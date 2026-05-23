@@ -5,9 +5,13 @@
   "author": "b310 digital gmbh",
   "private": true,
   "license": "MIT",
+  "files": [
+    "dist",
+    "client"
+  ],
   "engines": {
     "npm": "~10.9.0",
-    "node": "~25.0.0"
+    "node": "^24.0"
   },
   "scripts": {
     "prebuild": "rimraf dist",
