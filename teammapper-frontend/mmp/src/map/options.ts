@@ -243,7 +243,7 @@ export const DefaultNodeValues: DefaultNodeProperties = {
 };
 
 export const DefaultRootNodeValues: DefaultNodeProperties = {
-  name: 'Root node',
+  name: 'Zentrales Thema',
   link: {
     href: '',
   },
