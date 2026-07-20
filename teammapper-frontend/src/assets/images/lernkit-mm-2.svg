@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Beispiel-Mindmap sternenförmig">
+  <rect width="320" height="180" fill="#ffffff"/>
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M160 90 C 130 74, 104 62, 78 54" stroke="#1565C0"/>
+    <path d="M160 90 C 190 74, 216 62, 242 54" stroke="#F57F17"/>
+    <path d="M160 90 C 126 90, 96 90, 60 90" stroke="#2E7D32"/>
+    <path d="M160 90 C 194 90, 224 90, 260 90" stroke="#00897B"/>
+    <path d="M160 90 C 130 106, 104 118, 78 126" stroke="#6A4FA3"/>
+    <path d="M160 90 C 190 106, 216 118, 242 126" stroke="#C62828"/>
+  </g>
+  <g fill="#ffffff" stroke-width="2.5">
+    <ellipse cx="68" cy="52" rx="24" ry="13" stroke="#1565C0"/>
+    <ellipse cx="252" cy="52" rx="24" ry="13" stroke="#F57F17"/>
+    <ellipse cx="50" cy="90" rx="24" ry="13" stroke="#2E7D32"/>
+    <ellipse cx="270" cy="90" rx="24" ry="13" stroke="#00897B"/>
+    <ellipse cx="68" cy="128" rx="24" ry="13" stroke="#6A4FA3"/>
+    <ellipse cx="252" cy="128" rx="24" ry="13" stroke="#C62828"/>
+  </g>
+  <circle cx="160" cy="90" r="22" fill="#00897B"/>
+  <circle cx="160" cy="90" r="8" fill="#ffffff"/>
+</svg>

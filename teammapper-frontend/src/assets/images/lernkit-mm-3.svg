@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 180" role="img" aria-label="Beispiel-Mindmap Baum">
+  <rect width="320" height="180" fill="#ffffff"/>
+  <g fill="none" stroke-width="3" stroke-linecap="round">
+    <path d="M118 90 C 150 66, 176 52, 210 44" stroke="#1565C0"/>
+    <path d="M118 90 C 150 90, 180 90, 214 90" stroke="#F57F17"/>
+    <path d="M118 90 C 150 114, 176 128, 210 136" stroke="#2E7D32"/>
+    <path d="M210 44 C 232 40, 246 38, 262 36" stroke="#6A4FA3"/>
+    <path d="M210 136 C 232 140, 246 142, 262 144" stroke="#C62828"/>
+  </g>
+  <g fill="#ffffff" stroke-width="2.5">
+    <ellipse cx="228" cy="44" rx="24" ry="13" stroke="#1565C0"/>
+    <ellipse cx="240" cy="90" rx="24" ry="13" stroke="#F57F17"/>
+    <ellipse cx="228" cy="136" rx="24" ry="13" stroke="#2E7D32"/>
+    <ellipse cx="282" cy="36" rx="20" ry="11" stroke="#6A4FA3"/>
+    <ellipse cx="282" cy="144" rx="20" ry="11" stroke="#C62828"/>
+  </g>
+  <ellipse cx="96" cy="90" rx="40" ry="21" fill="#00897B"/>
+  <text x="96" y="95" text-anchor="middle" font-family="sans-serif" font-size="13" font-weight="700" fill="#ffffff">Thema</text>
+</svg>

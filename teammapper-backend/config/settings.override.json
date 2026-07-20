@@ -10,6 +10,11 @@
   "userSettings": {
     "general": {
       "language": "de"
+    },
+    "mapOptions": {
+      "rootNode": {
+        "name": "Zentrales Thema"
+      }
     }
   }
 }
