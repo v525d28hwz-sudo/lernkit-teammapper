@@ -5,6 +5,7 @@ import { DialogConnectionInfoComponent } from 'src/app/modules/application/compo
 import { DialogImportMermaidComponent } from 'src/app/modules/application/components/dialog-import-mermaid/dialog-import-mermaid.component';
 import { DialogImportAiComponent } from 'src/app/modules/application/components/dialog-import-ai/dialog-import-ai.component';
 import { DialogPictogramsComponent } from 'src/app/modules/application/components/dialog-pictograms/dialog-pictograms.component';
+import { DialogLernkitIconsComponent } from 'src/app/modules/application/components/dialog-lernkit-icons/dialog-lernkit-icons.component';
 import { DialogShareComponent } from 'src/app/modules/application/components/dialog-share/dialog-share.component';
 
 @Injectable({
@@ -17,8 +18,21 @@ export class DialogService {
   private shareModalRef: MatDialogRef<DialogShareComponent>;
   private aboutModalRef: MatDialogRef<DialogAboutComponent>;
   private pictogramsModalRef: MatDialogRef<DialogPictogramsComponent>;
+  private iconsModalRef: MatDialogRef<DialogLernkitIconsComponent>;
   private importMermaidModalRef: MatDialogRef<DialogImportMermaidComponent>;
   private importAiModalRef: MatDialogRef<DialogImportAiComponent>;
+
+  openIconsDialog() {
+    this.iconsModalRef = this.dialog.open(DialogLernkitIconsComponent, {
+      maxHeight: '90vh',
+      width: '560px',
+    });
+  }
+
+  closeIconsDialog() {
+    if (!this.iconsModalRef) return;
+    this.iconsModalRef.close();
+  }
 
   openPictogramDialog() {
     this.pictogramsModalRef = this.dialog.open(DialogPictogramsComponent);

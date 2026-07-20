@@ -1,0 +1,39 @@
+<h2 mat-dialog-title>{{ 'MODALS.ICONS.TITLE' | translate }}</h2>
+<mat-dialog-content>
+  <p class="lk-ic-hint">{{ 'MODALS.ICONS.HINT' | translate }}</p>
+
+  <mat-tab-group class="lk-ic-tabs" animationDuration="0ms">
+    <mat-tab [label]="'MODALS.ICONS.TAB_ALLGEMEIN' | translate">
+      <div class="lk-ic-grid">
+        @for (ic of allgemein(); track ic.file) {
+          <button
+            type="button"
+            class="lk-ic-cell"
+            [title]="ic.label"
+            (click)="pick('allgemein', ic.file)">
+            <img [src]="iconUrl('allgemein', ic.file)" [alt]="ic.label" />
+          </button>
+        }
+      </div>
+    </mat-tab>
+
+    <mat-tab [label]="'MODALS.ICONS.TAB_ZSL' | translate">
+      <div class="lk-ic-grid">
+        @for (ic of zsl(); track ic.file) {
+          <button
+            type="button"
+            class="lk-ic-cell"
+            [title]="ic.label"
+            (click)="pick('zsl', ic.file)">
+            <img [src]="iconUrl('zsl', ic.file)" [alt]="ic.label" />
+          </button>
+        }
+      </div>
+    </mat-tab>
+  </mat-tab-group>
+</mat-dialog-content>
+<mat-dialog-actions class="lk-ic-actions">
+  <button mat-flat-button color="primary" [mat-dialog-close]="true">
+    {{ 'MODALS.GENERAL.BUTTON_CLOSE' | translate }}
+  </button>
+</mat-dialog-actions>

@@ -232,6 +232,16 @@
       [disabled]="editDisabled"
       #imageUpload />
   }
+
+  <button
+    (click)="icons()"
+    [title]="'TOOLTIPS.ICONS' | translate"
+    [disabled]="editDisabled"
+    color="primary"
+    mat-icon-button>
+    <mat-icon>interests</mat-icon>
+  </button>
+
   @if (featureFlagPictograms) {
     <div>
       <button

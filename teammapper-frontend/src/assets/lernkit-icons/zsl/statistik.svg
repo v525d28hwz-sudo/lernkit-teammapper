@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <polygon points="10 11.4141 12 13.4141 15.707 9.707 14.293 8.293 12 10.5859 10 8.5859 4.293 14.293 5.707 15.707 10 11.4141" fill="#2a2623" stroke-width="0"/>
+  <polygon points="5 20 7 20 7 17 5 17.425 5 20" fill="#2a2623" stroke-width="0"/>
+  <polygon points="13 20 15 20 15 14 13 14.425 13 20" fill="#2a2623" stroke-width="0"/>
+  <polygon points="9 20 11 20 11 15 9 15.425 9 20" fill="#2a2623" stroke-width="0"/>
+  <polygon points="17 20 19 20 19 10 17 10.425 17 20" fill="#2a2623" stroke-width="0"/>
+  <rect x="15.5858" y="6.0001" width="2.8284" height="1.9998" transform="translate(.0294 14.0711) rotate(-45)" fill="#2a2623" stroke-width="0"/>
+</svg>

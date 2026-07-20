@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <path d="m12,14.7598l-.8232-1.1914c-.5303-.7676-3.1768-4.6943-3.1768-6.5684,0-2.2061,1.7939-4,4-4s4,1.7939,4,4c0,1.874-2.6465,5.8008-3.1768,6.5684l-.8232,1.1914Zm0-9.7598c-1.1025,0-2,.8975-2,2,0,.6621.9326,2.4746,2,4.1787,1.0674-1.7041,2-3.5166,2-4.1787,0-1.1025-.8975-2-2-2Z" fill="#2a2623" stroke-width="0"/>
+  <polygon points="23.4854 23 .5146 23 4.2646 11 9 11 9 13 5.7354 13 3.2354 21 20.7646 21 18.2646 13 15 13 15 11 19.7354 11 23.4854 23" fill="#2a2623" stroke-width="0"/>
+  <rect x="8" y="17" width="2" height="2" fill="#2a2623" stroke-width="0"/>
+  <rect x="5" y="18" width="2" height="2" fill="#2a2623" stroke-width="0"/>
+  <rect x="11" y="16" width="2" height="2" fill="#2a2623" stroke-width="0"/>
+  <rect x="14" y="17" width="2" height="2" fill="#2a2623" stroke-width="0"/>
+  <rect x="17" y="16" width="2" height="2" fill="#2a2623" stroke-width="0"/>
+</svg>

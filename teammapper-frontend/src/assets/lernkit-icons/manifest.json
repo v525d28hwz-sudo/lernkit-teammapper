@@ -1,0 +1,334 @@
+{
+  "allgemein": [
+    {
+      "file": "achtung.svg",
+      "label": "Achtung"
+    },
+    {
+      "file": "analyse.svg",
+      "label": "Analyse"
+    },
+    {
+      "file": "auge.svg",
+      "label": "Auge"
+    },
+    {
+      "file": "bilder.svg",
+      "label": "Bilder"
+    },
+    {
+      "file": "check.svg",
+      "label": "Häkchen"
+    },
+    {
+      "file": "diagramm.svg",
+      "label": "Diagramm"
+    },
+    {
+      "file": "einstellungen.svg",
+      "label": "Einstellungen"
+    },
+    {
+      "file": "flagge.svg",
+      "label": "Flagge"
+    },
+    {
+      "file": "frage.svg",
+      "label": "Frage"
+    },
+    {
+      "file": "glocke.svg",
+      "label": "Glocke"
+    },
+    {
+      "file": "gruppe.svg",
+      "label": "Gruppe"
+    },
+    {
+      "file": "haken.svg",
+      "label": "Haken"
+    },
+    {
+      "file": "haus.svg",
+      "label": "Haus"
+    },
+    {
+      "file": "herz.svg",
+      "label": "Herz"
+    },
+    {
+      "file": "info.svg",
+      "label": "Info"
+    },
+    {
+      "file": "kalender.svg",
+      "label": "Kalender"
+    },
+    {
+      "file": "kreisdiagramm.svg",
+      "label": "Kreisdiagramm"
+    },
+    {
+      "file": "lesezeichen.svg",
+      "label": "Lesezeichen"
+    },
+    {
+      "file": "ordner.svg",
+      "label": "Ordner"
+    },
+    {
+      "file": "papierkorb.svg",
+      "label": "Papierkorb"
+    },
+    {
+      "file": "person.svg",
+      "label": "Person"
+    },
+    {
+      "file": "personen.svg",
+      "label": "Personen"
+    },
+    {
+      "file": "pfeil-hoch.svg",
+      "label": "Pfeil hoch"
+    },
+    {
+      "file": "pfeil-rechts.svg",
+      "label": "Pfeil rechts"
+    },
+    {
+      "file": "pfeil-runter.svg",
+      "label": "Pfeil runter"
+    },
+    {
+      "file": "pin.svg",
+      "label": "Pin"
+    },
+    {
+      "file": "schloss.svg",
+      "label": "Schloss"
+    },
+    {
+      "file": "schluessel.svg",
+      "label": "Schlüssel"
+    },
+    {
+      "file": "stern.svg",
+      "label": "Stern"
+    },
+    {
+      "file": "stift.svg",
+      "label": "Stift"
+    },
+    {
+      "file": "warnung.svg",
+      "label": "Warnung"
+    },
+    {
+      "file": "ziel.svg",
+      "label": "Ziel"
+    }
+  ],
+  "zsl": [
+    {
+      "file": "apfel.svg",
+      "label": "Apfel"
+    },
+    {
+      "file": "baum.svg",
+      "label": "Baum"
+    },
+    {
+      "file": "biene.svg",
+      "label": "Biene"
+    },
+    {
+      "file": "blume.svg",
+      "label": "Blume"
+    },
+    {
+      "file": "buch.svg",
+      "label": "Buch"
+    },
+    {
+      "file": "digitalisierung.svg",
+      "label": "Digitalisierung"
+    },
+    {
+      "file": "element-1.svg",
+      "label": "Element 1"
+    },
+    {
+      "file": "element-2.svg",
+      "label": "Element 2"
+    },
+    {
+      "file": "element-3.svg",
+      "label": "Element 3"
+    },
+    {
+      "file": "element-4.svg",
+      "label": "Element 4"
+    },
+    {
+      "file": "erlenmeyer.svg",
+      "label": "Erlenmeyer-Kolben"
+    },
+    {
+      "file": "europa.svg",
+      "label": "Europa"
+    },
+    {
+      "file": "forschung.svg",
+      "label": "Forschung"
+    },
+    {
+      "file": "geld.svg",
+      "label": "Geld"
+    },
+    {
+      "file": "geometrie.svg",
+      "label": "Geometrie"
+    },
+    {
+      "file": "globus.svg",
+      "label": "Globus"
+    },
+    {
+      "file": "gluehbirne.svg",
+      "label": "Glühbirne"
+    },
+    {
+      "file": "gruppe.svg",
+      "label": "Gruppe"
+    },
+    {
+      "file": "herz.svg",
+      "label": "Herz"
+    },
+    {
+      "file": "hirsch.svg",
+      "label": "Hirsch"
+    },
+    {
+      "file": "igel.svg",
+      "label": "Igel"
+    },
+    {
+      "file": "inklusion.svg",
+      "label": "Inklusion"
+    },
+    {
+      "file": "innovation.svg",
+      "label": "Innovation"
+    },
+    {
+      "file": "justitia.svg",
+      "label": "Justitia"
+    },
+    {
+      "file": "kommunikation.svg",
+      "label": "Kommunikation"
+    },
+    {
+      "file": "kuh.svg",
+      "label": "Kuh"
+    },
+    {
+      "file": "landkarte.svg",
+      "label": "Landkarte"
+    },
+    {
+      "file": "lupe.svg",
+      "label": "Lupe"
+    },
+    {
+      "file": "menschen.svg",
+      "label": "Menschen"
+    },
+    {
+      "file": "mikroskop.svg",
+      "label": "Mikroskop"
+    },
+    {
+      "file": "musiknote.svg",
+      "label": "Musiknote"
+    },
+    {
+      "file": "paragraph.svg",
+      "label": "Paragraph"
+    },
+    {
+      "file": "pi.svg",
+      "label": "Pi (π)"
+    },
+    {
+      "file": "plus-minus.svg",
+      "label": "Plus/Minus"
+    },
+    {
+      "file": "reagenzglas.svg",
+      "label": "Reagenzglas"
+    },
+    {
+      "file": "regenbogen.svg",
+      "label": "Regenbogen"
+    },
+    {
+      "file": "schueler.svg",
+      "label": "Schüler"
+    },
+    {
+      "file": "schule.svg",
+      "label": "Schule"
+    },
+    {
+      "file": "sonne.svg",
+      "label": "Sonne"
+    },
+    {
+      "file": "sport-handball.svg",
+      "label": "Handball"
+    },
+    {
+      "file": "sport-laufen.svg",
+      "label": "Laufen"
+    },
+    {
+      "file": "sport-schwimmen.svg",
+      "label": "Schwimmen"
+    },
+    {
+      "file": "statistik.svg",
+      "label": "Statistik"
+    },
+    {
+      "file": "strommast.svg",
+      "label": "Strommast"
+    },
+    {
+      "file": "tanne.svg",
+      "label": "Tanne"
+    },
+    {
+      "file": "technologie.svg",
+      "label": "Technologie"
+    },
+    {
+      "file": "universitaet.svg",
+      "label": "Universität"
+    },
+    {
+      "file": "waage.svg",
+      "label": "Waage"
+    },
+    {
+      "file": "windrad.svg",
+      "label": "Windrad"
+    },
+    {
+      "file": "wolke.svg",
+      "label": "Wolke"
+    }
+  ]
+}

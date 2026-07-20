@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 40 27">
+  <path d="m22.1211,14.1211c1.1699-1.1699,1.1699-3.0723,0-4.2422s-3.0723-1.1699-4.2422,0-1.1699,3.0723,0,4.2422c.585.585,1.3525.877,2.1211.877s1.5361-.292,2.1211-.877Zm-2.8281-2.8281c.1953-.1953.4512-.292.707-.292s.5117.0967.707.292c.3896.3896.3896,1.0244,0,1.4141-.3906.3906-1.0234.3906-1.4141,0-.3896-.3896-.3896-1.0244,0-1.4141Z" fill="#2a2623" stroke-width="0"/>
+  <path d="m13.3431,9H3c-1.6543,0-3,1.3457-3,3v13h2v-13c0-.5518.4482-1,1-1h12c0-2.2061,1.7939-4,4-4v-2c-2.6076,0-4.8315,1.6719-5.6569,4Z" fill="#2a2623" stroke-width="0"/>
+  <polygon points="19 0 19 5 21 5 21 .425 19 0" fill="#2a2623" stroke-width="0"/>
+  <rect x="14" y="25" width="12" height="2" fill="#2a2623" stroke-width="0"/>
+  <polygon points="16 24 18 23.575 18 19 22 19 22 24 24 23.575 24 17 16 17 16 24" fill="#2a2623" stroke-width="0"/>
+  <polygon points="26 17 28 16.575 28 13 26 13 26 17" fill="#2a2623" stroke-width="0"/>
+  <polygon points="26 23 28 22.575 28 19 26 19 26 23" fill="#2a2623" stroke-width="0"/>
+  <polygon points="30 17 32 16.575 32 13 30 13 30 17" fill="#2a2623" stroke-width="0"/>
+  <polygon points="30 23 32 22.575 32 19 30 19 30 23" fill="#2a2623" stroke-width="0"/>
+  <polygon points="34 17 36 16.575 36 13 34 13 34 17" fill="#2a2623" stroke-width="0"/>
+  <polygon points="34 23 36 22.575 36 19 34 19 34 23" fill="#2a2623" stroke-width="0"/>
+  <polygon points="6 13 4 13 4 17 6 16.575 6 13" fill="#2a2623" stroke-width="0"/>
+  <polygon points="4 23 6 22.575 6 19 4 19 4 23" fill="#2a2623" stroke-width="0"/>
+  <polygon points="10 13 8 13 8 17 10 16.575 10 13" fill="#2a2623" stroke-width="0"/>
+  <polygon points="8 23 10 22.575 10 19 8 19 8 23" fill="#2a2623" stroke-width="0"/>
+  <polygon points="14 13 12 13 12 17 14 16.575 14 13" fill="#2a2623" stroke-width="0"/>
+  <polygon points="12 23 14 22.575 14 19 12 19 12 23" fill="#2a2623" stroke-width="0"/>
+  <path d="m40,25v-13c0-1.6543-1.3457-3-3-3h-10.3431c-.8254-2.3281-3.0493-4-5.6569-4v2c2.2061,0,4,1.7939,4,4h12c.5518,0,1,.4482,1,1v13h2Z" fill="#2a2623" stroke-width="0"/>
+</svg>

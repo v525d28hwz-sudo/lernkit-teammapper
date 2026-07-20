@@ -1,0 +1,63 @@
+:host {
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+}
+
+.lk-ic-hint {
+  font-size: 13px;
+  line-height: 1.5;
+  color: #5c677d;
+  margin: 0 0 8px;
+}
+
+.lk-ic-tabs {
+  min-width: 420px;
+}
+
+.lk-ic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 8px;
+  padding: 16px 4px 4px;
+  max-height: 52vh;
+  overflow-y: auto;
+}
+
+.lk-ic-cell {
+  border: 1px solid #e4e2dc;
+  border-radius: 10px;
+  background: #ffffff;
+  padding: 8px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  aspect-ratio: 1;
+  transition:
+    border-color 0.12s ease,
+    box-shadow 0.12s ease,
+    transform 0.12s ease;
+
+  img {
+    max-width: 100%;
+    max-height: 42px;
+    object-fit: contain;
+    pointer-events: none;
+  }
+}
+
+.lk-ic-cell:hover {
+  border-color: #00897b;
+  box-shadow: 0 2px 8px rgba(0, 137, 123, 0.18);
+  transform: translateY(-1px);
+}
+
+.lk-ic-actions {
+  justify-content: center !important;
+  padding-top: 6px;
+
+  button {
+    border-radius: 22px;
+    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-weight: 700;
+  }
+}

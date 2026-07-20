@@ -47,6 +47,7 @@
     "EDIT_NODE": "Änderungen am Text eines Knotens erlauben",
     "COUPLE_NODE": "Knoten koppeln oder entkoppeln",
     "NODE_IMAGE": "Bild zum Knoten hinzufügen",
+    "ICONS": "Icon einfügen",
     "NODE_IMAGE_REMOVE": "Bild vom Knoten entfernen",
     "PICTOGRAM": "Piktrogramm",
     "BOLD_TEXT": "Fett",
@@ -102,6 +103,12 @@
       "LABEL_FILE": "Mermaid-Datei (.mmd) hochladen",
       "LABEL_TEXT_AREA": "… oder Mermaid-Code hier einfügen",
       "HINT": "Der Code muss Mermaid-mindmap-Syntax sein (beginnt mit „mindmap“). Flussdiagramme (flowchart/graph) werden nicht unterstützt – bitte AIS.chat um eine „Mermaid-Mindmap“."
+    },
+    "ICONS": {
+      "TITLE": "Icon einfügen",
+      "HINT": "Wähle ein Icon – es wird dem aktuell ausgewählten Knoten als Bild hinzugefügt.",
+      "TAB_ALLGEMEIN": "Allgemein & Schule",
+      "TAB_ZSL": "ZSL-Design"
     },
     "IMPORT_AI": {
       "TITLE": "KI-Mindmap-Generator",

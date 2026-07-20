@@ -47,6 +47,7 @@
     "EDIT_NODE": "Allows to edit the text of the node",
     "COUPLE_NODE": "Groups or ungroups the node",
     "NODE_IMAGE": "Adds an image to the node",
+    "ICONS": "Insert icon",
     "NODE_IMAGE_REMOVE": "Removes an image from the node",
     "PICTOGRAM": "Pictrogram",
     "BOLD_TEXT": "Changes the weight of the text",
@@ -102,6 +103,12 @@
       "LABEL_FILE": "Upload Mermaid file (.mmd)",
       "LABEL_TEXT_AREA": "… or paste Mermaid code here",
       "HINT": "The code must use Mermaid mindmap syntax (starts with “mindmap”). Flowcharts (flowchart/graph) are not supported – ask for a “Mermaid mindmap”."
+    },
+    "ICONS": {
+      "TITLE": "Insert icon",
+      "HINT": "Pick an icon – it is added as an image to the currently selected node.",
+      "TAB_ALLGEMEIN": "General & school",
+      "TAB_ZSL": "ZSL design"
     },
     "IMPORT_AI": {
       "TITLE": "AI Mindmap Generator",
