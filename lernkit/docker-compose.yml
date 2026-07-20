@@ -1,0 +1,61 @@
+# Produktions-Stack für maps.lernkit.de (Coolify-Ressource "Docker Compose Empty").
+# Zieht das fertige GHCR-Image dieses Forks + eigenes Postgres.
+# Muster wie 11-Feedback/docker-compose.yml (feedback.lernkit.de).
+# Dies ist eine EIGENE Datei (lernkit/), damit die Upstream-Compose-Dateien im
+# Repo-Root (docker-compose.yml / docker-compose-prod.yml) unangetastet bleiben.
+#
+# WICHTIG: KEIN eigener `networks:`-Block! Coolify hängt alle Services an sein
+# verwaltetes Netz; ein Custom-Netz führt sonst zu 504 (Traefik wählt falsche IP).
+# Service-DNS (db) läuft über das Coolify-Netz. Traefik übernimmt TLS +
+# Subdomain-Routing + WebSocket-Passthrough (/yjs) automatisch.
+#
+# Env-Werte (JWT_SECRET, POSTGRES_PASSWORD) NICHT hier, sondern in der Coolify-UI
+# als Environment Variables setzen.
+services:
+  db:
+    image: postgres:15-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-teammapper}
+      POSTGRES_USER: ${POSTGRES_USER:-teammapper}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      PGDATA: /var/lib/postgresql/data/pgdata
+    volumes:
+      - maps-db-data:/var/lib/postgresql/data/pgdata
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U $${POSTGRES_USER:-teammapper}"]
+      interval: 5s
+      timeout: 5s
+      retries: 15
+
+  app:
+    # Owner ist v525d28hwz-sudo → passt. Der CI-Job (lernkit-deploy.yml) pusht
+    # exakt dieses Tag.
+    image: ghcr.io/v525d28hwz-sudo/lernkit-teammapper:latest
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      MODE: PROD
+      BINDING: 0.0.0.0
+      JWT_SECRET: ${JWT_SECRET}
+      LOG_LEVEL: log
+      POSTGRES_HOST: db
+      POSTGRES_PORT: "5432"
+      POSTGRES_DATABASE: ${POSTGRES_DB:-teammapper}
+      POSTGRES_USER: ${POSTGRES_USER:-teammapper}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_SSL: "false"
+      POSTGRES_SSL_REJECT_UNAUTHORIZED: "false"
+      POSTGRES_QUERY_TIMEOUT: "100000"
+      POSTGRES_STATEMENT_TIMEOUT: "100000"
+      # Retention: Löschung nach 365 Tagen INAKTIVITÄT (GREATEST(lastAccessed,
+      # lastModified, node.lastUpdatedAt) + afterDays) — siehe MapsService.
+      DELETE_AFTER_DAYS: "365"
+    ports:
+      # Coolify-Domain maps.lernkit.de auf Port 8098 routen. App lauscht auf 3000.
+      - "8098:3000"
+
+volumes:
+  maps-db-data:

@@ -1,0 +1,12 @@
+{
+  "systemSettings": {
+    "featureFlags": {
+      "pictograms": false
+    }
+  },
+  "userSettings": {
+    "general": {
+      "language": "de"
+    }
+  }
+}
