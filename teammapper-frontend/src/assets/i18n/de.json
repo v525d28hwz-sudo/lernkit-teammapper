@@ -130,7 +130,7 @@
     },
     "INFO": {
       "DELETED_AT": "Diese Mindmap wird gelöscht am:",
-      "DELETE_AFTER_DAYS": "Mindmaps werden auf diesem Server nach {{deleteAfterDays}} Tagen gelöscht.",
+      "DELETE_AFTER_DAYS": "Mindmaps werden auf diesem Server {{deleteAfterDays}} Tage nach der letzten Bearbeitung automatisch gelöscht.",
       "DELETE": "Mindmap löschen",
       "CONFIRM_DELETE": "Wirklich löschen?"
     },
@@ -146,7 +146,7 @@
   "PAGES": {
     "ABOUT": {
       "INTRODUCTION": {
-        "APPLICATION_DESCRIPTION": "Die Open-Source-Anwendung, um Mindmaps im Team zu verwenden.",
+        "APPLICATION_DESCRIPTION": "Mindmaps sind eine großartige Möglichkeit, Themen strukturiert zu visualisieren. Dieses lernkit-Werkzeug bietet dir zahlreiche Funktionen: Arbeite kollaborativ in Echtzeit, färbe deine Knoten oder füge Bilder zur Veranschaulichung hinzu.",
         "APPLICATION_PROPERTIES": [
           "Gleichzeitig an Mindmaps arbeiten",
           "Einfaches Teilen der Mindmap über einen QR-Code oder Link",

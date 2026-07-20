@@ -6,7 +6,8 @@
 }
 
 section.jumbotron {
-  background-color: mat.m2-get-color-from-palette(theme.$app-primary);
+  // Dunkler Hero (lernkit --dark), damit die Teal-Akzentfarbe den Buttons/Toolbar vorbehalten bleibt
+  background-color: #2a2623;
   padding: 100px 0 40px 0;
   text-align: center;
   align-items: center;

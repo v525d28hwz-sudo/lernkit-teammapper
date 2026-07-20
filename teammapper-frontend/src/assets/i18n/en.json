@@ -130,7 +130,7 @@
     },
     "INFO": {
       "DELETED_AT": "Mindmap is going to be deleted at:",
-      "DELETE_AFTER_DAYS": "Mindmaps will be deleted on this server after {{deleteAfterDays}} days.",
+      "DELETE_AFTER_DAYS": "Mindmaps on this server are automatically deleted {{deleteAfterDays}} days after the last edit.",
       "DELETE": "Delete mindmap",
       "CONFIRM_DELETE": "Delete?"
     },
@@ -146,7 +146,7 @@
   "PAGES": {
     "ABOUT": {
       "INTRODUCTION": {
-        "APPLICATION_DESCRIPTION": "The open-source web application to draw mind maps together.",
+        "APPLICATION_DESCRIPTION": "Mindmaps are a great way to visualise topics in a structured manner. This lernkit tool offers many features: work together in real time, colour your nodes or add images for illustration.",
         "APPLICATION_PROPERTIES": [
           "Collaborate together on mind maps",
           "Share mind maps with others - either by a QR code or by providing the link.",

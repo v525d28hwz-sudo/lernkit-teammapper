@@ -8,7 +8,7 @@ const DEFAULT_COLOR_BACKGROUND = '#f0f6f5'
 const DEFAULT_FONT_SIZE = 20
 const DEFAULT_FONT_STYLE = 'normal'
 const DEFAULT_FONT_WEIGHT = 'normal'
-const DEFAULT_NAME = 'Root node'
+const DEFAULT_NAME = 'Zentrales Thema'
 
 const mapMmpNodeToClient = (serverNode: MmpNode): IMmpClientNode => ({
   colors: {

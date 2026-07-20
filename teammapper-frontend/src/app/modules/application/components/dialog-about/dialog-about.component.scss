@@ -1,10 +1,50 @@
+:host {
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+}
+
 .about-modal-section {
   img {
-    padding-right: 2rem;
-    margin-bottom: 2rem;
-    margin-right: auto;
-    margin-left: auto;
+    margin: 0 auto 1.2rem;
     display: block;
+  }
+}
+
+.lk-about-meta {
+  font-size: 13px;
+  color: #5c677d;
+}
+
+.lk-about-links {
+  margin-top: 14px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  font-size: 13px;
+
+  a {
+    color: #00897b;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+  }
+  a:hover {
+    text-decoration: underline;
+  }
+  span {
+    color: #b0b6c0;
+  }
+}
+
+.lk-about-actions {
+  padding: 8px 0 4px;
+  gap: 10px;
+
+  button {
+    border-radius: 22px;
+    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2px;
   }
 }
 
@@ -13,5 +53,5 @@
 }
 
 .mat-list-item {
-  font-family: 'Fira Sans';
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
 }
