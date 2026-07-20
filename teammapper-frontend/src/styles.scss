@@ -20,6 +20,20 @@
   font-weight: 700;
 }
 
+// lernkit-Hausschrift (BaWueSans, self-hosted / first-party)
+@font-face {
+  font-family: 'BaWueSans';
+  src: url('assets/font/bawuesans/BaWueSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'BaWueSans';
+  src: url('assets/font/bawuesans/BaWueSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+
 html,
 body {
   margin: 0;
@@ -28,7 +42,8 @@ body {
 }
 
 body {
-  font-family: 'Fira Sans', sans;
+  font-family: 'BaWueSans', 'Fira Sans', -apple-system, BlinkMacSystemFont,
+    'Segoe UI', Roboto, sans-serif;
   font-size: 17px;
 }
 

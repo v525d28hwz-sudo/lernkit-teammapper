@@ -1,68 +1,80 @@
-footer.footer {
+// lernkit-Fußzeile (dunkel, analog Portal). MIT/TeamMapper-Attribution bleibt (Lizenz).
+footer.lk-fuss {
+  background-color: #2a2623;
   padding: 20px 0;
-  background-color: #2c2c2c;
-  color: whitesmoke;
 
-  div.container {
+  .lk-fuss__innen {
+    max-width: 1170px;
+    margin: 0 auto;
+    padding: 0 24px;
     display: flex;
-    justify-content: space-between;
     align-items: center;
     flex-wrap: wrap;
-    font-size: 16px;
+    gap: 8px 20px;
+    font-family: 'BaWueSans', sans-serif;
+  }
+
+  .lk-fuss__marke {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .lk-fuss__logo {
+    font: 700 15px 'BaWueSans', sans-serif;
+    color: #e3eefa;
+    text-decoration: none;
+  }
+
+  .lk-fuss__sub {
+    font: 700 8px 'BaWueSans', sans-serif;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: rgba(255, 255, 255, 0.45);
+  }
+
+  .lk-fuss__attrib {
+    font: 400 12px 'BaWueSans', sans-serif;
+    color: rgba(255, 255, 255, 0.5);
 
     a {
+      color: rgba(255, 255, 255, 0.75);
       text-decoration: none;
-      color: whitesmoke;
     }
-
     a:hover {
-      opacity: 0.8;
+      color: #fff;
     }
+  }
 
-    div.spacer {
-      flex: 1 1 auto;
+  .lk-fuss__spacer {
+    flex: 1 1 auto;
+  }
+
+  .lk-fuss__links {
+    display: flex;
+    gap: 16px;
+    font: 400 12px 'BaWueSans', sans-serif;
+
+    a {
+      color: rgba(255, 255, 255, 0.5);
+      text-decoration: none;
     }
-
-    div.license {
-      display: inline-block;
-      white-space: nowrap;
-      padding: 8px 30px 8px 0;
+    a:hover {
+      color: rgba(255, 255, 255, 0.85);
     }
+  }
 
-    div.links {
-      padding: 8px 0;
-
-      > a {
-        display: inline-block;
-        white-space: nowrap;
-        padding-right: 15px;
+  .lk-fuss__lang {
+    ::ng-deep {
+      .mat-mdc-select {
+        min-width: 120px;
       }
-    }
-
-    div.languages {
-      padding: 8px 0;
-
-      ::ng-deep {
-        .mat-mdc-select {
-          min-width: 150px;
-        }
-
-        .mat-mdc-select-value {
-          max-width: 100%;
-          width: auto;
-        }
-
-        .mat-mdc-select-value-text {
-          color: whitesmoke;
-        }
-
-        .mat-mdc-select-arrow {
-          color: whitesmoke;
-        }
-
-        .mat-mdc-select-placeholder {
-          color: rgba(255, 255, 255, 0.7);
-        }
+      .mat-mdc-select-value-text,
+      .mat-mdc-select-arrow {
+        color: whitesmoke;
+      }
+      .mat-mdc-select-placeholder {
+        color: rgba(255, 255, 255, 0.7);
       }
     }
   }

@@ -6,7 +6,8 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://www.google.com/design/spec/style/color.html
-$app-primary: mat.m2-define-palette(mat.$m2-blue-gray-palette, 700);
+// lernkit-Akzent = Material Blue 800 (#1565C0)
+$app-primary: mat.m2-define-palette(mat.$m2-blue-palette, 800);
 $app-accent: mat.m2-define-palette(mat.$m2-gray-palette, 50);
 
 // The warn palette is optional (defaults to red).
@@ -20,7 +21,10 @@ $app-theme: mat.m2-define-light-theme(
       accent: $app-accent,
       warn: $app-warn,
     ),
-    typography: mat.m2-define-typography-config(),
+    typography:
+      mat.m2-define-typography-config(
+        $font-family: '"BaWueSans", "Fira Sans", sans-serif',
+      ),
     density: 0,
   )
 );

@@ -1,16 +1,30 @@
-<footer class="footer">
-  <div class="container">
-    <div class="license">
-      {{ currentYear }}
-      <a href="https://b310.de" target="_blank"> B310 Digital GmbH </a>
+<footer class="lk-fuss">
+  <div class="lk-fuss__innen">
+    <div class="lk-fuss__marke">
+      <a class="lk-fuss__logo" href="https://lernkit.de">lernkit.de</a>
+      <span class="lk-fuss__sub">Mindmap</span>
     </div>
-    <div class="links">
-      <a href="https://github.com/b310-digital/teammapper" target="_blank">
-        {{ 'GENERAL.REPOSITORY' | translate }}
-      </a>
+
+    <div class="lk-fuss__attrib">
+      {{ currentYear }} · Basiert auf
+      <a
+        href="https://github.com/b310-digital/teammapper"
+        target="_blank"
+        rel="noopener">
+        TeamMapper</a
+      >
+      (<a href="https://b310.de" target="_blank" rel="noopener">B310 Digital</a>,
+      MIT-Lizenz)
     </div>
-    <div class="spacer"></div>
-    <div class="languages">
+
+    <div class="lk-fuss__spacer"></div>
+
+    <nav class="lk-fuss__links">
+      <a href="https://badges.lernkit.de/datenschutz">Datenschutz</a>
+      <a href="https://badges.lernkit.de/impressum">Impressum</a>
+    </nav>
+
+    <div class="lk-fuss__lang">
       <mat-select
         (selectionChange)="updateLanguage()"
         [(value)]="settings.general.language"
