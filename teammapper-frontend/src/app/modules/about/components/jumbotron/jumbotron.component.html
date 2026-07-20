@@ -50,9 +50,33 @@
       </mat-list>
     </div>
 
-    <button mat-flat-button color="accent" routerLink="map">
+    <button
+      mat-flat-button
+      color="primary"
+      class="lk-create"
+      routerLink="map">
       {{ 'GENERAL.CREATE' | translate }}
     </button>
+
+    <div class="lk-hinweis">
+      <div class="lk-hinweis__innen">
+        <p class="lk-hinweis__loesch">
+          <span class="lk-hinweis__icon">⏳</span> Mindmaps werden
+          <strong>365 Tage nach der letzten Bearbeitung</strong> automatisch
+          gelöscht.
+        </p>
+        <p class="lk-hinweis__ds">
+          Anonyme Nutzung ohne Anmeldung, keine personenbezogenen Klardaten.
+          Näheres in der
+          <a
+            href="https://badges.lernkit.de/datenschutz"
+            target="_blank"
+            rel="noopener"
+            >Datenschutzerklärung</a
+          >.
+        </p>
+      </div>
+    </div>
   </div>
   <div>
     <img src="./assets/images/screens.png" alt="Screens" />
