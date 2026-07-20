@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <polygon points="6 6 5.575 4 2 4 2.425 6 4.8949 6 6.0947 18 18.575 18 19 16 7.9053 16 7.1133 8.082 18.7969 8.917 18.1807 12 9.425 12 9 14 19.8193 14 21.2031 7.083 6 5.9974 6 6" fill="#2a2623" stroke-width="0"/>
+  <circle cx="7.5" cy="20.5" r="1.5" fill="#2a2623" stroke-width="0"/>
+  <circle cx="17.5" cy="20.5" r="1.5" fill="#2a2623" stroke-width="0"/>
+</svg>

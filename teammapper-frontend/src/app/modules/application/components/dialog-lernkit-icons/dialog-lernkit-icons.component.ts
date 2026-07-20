@@ -1,4 +1,4 @@
-import { Component, inject, signal, OnInit } from '@angular/core';
+import { Component, inject, signal, computed, OnInit } from '@angular/core';
 import {
   MatDialogRef,
   MatDialogTitle,
@@ -16,10 +16,12 @@ import { UtilsService } from 'src/app/core/services/utils/utils.service';
 interface IconEntry {
   file: string;
   label: string;
+  kategorie: string;
+  keywords?: string[];
 }
 interface IconManifest {
-  allgemein: IconEntry[];
-  zsl: IconEntry[];
+  symbole: IconEntry[];
+  motive: IconEntry[];
 }
 
 @Component({
@@ -45,29 +47,66 @@ export class DialogLernkitIconsComponent implements OnInit {
 
   private readonly base = '/assets/lernkit-icons/';
 
-  public allgemein = signal<IconEntry[]>([]);
-  public zsl = signal<IconEntry[]>([]);
+  public symbole = signal<IconEntry[]>([]);
+  public motive = signal<IconEntry[]>([]);
+
+  public suche = signal('');
+  public katSymbole = signal('Alle');
+  public katMotive = signal('Alle');
+
+  public kategorienSymbole = computed(() => this.kategorien(this.symbole()));
+  public kategorienMotive = computed(() => this.kategorien(this.motive()));
+  public gefiltertSymbole = computed(() =>
+    this.filter(this.symbole(), this.katSymbole())
+  );
+  public gefiltertMotive = computed(() =>
+    this.filter(this.motive(), this.katMotive())
+  );
 
   async ngOnInit() {
     try {
       const res = await fetch(this.base + 'manifest.json');
       const man = (await res.json()) as IconManifest;
-      this.allgemein.set(man.allgemein || []);
-      this.zsl.set(man.zsl || []);
+      this.symbole.set(man.symbole || []);
+      this.motive.set(man.motive || []);
     } catch (_e) {
       // Manifest nicht ladbar – Dialog bleibt leer
     }
   }
 
-  iconUrl(level: string, file: string): string {
-    return this.base + level + '/' + file;
+  private kategorien(list: IconEntry[]): string[] {
+    const set = Array.from(new Set(list.map(i => i.kategorie))).sort((a, b) =>
+      a.localeCompare(b, 'de')
+    );
+    return ['Alle', ...set];
   }
 
-  // Icon als Bild (Base64-Data-URI) an den ausgewählten Knoten hängen –
-  // gleicher Weg wie beim Piktogramm-/Bild-Import (wandert beim Export/Kollab mit).
-  async pick(level: string, file: string) {
+  private filter(list: IconEntry[], kat: string): IconEntry[] {
+    const q = this.suche().trim().toLowerCase();
+    return list.filter(i => {
+      const katOk = kat === 'Alle' || i.kategorie === kat;
+      if (!katOk) return false;
+      if (!q) return true;
+      return (
+        i.label.toLowerCase().includes(q) ||
+        i.kategorie.toLowerCase().includes(q) ||
+        (i.keywords || []).some(k => k.toLowerCase().includes(q))
+      );
+    });
+  }
+
+  onSearch(event: Event) {
+    this.suche.set((event.target as HTMLInputElement).value || '');
+  }
+
+  iconUrl(group: string, file: string): string {
+    return this.base + group + '/' + file;
+  }
+
+  // Icon als Bild (Base64-Data-URI) an den ausgewählten Knoten hängen.
+  async pick(group: string, file: string) {
     try {
-      const res = await fetch(this.iconUrl(level, file));
+      const res = await fetch(this.iconUrl(group, file));
       const blob = await res.blob();
       const dataUri = await this.utilsService.blobToBase64(blob);
       this.mmpService.addNodeImage(dataUri);

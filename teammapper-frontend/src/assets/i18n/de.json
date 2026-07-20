@@ -106,9 +106,10 @@
     },
     "ICONS": {
       "TITLE": "Icon einfügen",
-      "HINT": "Wähle ein Icon – es wird dem aktuell ausgewählten Knoten als Bild hinzugefügt.",
-      "TAB_ALLGEMEIN": "Allgemein & Schule",
-      "TAB_ZSL": "ZSL-Design"
+      "SEARCH": "Suchen (z. B. Chemie, Baum, Pfeil) …",
+      "TAB_SYMBOLE": "Symbole",
+      "TAB_MOTIVE": "Motive",
+      "EMPTY": "Keine passenden Icons"
     },
     "IMPORT_AI": {
       "TITLE": "KI-Mindmap-Generator",

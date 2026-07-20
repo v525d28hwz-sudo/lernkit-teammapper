@@ -106,9 +106,10 @@
     },
     "ICONS": {
       "TITLE": "Insert icon",
-      "HINT": "Pick an icon – it is added as an image to the currently selected node.",
-      "TAB_ALLGEMEIN": "General & school",
-      "TAB_ZSL": "ZSL design"
+      "SEARCH": "Search (e.g. chemistry, tree, arrow) …",
+      "TAB_SYMBOLE": "Symbols",
+      "TAB_MOTIVE": "Motifs",
+      "EMPTY": "No matching icons"
     },
     "IMPORT_AI": {
       "TITLE": "AI Mindmap Generator",

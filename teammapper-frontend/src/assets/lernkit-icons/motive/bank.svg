@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="Icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+  <polygon points="24 22 .425 22 0 24 23.575 24 24 22" fill="#2a2623" stroke-width="0"/>
+  <path d="m2.425,19l-.425,2h19.575l.425-2h-11v-6h2v5h2v-5c0-1.103-.8975-2-2-2h-2c-1.103,0-2,.897-2,2v6h-3v-9h11v-2H3.425l-.425,2h1v9h-1.575Z" fill="#2a2623" stroke-width="0"/>
+  <path d="m18,18h2v-8h.575l.425-2h-1v-1h2.2549L12,.0415,1.7456,7h16.2544v11ZM8.2544,5l3.7456-2.5415,3.7451,2.5415h-7.4907Z" fill="#2a2623" stroke-width="0"/>
+</svg>

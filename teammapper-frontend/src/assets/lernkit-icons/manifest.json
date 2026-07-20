@@ -1,334 +1,1861 @@
 {
-  "allgemein": [
-    {
-      "file": "achtung.svg",
-      "label": "Achtung"
-    },
-    {
-      "file": "analyse.svg",
-      "label": "Analyse"
-    },
-    {
-      "file": "auge.svg",
-      "label": "Auge"
-    },
-    {
-      "file": "bilder.svg",
-      "label": "Bilder"
-    },
+  "symbole": [
     {
       "file": "check.svg",
-      "label": "Häkchen"
-    },
-    {
-      "file": "diagramm.svg",
-      "label": "Diagramm"
-    },
-    {
-      "file": "einstellungen.svg",
-      "label": "Einstellungen"
-    },
-    {
-      "file": "flagge.svg",
-      "label": "Flagge"
-    },
-    {
-      "file": "frage.svg",
-      "label": "Frage"
-    },
-    {
-      "file": "glocke.svg",
-      "label": "Glocke"
-    },
-    {
-      "file": "gruppe.svg",
-      "label": "Gruppe"
-    },
-    {
-      "file": "haken.svg",
-      "label": "Haken"
-    },
-    {
-      "file": "haus.svg",
-      "label": "Haus"
-    },
-    {
-      "file": "herz.svg",
-      "label": "Herz"
+      "label": "Häkchen",
+      "kategorie": "Symbole",
+      "keywords": [
+        "ok",
+        "erledigt",
+        "richtig",
+        "bestätigt"
+      ]
     },
     {
       "file": "info.svg",
-      "label": "Info"
+      "label": "Info",
+      "kategorie": "Symbole",
+      "keywords": [
+        "information",
+        "hinweis",
+        "details"
+      ]
     },
     {
-      "file": "kalender.svg",
-      "label": "Kalender"
+      "file": "frage.svg",
+      "label": "Frage",
+      "kategorie": "Symbole",
+      "keywords": [
+        "fragezeichen",
+        "hilfe",
+        "unklar",
+        "frage"
+      ]
     },
     {
-      "file": "kreisdiagramm.svg",
-      "label": "Kreisdiagramm"
-    },
-    {
-      "file": "lesezeichen.svg",
-      "label": "Lesezeichen"
-    },
-    {
-      "file": "ordner.svg",
-      "label": "Ordner"
-    },
-    {
-      "file": "papierkorb.svg",
-      "label": "Papierkorb"
-    },
-    {
-      "file": "person.svg",
-      "label": "Person"
-    },
-    {
-      "file": "personen.svg",
-      "label": "Personen"
-    },
-    {
-      "file": "pfeil-hoch.svg",
-      "label": "Pfeil hoch"
-    },
-    {
-      "file": "pfeil-rechts.svg",
-      "label": "Pfeil rechts"
-    },
-    {
-      "file": "pfeil-runter.svg",
-      "label": "Pfeil runter"
-    },
-    {
-      "file": "pin.svg",
-      "label": "Pin"
-    },
-    {
-      "file": "schloss.svg",
-      "label": "Schloss"
-    },
-    {
-      "file": "schluessel.svg",
-      "label": "Schlüssel"
-    },
-    {
-      "file": "stern.svg",
-      "label": "Stern"
-    },
-    {
-      "file": "stift.svg",
-      "label": "Stift"
-    },
-    {
-      "file": "warnung.svg",
-      "label": "Warnung"
-    },
-    {
-      "file": "ziel.svg",
-      "label": "Ziel"
-    }
-  ],
-  "zsl": [
-    {
-      "file": "apfel.svg",
-      "label": "Apfel"
-    },
-    {
-      "file": "baum.svg",
-      "label": "Baum"
-    },
-    {
-      "file": "biene.svg",
-      "label": "Biene"
-    },
-    {
-      "file": "blume.svg",
-      "label": "Blume"
-    },
-    {
-      "file": "buch.svg",
-      "label": "Buch"
-    },
-    {
-      "file": "digitalisierung.svg",
-      "label": "Digitalisierung"
-    },
-    {
-      "file": "element-1.svg",
-      "label": "Element 1"
-    },
-    {
-      "file": "element-2.svg",
-      "label": "Element 2"
-    },
-    {
-      "file": "element-3.svg",
-      "label": "Element 3"
-    },
-    {
-      "file": "element-4.svg",
-      "label": "Element 4"
-    },
-    {
-      "file": "erlenmeyer.svg",
-      "label": "Erlenmeyer-Kolben"
-    },
-    {
-      "file": "europa.svg",
-      "label": "Europa"
-    },
-    {
-      "file": "forschung.svg",
-      "label": "Forschung"
-    },
-    {
-      "file": "geld.svg",
-      "label": "Geld"
-    },
-    {
-      "file": "geometrie.svg",
-      "label": "Geometrie"
-    },
-    {
-      "file": "globus.svg",
-      "label": "Globus"
-    },
-    {
-      "file": "gluehbirne.svg",
-      "label": "Glühbirne"
-    },
-    {
-      "file": "gruppe.svg",
-      "label": "Gruppe"
+      "file": "schliessen.svg",
+      "label": "Schließen",
+      "kategorie": "Symbole",
+      "keywords": [
+        "abbrechen",
+        "falsch",
+        "kreuz",
+        "nein"
+      ]
     },
     {
       "file": "herz.svg",
-      "label": "Herz"
+      "label": "Herz",
+      "kategorie": "Symbole",
+      "keywords": [
+        "liebe",
+        "favorit",
+        "gefällt",
+        "gesundheit"
+      ]
     },
     {
-      "file": "hirsch.svg",
-      "label": "Hirsch"
-    },
-    {
-      "file": "igel.svg",
-      "label": "Igel"
-    },
-    {
-      "file": "inklusion.svg",
-      "label": "Inklusion"
-    },
-    {
-      "file": "innovation.svg",
-      "label": "Innovation"
-    },
-    {
-      "file": "justitia.svg",
-      "label": "Justitia"
-    },
-    {
-      "file": "kommunikation.svg",
-      "label": "Kommunikation"
-    },
-    {
-      "file": "kuh.svg",
-      "label": "Kuh"
-    },
-    {
-      "file": "landkarte.svg",
-      "label": "Landkarte"
+      "file": "gluehbirne.svg",
+      "label": "Glühbirne",
+      "kategorie": "Symbole",
+      "keywords": [
+        "idee",
+        "einfall",
+        "kreativität",
+        "licht"
+      ]
     },
     {
       "file": "lupe.svg",
-      "label": "Lupe"
+      "label": "Lupe",
+      "kategorie": "Symbole",
+      "keywords": [
+        "suchen",
+        "vergrößern",
+        "finden",
+        "untersuchen"
+      ]
     },
     {
-      "file": "menschen.svg",
-      "label": "Menschen"
+      "file": "pin.svg",
+      "label": "Pinnnadel",
+      "kategorie": "Symbole",
+      "keywords": [
+        "merken",
+        "anheften",
+        "markieren"
+      ]
     },
     {
-      "file": "mikroskop.svg",
-      "label": "Mikroskop"
+      "file": "stern.svg",
+      "label": "Stern",
+      "kategorie": "Symbole",
+      "keywords": [
+        "favorit",
+        "bewertung",
+        "wichtig",
+        "top"
+      ]
     },
     {
-      "file": "musiknote.svg",
-      "label": "Musiknote"
+      "file": "ziel.svg",
+      "label": "Ziel",
+      "kategorie": "Symbole",
+      "keywords": [
+        "ziel",
+        "fokus",
+        "treffer",
+        "zielscheibe"
+      ]
     },
     {
-      "file": "paragraph.svg",
-      "label": "Paragraph"
+      "file": "papierkorb.svg",
+      "label": "Papierkorb",
+      "kategorie": "Symbole",
+      "keywords": [
+        "löschen",
+        "müll",
+        "entfernen",
+        "abfall"
+      ]
     },
     {
-      "file": "pi.svg",
-      "label": "Pi (π)"
+      "file": "warnung.svg",
+      "label": "Warnung",
+      "kategorie": "Symbole",
+      "keywords": [
+        "achtung",
+        "gefahr",
+        "hinweis",
+        "vorsicht"
+      ]
     },
     {
-      "file": "plus-minus.svg",
-      "label": "Plus/Minus"
+      "file": "glocke.svg",
+      "label": "Glocke",
+      "kategorie": "Symbole",
+      "keywords": [
+        "benachrichtigung",
+        "erinnerung",
+        "alarm"
+      ]
     },
     {
-      "file": "reagenzglas.svg",
-      "label": "Reagenzglas"
+      "file": "lesezeichen.svg",
+      "label": "Lesezeichen",
+      "kategorie": "Symbole",
+      "keywords": [
+        "merken",
+        "favorit",
+        "markieren",
+        "speichern"
+      ]
     },
     {
-      "file": "regenbogen.svg",
-      "label": "Regenbogen"
+      "file": "barrierefreiheit.svg",
+      "label": "Barrierefreiheit",
+      "kategorie": "Symbole",
+      "keywords": [
+        "inklusion",
+        "zugänglichkeit",
+        "rollstuhl"
+      ]
     },
     {
-      "file": "schueler.svg",
-      "label": "Schüler"
+      "file": "auge.svg",
+      "label": "Auge",
+      "kategorie": "Symbole",
+      "keywords": [
+        "ansehen",
+        "sichtbar",
+        "beobachten",
+        "anzeigen"
+      ]
     },
     {
-      "file": "schule.svg",
-      "label": "Schule"
+      "file": "pfeil-rechts.svg",
+      "label": "Pfeil rechts",
+      "kategorie": "Pfeile",
+      "keywords": [
+        "weiter",
+        "nächste",
+        "richtung",
+        "rechts"
+      ]
     },
     {
-      "file": "sonne.svg",
-      "label": "Sonne"
+      "file": "pfeil-links.svg",
+      "label": "Pfeil links",
+      "kategorie": "Pfeile",
+      "keywords": [
+        "zurück",
+        "vorherige",
+        "richtung",
+        "links"
+      ]
     },
     {
-      "file": "sport-handball.svg",
-      "label": "Handball"
+      "file": "pfeil-hoch.svg",
+      "label": "Pfeil hoch",
+      "kategorie": "Pfeile",
+      "keywords": [
+        "oben",
+        "aufwärts",
+        "steigen",
+        "richtung"
+      ]
     },
     {
-      "file": "sport-laufen.svg",
-      "label": "Laufen"
+      "file": "pfeil-runter.svg",
+      "label": "Pfeil runter",
+      "kategorie": "Pfeile",
+      "keywords": [
+        "unten",
+        "abwärts",
+        "fallen",
+        "richtung"
+      ]
     },
     {
-      "file": "sport-schwimmen.svg",
-      "label": "Schwimmen"
+      "file": "aktualisieren.svg",
+      "label": "Aktualisieren",
+      "kategorie": "Pfeile",
+      "keywords": [
+        "neu laden",
+        "wiederholen",
+        "synchronisieren"
+      ]
     },
     {
-      "file": "statistik.svg",
-      "label": "Statistik"
+      "file": "gehirn.svg",
+      "label": "Gehirn",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "denken",
+        "verstand",
+        "intelligenz",
+        "lernen"
+      ]
     },
     {
-      "file": "strommast.svg",
-      "label": "Strommast"
+      "file": "roboter.svg",
+      "label": "Roboter",
+      "kategorie": "Technik",
+      "keywords": [
+        "ki",
+        "automatik",
+        "maschine",
+        "technik"
+      ]
     },
     {
-      "file": "tanne.svg",
-      "label": "Tanne"
+      "file": "laptop.svg",
+      "label": "Laptop",
+      "kategorie": "Technik",
+      "keywords": [
+        "computer",
+        "notebook",
+        "rechner",
+        "gerät"
+      ]
     },
     {
-      "file": "technologie.svg",
-      "label": "Technologie"
+      "file": "smartphone.svg",
+      "label": "Smartphone",
+      "kategorie": "Technik",
+      "keywords": [
+        "handy",
+        "telefon",
+        "mobil",
+        "gerät"
+      ]
     },
     {
-      "file": "universitaet.svg",
-      "label": "Universität"
+      "file": "drucker.svg",
+      "label": "Drucker",
+      "kategorie": "Technik",
+      "keywords": [
+        "drucken",
+        "ausdruck",
+        "gerät",
+        "papier"
+      ]
     },
     {
-      "file": "waage.svg",
-      "label": "Waage"
+      "file": "sprechblase.svg",
+      "label": "Sprechblase",
+      "kategorie": "Kommunikation",
+      "keywords": [
+        "chat",
+        "reden",
+        "kommentar",
+        "nachricht"
+      ]
     },
     {
-      "file": "windrad.svg",
-      "label": "Windrad"
+      "file": "mail.svg",
+      "label": "E-Mail",
+      "kategorie": "Kommunikation",
+      "keywords": [
+        "brief",
+        "post",
+        "nachricht",
+        "senden"
+      ]
+    },
+    {
+      "file": "senden.svg",
+      "label": "Senden",
+      "kategorie": "Kommunikation",
+      "keywords": [
+        "abschicken",
+        "papierflieger",
+        "nachricht",
+        "versenden"
+      ]
     },
     {
       "file": "wolke.svg",
-      "label": "Wolke"
+      "label": "Wolke",
+      "kategorie": "Wetter",
+      "keywords": [
+        "himmel",
+        "cloud",
+        "speicher",
+        "wetter"
+      ]
+    },
+    {
+      "file": "hochladen.svg",
+      "label": "Hochladen",
+      "kategorie": "Technik",
+      "keywords": [
+        "upload",
+        "senden",
+        "cloud",
+        "datei"
+      ]
+    },
+    {
+      "file": "herunterladen.svg",
+      "label": "Herunterladen",
+      "kategorie": "Technik",
+      "keywords": [
+        "download",
+        "speichern",
+        "cloud",
+        "datei"
+      ]
+    },
+    {
+      "file": "schule.svg",
+      "label": "Schule",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "bildung",
+        "lernen",
+        "unterricht",
+        "gebäude"
+      ]
+    },
+    {
+      "file": "gebaeude.svg",
+      "label": "Gebäude",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "stadt",
+        "haus",
+        "büro",
+        "architektur"
+      ]
+    },
+    {
+      "file": "haus.svg",
+      "label": "Haus",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "zuhause",
+        "wohnen",
+        "heim",
+        "gebäude"
+      ]
+    },
+    {
+      "file": "einstellungen.svg",
+      "label": "Einstellungen",
+      "kategorie": "Technik",
+      "keywords": [
+        "konfiguration",
+        "zahnrad",
+        "optionen",
+        "system"
+      ]
+    },
+    {
+      "file": "filter.svg",
+      "label": "Filter",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "sortieren",
+        "auswählen",
+        "trichter",
+        "filtern"
+      ]
+    },
+    {
+      "file": "regler.svg",
+      "label": "Regler",
+      "kategorie": "Technik",
+      "keywords": [
+        "schieber",
+        "einstellen",
+        "steuerung",
+        "optionen"
+      ]
+    },
+    {
+      "file": "stift.svg",
+      "label": "Stift",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "bearbeiten",
+        "schreiben",
+        "zeichnen",
+        "bleistift"
+      ]
+    },
+    {
+      "file": "farbpalette.svg",
+      "label": "Farbpalette",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "farben",
+        "malen",
+        "kunst",
+        "gestalten"
+      ]
+    },
+    {
+      "file": "fueller.svg",
+      "label": "Füller",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "schreiben",
+        "tinte",
+        "stift",
+        "unterschrift"
+      ]
+    },
+    {
+      "file": "fehler.svg",
+      "label": "Fehler",
+      "kategorie": "Technik",
+      "keywords": [
+        "bug",
+        "käfer",
+        "problem",
+        "programmieren"
+      ]
+    },
+    {
+      "file": "ordner.svg",
+      "label": "Ordner",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "dateien",
+        "verzeichnis",
+        "ablage",
+        "speichern"
+      ]
+    },
+    {
+      "file": "ordner-offen.svg",
+      "label": "Ordner offen",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "dateien",
+        "verzeichnis",
+        "öffnen",
+        "ablage"
+      ]
+    },
+    {
+      "file": "dokument.svg",
+      "label": "Dokument",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "datei",
+        "text",
+        "blatt",
+        "seite"
+      ]
+    },
+    {
+      "file": "speichern.svg",
+      "label": "Speichern",
+      "kategorie": "Technik",
+      "keywords": [
+        "diskette",
+        "sichern",
+        "datei",
+        "festplatte"
+      ]
+    },
+    {
+      "file": "notiz.svg",
+      "label": "Notiz",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "merken",
+        "zettel",
+        "aufschreiben",
+        "erinnerung"
+      ]
+    },
+    {
+      "file": "apfel.svg",
+      "label": "Apfel",
+      "kategorie": "Essen",
+      "keywords": [
+        "obst",
+        "frucht",
+        "gesund",
+        "essen"
+      ]
+    },
+    {
+      "file": "kaffee.svg",
+      "label": "Kaffee",
+      "kategorie": "Essen",
+      "keywords": [
+        "tasse",
+        "getränk",
+        "heiß",
+        "pause"
+      ]
+    },
+    {
+      "file": "daumen-hoch.svg",
+      "label": "Daumen hoch",
+      "kategorie": "Symbole",
+      "keywords": [
+        "gefällt",
+        "gut",
+        "zustimmung",
+        "like"
+      ]
+    },
+    {
+      "file": "daumen-runter.svg",
+      "label": "Daumen runter",
+      "kategorie": "Symbole",
+      "keywords": [
+        "schlecht",
+        "ablehnung",
+        "dislike",
+        "negativ"
+      ]
+    },
+    {
+      "file": "hand-heben.svg",
+      "label": "Hand heben",
+      "kategorie": "Mensch",
+      "keywords": [
+        "melden",
+        "mitmachen",
+        "frage",
+        "beteiligen"
+      ]
+    },
+    {
+      "file": "ebenen.svg",
+      "label": "Ebenen",
+      "kategorie": "Technik",
+      "keywords": [
+        "schichten",
+        "stapel",
+        "layer",
+        "struktur"
+      ]
+    },
+    {
+      "file": "globus.svg",
+      "label": "Globus",
+      "kategorie": "Natur",
+      "keywords": [
+        "welt",
+        "erde",
+        "global",
+        "geografie"
+      ]
+    },
+    {
+      "file": "standort.svg",
+      "label": "Standort",
+      "kategorie": "Symbole",
+      "keywords": [
+        "ort",
+        "position",
+        "karte",
+        "marker"
+      ]
+    },
+    {
+      "file": "landkarte.svg",
+      "label": "Landkarte",
+      "kategorie": "Symbole",
+      "keywords": [
+        "karte",
+        "navigation",
+        "orientierung",
+        "weg"
+      ]
+    },
+    {
+      "file": "blume.svg",
+      "label": "Blume",
+      "kategorie": "Natur",
+      "keywords": [
+        "pflanze",
+        "blüte",
+        "garten",
+        "frühling"
+      ]
+    },
+    {
+      "file": "wachstum.svg",
+      "label": "Wachstum",
+      "kategorie": "Natur",
+      "keywords": [
+        "pflanze",
+        "sprössling",
+        "entwicklung",
+        "keimen"
+      ]
+    },
+    {
+      "file": "personen.svg",
+      "label": "Personen",
+      "kategorie": "Mensch",
+      "keywords": [
+        "leute",
+        "gruppe",
+        "team",
+        "menschen"
+      ]
+    },
+    {
+      "file": "gruppe.svg",
+      "label": "Gruppe",
+      "kategorie": "Mensch",
+      "keywords": [
+        "team",
+        "gemeinschaft",
+        "personen",
+        "zusammen"
+      ]
+    },
+    {
+      "file": "person.svg",
+      "label": "Person",
+      "kategorie": "Mensch",
+      "keywords": [
+        "mensch",
+        "profil",
+        "nutzer",
+        "einzeln"
+      ]
+    },
+    {
+      "file": "person-hinzufuegen.svg",
+      "label": "Person hinzufügen",
+      "kategorie": "Mensch",
+      "keywords": [
+        "einladen",
+        "neu",
+        "mitglied",
+        "team"
+      ]
+    },
+    {
+      "file": "kamera.svg",
+      "label": "Kamera",
+      "kategorie": "Technik",
+      "keywords": [
+        "foto",
+        "aufnahme",
+        "bild",
+        "fotografieren"
+      ]
+    },
+    {
+      "file": "video.svg",
+      "label": "Video",
+      "kategorie": "Technik",
+      "keywords": [
+        "film",
+        "aufnahme",
+        "kamera",
+        "clip"
+      ]
+    },
+    {
+      "file": "bilder.svg",
+      "label": "Bilder",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "fotos",
+        "galerie",
+        "grafik",
+        "aufnahmen"
+      ]
+    },
+    {
+      "file": "warenkorb.svg",
+      "label": "Warenkorb",
+      "kategorie": "Symbole",
+      "keywords": [
+        "einkaufen",
+        "shop",
+        "kaufen",
+        "korb"
+      ]
+    },
+    {
+      "file": "geldboerse.svg",
+      "label": "Geldbörse",
+      "kategorie": "Symbole",
+      "keywords": [
+        "portemonnaie",
+        "geld",
+        "bezahlen",
+        "finanzen"
+      ]
+    },
+    {
+      "file": "schloss.svg",
+      "label": "Schloss",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sicherheit",
+        "gesperrt",
+        "privat",
+        "schützen"
+      ]
+    },
+    {
+      "file": "schluessel.svg",
+      "label": "Schlüssel",
+      "kategorie": "Symbole",
+      "keywords": [
+        "zugang",
+        "passwort",
+        "öffnen",
+        "sicherheit"
+      ]
+    },
+    {
+      "file": "schild.svg",
+      "label": "Schutzschild",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sicherheit",
+        "schutz",
+        "geprüft",
+        "abwehr"
+      ]
+    },
+    {
+      "file": "waage.svg",
+      "label": "Waage",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "gleichgewicht",
+        "justiz",
+        "messen",
+        "vergleich"
+      ]
+    },
+    {
+      "file": "note.svg",
+      "label": "Note",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "musik",
+        "ton",
+        "melodie",
+        "lied"
+      ]
+    },
+    {
+      "file": "mikrofon.svg",
+      "label": "Mikrofon",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "aufnahme",
+        "sprechen",
+        "podcast",
+        "stimme"
+      ]
+    },
+    {
+      "file": "kopfhoerer.svg",
+      "label": "Kopfhörer",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "musik",
+        "hören",
+        "audio",
+        "ton"
+      ]
+    },
+    {
+      "file": "diagramm.svg",
+      "label": "Diagramm",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "statistik",
+        "balken",
+        "daten",
+        "auswertung"
+      ]
+    },
+    {
+      "file": "kreisdiagramm.svg",
+      "label": "Kreisdiagramm",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "statistik",
+        "anteil",
+        "daten",
+        "tortendiagramm"
+      ]
+    },
+    {
+      "file": "analyse.svg",
+      "label": "Analyse",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "auswertung",
+        "daten",
+        "statistik",
+        "untersuchen"
+      ]
+    },
+    {
+      "file": "trend.svg",
+      "label": "Trend",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "wachstum",
+        "entwicklung",
+        "steigen",
+        "kurve"
+      ]
+    },
+    {
+      "file": "pokal.svg",
+      "label": "Pokal",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sieg",
+        "gewinner",
+        "auszeichnung",
+        "erfolg"
+      ]
+    },
+    {
+      "file": "rakete.svg",
+      "label": "Rakete",
+      "kategorie": "Technik",
+      "keywords": [
+        "start",
+        "schnell",
+        "weltraum",
+        "abheben"
+      ]
+    },
+    {
+      "file": "krone.svg",
+      "label": "Krone",
+      "kategorie": "Symbole",
+      "keywords": [
+        "könig",
+        "sieger",
+        "best",
+        "auszeichnung"
+      ]
+    },
+    {
+      "file": "feuer.svg",
+      "label": "Feuer",
+      "kategorie": "Symbole",
+      "keywords": [
+        "flamme",
+        "heiß",
+        "brennen",
+        "energie"
+      ]
+    },
+    {
+      "file": "flagge.svg",
+      "label": "Flagge",
+      "kategorie": "Symbole",
+      "keywords": [
+        "markierung",
+        "ziel",
+        "fahne",
+        "meilenstein"
+      ]
+    },
+    {
+      "file": "abschluss.svg",
+      "label": "Abschluss",
+      "kategorie": "Schule",
+      "keywords": [
+        "diplom",
+        "hut",
+        "studium",
+        "absolvent"
+      ]
+    },
+    {
+      "file": "smiley.svg",
+      "label": "Smiley",
+      "kategorie": "Symbole",
+      "keywords": [
+        "lächeln",
+        "freude",
+        "emoji",
+        "glücklich"
+      ]
+    },
+    {
+      "file": "sparschwein.svg",
+      "label": "Sparschwein",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sparen",
+        "geld",
+        "finanzen",
+        "münze"
+      ]
+    },
+    {
+      "file": "uhr.svg",
+      "label": "Uhr",
+      "kategorie": "Zeit",
+      "keywords": [
+        "zeit",
+        "stunde",
+        "termin",
+        "uhrzeit"
+      ]
+    },
+    {
+      "file": "kalender.svg",
+      "label": "Kalender",
+      "kategorie": "Zeit",
+      "keywords": [
+        "datum",
+        "termin",
+        "planung",
+        "tag"
+      ]
+    },
+    {
+      "file": "sanduhr.svg",
+      "label": "Sanduhr",
+      "kategorie": "Zeit",
+      "keywords": [
+        "zeit",
+        "warten",
+        "ablauf",
+        "frist"
+      ]
+    },
+    {
+      "file": "termin.svg",
+      "label": "Termin",
+      "kategorie": "Zeit",
+      "keywords": [
+        "kalender",
+        "datum",
+        "bestätigt",
+        "planung"
+      ]
+    },
+    {
+      "file": "liste.svg",
+      "label": "Liste",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "aufzählung",
+        "punkte",
+        "stichworte",
+        "übersicht"
+      ]
+    },
+    {
+      "file": "nummerierte-liste.svg",
+      "label": "Nummerierte Liste",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "reihenfolge",
+        "schritte",
+        "aufzählung",
+        "nummern"
+      ]
+    },
+    {
+      "file": "text.svg",
+      "label": "Text",
+      "kategorie": "Büro & Arbeit",
+      "keywords": [
+        "schrift",
+        "absatz",
+        "inhalt",
+        "schreiben"
+      ]
+    },
+    {
+      "file": "sonne.svg",
+      "label": "Sonne",
+      "kategorie": "Wetter",
+      "keywords": [
+        "sonnig",
+        "hell",
+        "tag",
+        "wärme"
+      ]
+    },
+    {
+      "file": "mond.svg",
+      "label": "Mond",
+      "kategorie": "Wetter",
+      "keywords": [
+        "nacht",
+        "dunkel",
+        "abend",
+        "schlaf"
+      ]
+    },
+    {
+      "file": "tropfen.svg",
+      "label": "Tropfen",
+      "kategorie": "Wetter",
+      "keywords": [
+        "wasser",
+        "regen",
+        "flüssigkeit",
+        "feucht"
+      ]
+    },
+    {
+      "file": "schneeflocke.svg",
+      "label": "Schneeflocke",
+      "kategorie": "Wetter",
+      "keywords": [
+        "schnee",
+        "winter",
+        "kalt",
+        "frost"
+      ]
+    },
+    {
+      "file": "erlenmeyer.svg",
+      "label": "Erlenmeyer-Kolben",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "chemie",
+        "kolben",
+        "labor",
+        "glas",
+        "experiment"
+      ]
+    },
+    {
+      "file": "reagenzglas.svg",
+      "label": "Reagenzglas",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "chemie",
+        "labor",
+        "glas",
+        "probe"
+      ]
+    },
+    {
+      "file": "pi.svg",
+      "label": "Pi (π)",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "mathe",
+        "mathematik",
+        "kreiszahl",
+        "zahl"
+      ]
+    },
+    {
+      "file": "plus-minus.svg",
+      "label": "Plus/Minus",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "mathe",
+        "rechnen",
+        "plus",
+        "minus"
+      ]
+    },
+    {
+      "file": "geometrie.svg",
+      "label": "Geometrie",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "mathe",
+        "dreieck",
+        "geodreieck",
+        "winkel"
+      ]
+    },
+    {
+      "file": "musiknote.svg",
+      "label": "Musiknote",
+      "kategorie": "Kunst & Musik",
+      "keywords": [
+        "musik",
+        "note",
+        "melodie",
+        "ton"
+      ]
+    }
+  ],
+  "motive": [
+    {
+      "file": "apfel.svg",
+      "label": "Apfel",
+      "kategorie": "Natur",
+      "keywords": [
+        "obst",
+        "frucht",
+        "gesund",
+        "essen"
+      ]
+    },
+    {
+      "file": "auto.svg",
+      "label": "Auto",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "fahrzeug",
+        "pkw",
+        "wagen",
+        "mobilität"
+      ]
+    },
+    {
+      "file": "bahn.svg",
+      "label": "Bahn",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "zug",
+        "eisenbahn",
+        "verkehr",
+        "reise"
+      ]
+    },
+    {
+      "file": "bank.svg",
+      "label": "Bank",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "geld",
+        "finanzen",
+        "institut",
+        "sparen"
+      ]
+    },
+    {
+      "file": "baum.svg",
+      "label": "Baum",
+      "kategorie": "Natur",
+      "keywords": [
+        "wald",
+        "pflanze",
+        "umwelt",
+        "natur"
+      ]
+    },
+    {
+      "file": "biene.svg",
+      "label": "Biene",
+      "kategorie": "Tier",
+      "keywords": [
+        "insekt",
+        "honig",
+        "natur",
+        "bestäubung"
+      ]
+    },
+    {
+      "file": "blaulicht.svg",
+      "label": "Blaulicht",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "polizei",
+        "notfall",
+        "einsatz",
+        "sirene"
+      ]
+    },
+    {
+      "file": "blume.svg",
+      "label": "Blume",
+      "kategorie": "Natur",
+      "keywords": [
+        "pflanze",
+        "blüte",
+        "garten",
+        "frühling"
+      ]
+    },
+    {
+      "file": "brezel.svg",
+      "label": "Brezel",
+      "kategorie": "Essen",
+      "keywords": [
+        "gebäck",
+        "essen",
+        "bäckerei",
+        "snack"
+      ]
+    },
+    {
+      "file": "bruecke.svg",
+      "label": "Brücke",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "übergang",
+        "verbindung",
+        "bau",
+        "fluss"
+      ]
+    },
+    {
+      "file": "buch.svg",
+      "label": "Buch",
+      "kategorie": "Schule",
+      "keywords": [
+        "lesen",
+        "bildung",
+        "wissen",
+        "lernen"
+      ]
+    },
+    {
+      "file": "bus.svg",
+      "label": "Bus",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "fahrzeug",
+        "nahverkehr",
+        "transport",
+        "öpnv"
+      ]
+    },
+    {
+      "file": "digitalisierung.svg",
+      "label": "Digitalisierung",
+      "kategorie": "Technik",
+      "keywords": [
+        "digital",
+        "daten",
+        "technik",
+        "vernetzung"
+      ]
+    },
+    {
+      "file": "e-auto.svg",
+      "label": "E-Auto",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "elektroauto",
+        "laden",
+        "umwelt",
+        "mobilität"
+      ]
+    },
+    {
+      "file": "einkaufswagen.svg",
+      "label": "Einkaufswagen",
+      "kategorie": "Symbole",
+      "keywords": [
+        "einkaufen",
+        "shop",
+        "markt",
+        "kaufen"
+      ]
+    },
+    {
+      "file": "element-1.svg",
+      "label": "Element 1",
+      "kategorie": "Symbole",
+      "keywords": [
+        "form",
+        "muster",
+        "dekor",
+        "element"
+      ]
+    },
+    {
+      "file": "element-2.svg",
+      "label": "Element 2",
+      "kategorie": "Symbole",
+      "keywords": [
+        "form",
+        "muster",
+        "dekor",
+        "element"
+      ]
+    },
+    {
+      "file": "element-3.svg",
+      "label": "Element 3",
+      "kategorie": "Symbole",
+      "keywords": [
+        "form",
+        "muster",
+        "dekor",
+        "element"
+      ]
+    },
+    {
+      "file": "element-4.svg",
+      "label": "Element 4",
+      "kategorie": "Symbole",
+      "keywords": [
+        "form",
+        "muster",
+        "dekor",
+        "element"
+      ]
+    },
+    {
+      "file": "europa.svg",
+      "label": "Europa",
+      "kategorie": "Symbole",
+      "keywords": [
+        "eu",
+        "sterne",
+        "kontinent",
+        "union"
+      ]
+    },
+    {
+      "file": "fahrrad.svg",
+      "label": "Fahrrad",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "rad",
+        "radfahren",
+        "mobilität",
+        "sport"
+      ]
+    },
+    {
+      "file": "flaggen.svg",
+      "label": "Flaggen",
+      "kategorie": "Symbole",
+      "keywords": [
+        "fahnen",
+        "länder",
+        "international",
+        "staaten"
+      ]
+    },
+    {
+      "file": "forschung.svg",
+      "label": "Forschung",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "wissenschaft",
+        "labor",
+        "untersuchung",
+        "studie"
+      ]
+    },
+    {
+      "file": "fotoapparat.svg",
+      "label": "Fotoapparat",
+      "kategorie": "Technik",
+      "keywords": [
+        "kamera",
+        "foto",
+        "bild",
+        "aufnahme"
+      ]
+    },
+    {
+      "file": "fussgaenger.svg",
+      "label": "Fußgänger",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "gehen",
+        "laufen",
+        "zebrastreifen",
+        "mensch"
+      ]
+    },
+    {
+      "file": "geld.svg",
+      "label": "Geld",
+      "kategorie": "Symbole",
+      "keywords": [
+        "münzen",
+        "finanzen",
+        "bezahlen",
+        "euro"
+      ]
+    },
+    {
+      "file": "globus.svg",
+      "label": "Globus",
+      "kategorie": "Natur",
+      "keywords": [
+        "welt",
+        "erde",
+        "geografie",
+        "global"
+      ]
+    },
+    {
+      "file": "gluehbirne.svg",
+      "label": "Glühbirne",
+      "kategorie": "Symbole",
+      "keywords": [
+        "idee",
+        "licht",
+        "kreativität",
+        "einfall"
+      ]
+    },
+    {
+      "file": "greif.svg",
+      "label": "Greif",
+      "kategorie": "Tier",
+      "keywords": [
+        "wappen",
+        "fabelwesen",
+        "baden-württemberg",
+        "symbol"
+      ]
+    },
+    {
+      "file": "gruppe.svg",
+      "label": "Gruppe",
+      "kategorie": "Mensch",
+      "keywords": [
+        "team",
+        "personen",
+        "gemeinschaft",
+        "zusammen"
+      ]
+    },
+    {
+      "file": "haus.svg",
+      "label": "Haus",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "zuhause",
+        "wohnen",
+        "heim",
+        "gebäude"
+      ]
+    },
+    {
+      "file": "herz.svg",
+      "label": "Herz",
+      "kategorie": "Symbole",
+      "keywords": [
+        "liebe",
+        "gesundheit",
+        "gefällt",
+        "favorit"
+      ]
+    },
+    {
+      "file": "hirsch.svg",
+      "label": "Hirsch",
+      "kategorie": "Tier",
+      "keywords": [
+        "wild",
+        "wald",
+        "geweih",
+        "tier"
+      ]
+    },
+    {
+      "file": "igel.svg",
+      "label": "Igel",
+      "kategorie": "Tier",
+      "keywords": [
+        "stacheln",
+        "garten",
+        "wildtier",
+        "natur"
+      ]
+    },
+    {
+      "file": "inklusion.svg",
+      "label": "Inklusion",
+      "kategorie": "Mensch",
+      "keywords": [
+        "teilhabe",
+        "vielfalt",
+        "gemeinschaft",
+        "barrierefrei"
+      ]
+    },
+    {
+      "file": "innovation.svg",
+      "label": "Innovation",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "idee",
+        "neuerung",
+        "fortschritt",
+        "erfindung"
+      ]
+    },
+    {
+      "file": "justitia.svg",
+      "label": "Justitia",
+      "kategorie": "Symbole",
+      "keywords": [
+        "justiz",
+        "recht",
+        "gesetz",
+        "waage"
+      ]
+    },
+    {
+      "file": "kirche.svg",
+      "label": "Kirche",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "religion",
+        "turm",
+        "glaube",
+        "bauwerk"
+      ]
+    },
+    {
+      "file": "kommunikation.svg",
+      "label": "Kommunikation",
+      "kategorie": "Kommunikation",
+      "keywords": [
+        "austausch",
+        "reden",
+        "dialog",
+        "nachricht"
+      ]
+    },
+    {
+      "file": "krankenhaus.svg",
+      "label": "Krankenhaus",
+      "kategorie": "Gebäude",
+      "keywords": [
+        "klinik",
+        "gesundheit",
+        "medizin",
+        "notfall"
+      ]
+    },
+    {
+      "file": "kuh.svg",
+      "label": "Kuh",
+      "kategorie": "Tier",
+      "keywords": [
+        "rind",
+        "bauernhof",
+        "milch",
+        "tier"
+      ]
+    },
+    {
+      "file": "landkarte.svg",
+      "label": "Landkarte",
+      "kategorie": "Symbole",
+      "keywords": [
+        "karte",
+        "navigation",
+        "weg",
+        "orientierung"
+      ]
+    },
+    {
+      "file": "lupe.svg",
+      "label": "Lupe",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "suchen",
+        "untersuchen",
+        "vergrößern",
+        "finden"
+      ]
+    },
+    {
+      "file": "menschen.svg",
+      "label": "Menschen",
+      "kategorie": "Mensch",
+      "keywords": [
+        "leute",
+        "personen",
+        "gesellschaft",
+        "gruppe"
+      ]
+    },
+    {
+      "file": "mikroskop.svg",
+      "label": "Mikroskop",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "labor",
+        "forschung",
+        "biologie",
+        "untersuchen"
+      ]
+    },
+    {
+      "file": "paragraph.svg",
+      "label": "Paragraph",
+      "kategorie": "Symbole",
+      "keywords": [
+        "gesetz",
+        "recht",
+        "regel",
+        "justiz"
+      ]
+    },
+    {
+      "file": "regenbogen.svg",
+      "label": "Regenbogen",
+      "kategorie": "Wetter",
+      "keywords": [
+        "farben",
+        "himmel",
+        "wetter",
+        "bunt"
+      ]
+    },
+    {
+      "file": "schueler.svg",
+      "label": "Schüler",
+      "kategorie": "Schule",
+      "keywords": [
+        "lernen",
+        "bildung",
+        "kind",
+        "unterricht"
+      ]
+    },
+    {
+      "file": "schule.svg",
+      "label": "Schule",
+      "kategorie": "Schule",
+      "keywords": [
+        "bildung",
+        "lernen",
+        "unterricht",
+        "gebäude"
+      ]
+    },
+    {
+      "file": "sicherheitsschloss.svg",
+      "label": "Sicherheitsschloss",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sicherheit",
+        "schutz",
+        "daten",
+        "sperren"
+      ]
+    },
+    {
+      "file": "sonne.svg",
+      "label": "Sonne",
+      "kategorie": "Wetter",
+      "keywords": [
+        "sonnig",
+        "hell",
+        "wärme",
+        "tag"
+      ]
+    },
+    {
+      "file": "sparschwein.svg",
+      "label": "Sparschwein",
+      "kategorie": "Symbole",
+      "keywords": [
+        "sparen",
+        "geld",
+        "finanzen",
+        "münze"
+      ]
+    },
+    {
+      "file": "sport-laufen.svg",
+      "label": "Laufen",
+      "kategorie": "Sport",
+      "keywords": [
+        "rennen",
+        "joggen",
+        "leichtathletik",
+        "bewegung"
+      ]
+    },
+    {
+      "file": "sport-schwimmen.svg",
+      "label": "Schwimmen",
+      "kategorie": "Sport",
+      "keywords": [
+        "wasser",
+        "sport",
+        "baden",
+        "bewegung"
+      ]
+    },
+    {
+      "file": "sport-handball.svg",
+      "label": "Handball",
+      "kategorie": "Sport",
+      "keywords": [
+        "ball",
+        "mannschaft",
+        "sport",
+        "spiel"
+      ]
+    },
+    {
+      "file": "sport-turnen.svg",
+      "label": "Turnen",
+      "kategorie": "Sport",
+      "keywords": [
+        "gymnastik",
+        "sport",
+        "bewegung",
+        "geräte"
+      ]
+    },
+    {
+      "file": "statistik.svg",
+      "label": "Statistik",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "daten",
+        "diagramm",
+        "auswertung",
+        "zahlen"
+      ]
+    },
+    {
+      "file": "strommast.svg",
+      "label": "Strommast",
+      "kategorie": "Technik",
+      "keywords": [
+        "energie",
+        "strom",
+        "elektrizität",
+        "leitung"
+      ]
+    },
+    {
+      "file": "tanne.svg",
+      "label": "Tanne",
+      "kategorie": "Natur",
+      "keywords": [
+        "baum",
+        "wald",
+        "nadelbaum",
+        "weihnachten"
+      ]
+    },
+    {
+      "file": "technologie.svg",
+      "label": "Technologie",
+      "kategorie": "Technik",
+      "keywords": [
+        "technik",
+        "digital",
+        "innovation",
+        "computer"
+      ]
+    },
+    {
+      "file": "traktor.svg",
+      "label": "Traktor",
+      "kategorie": "Verkehr",
+      "keywords": [
+        "landwirtschaft",
+        "bauernhof",
+        "fahrzeug",
+        "acker"
+      ]
+    },
+    {
+      "file": "universitaet.svg",
+      "label": "Universität",
+      "kategorie": "Schule",
+      "keywords": [
+        "hochschule",
+        "studium",
+        "bildung",
+        "wissenschaft"
+      ]
+    },
+    {
+      "file": "waage.svg",
+      "label": "Waage",
+      "kategorie": "Wissenschaft",
+      "keywords": [
+        "gleichgewicht",
+        "messen",
+        "justiz",
+        "vergleich"
+      ]
+    },
+    {
+      "file": "weinglas.svg",
+      "label": "Weinglas",
+      "kategorie": "Essen",
+      "keywords": [
+        "getränk",
+        "wein",
+        "glas",
+        "trinken"
+      ]
+    },
+    {
+      "file": "windrad.svg",
+      "label": "Windrad",
+      "kategorie": "Natur",
+      "keywords": [
+        "windkraft",
+        "energie",
+        "strom",
+        "umwelt"
+      ]
+    },
+    {
+      "file": "wolke.svg",
+      "label": "Wolke",
+      "kategorie": "Wetter",
+      "keywords": [
+        "himmel",
+        "bewölkt",
+        "wetter",
+        "regen"
+      ]
     }
   ]
 }

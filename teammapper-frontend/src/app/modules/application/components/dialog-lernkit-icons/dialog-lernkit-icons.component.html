@@ -1,32 +1,65 @@
 <h2 mat-dialog-title>{{ 'MODALS.ICONS.TITLE' | translate }}</h2>
 <mat-dialog-content>
-  <p class="lk-ic-hint">{{ 'MODALS.ICONS.HINT' | translate }}</p>
+  <input
+    class="lk-ic-search"
+    type="search"
+    [value]="suche()"
+    (input)="onSearch($event)"
+    [placeholder]="'MODALS.ICONS.SEARCH' | translate" />
 
   <mat-tab-group class="lk-ic-tabs" animationDuration="0ms">
-    <mat-tab [label]="'MODALS.ICONS.TAB_ALLGEMEIN' | translate">
+    <mat-tab [label]="'MODALS.ICONS.TAB_SYMBOLE' | translate">
+      <div class="lk-ic-cats">
+        @for (k of kategorienSymbole(); track k) {
+          <button
+            type="button"
+            class="lk-ic-cat"
+            [class.aktiv]="katSymbole() === k"
+            (click)="katSymbole.set(k)">
+            {{ k }}
+          </button>
+        }
+      </div>
       <div class="lk-ic-grid">
-        @for (ic of allgemein(); track ic.file) {
+        @for (ic of gefiltertSymbole(); track ic.file) {
           <button
             type="button"
             class="lk-ic-cell"
             [title]="ic.label"
-            (click)="pick('allgemein', ic.file)">
-            <img [src]="iconUrl('allgemein', ic.file)" [alt]="ic.label" />
+            (click)="pick('symbole', ic.file)">
+            <img [src]="iconUrl('symbole', ic.file)" [alt]="ic.label" />
           </button>
+        }
+        @if (gefiltertSymbole().length === 0) {
+          <div class="lk-ic-empty">{{ 'MODALS.ICONS.EMPTY' | translate }}</div>
         }
       </div>
     </mat-tab>
 
-    <mat-tab [label]="'MODALS.ICONS.TAB_ZSL' | translate">
+    <mat-tab [label]="'MODALS.ICONS.TAB_MOTIVE' | translate">
+      <div class="lk-ic-cats">
+        @for (k of kategorienMotive(); track k) {
+          <button
+            type="button"
+            class="lk-ic-cat"
+            [class.aktiv]="katMotive() === k"
+            (click)="katMotive.set(k)">
+            {{ k }}
+          </button>
+        }
+      </div>
       <div class="lk-ic-grid">
-        @for (ic of zsl(); track ic.file) {
+        @for (ic of gefiltertMotive(); track ic.file) {
           <button
             type="button"
             class="lk-ic-cell"
             [title]="ic.label"
-            (click)="pick('zsl', ic.file)">
-            <img [src]="iconUrl('zsl', ic.file)" [alt]="ic.label" />
+            (click)="pick('motive', ic.file)">
+            <img [src]="iconUrl('motive', ic.file)" [alt]="ic.label" />
           </button>
+        }
+        @if (gefiltertMotive().length === 0) {
+          <div class="lk-ic-empty">{{ 'MODALS.ICONS.EMPTY' | translate }}</div>
         }
       </div>
     </mat-tab>
