@@ -1,10 +1,24 @@
 <h2 mat-dialog-title>{{ 'MODALS.IMPORT_MERMAID.TITLE' | translate }}</h2>
 <mat-dialog-content>
-  <div class="import-mermaid-modal-section">
+  <div class="lk-mm-intro">
     {{ 'MODALS.IMPORT_MERMAID.CONTENT' | translate }}
   </div>
-  <br />
-  {{ 'MODALS.IMPORT_MERMAID.LABEL_TEXT_AREA' | translate }}
+
+  <!-- Option 1: Mermaid-Datei hochladen -->
+  <div class="lk-mm-file">
+    <span class="lk-mm-caption">{{
+      'MODALS.IMPORT_MERMAID.LABEL_FILE' | translate
+    }}</span>
+    <input
+      type="file"
+      accept=".mmd,.mermaid,.txt,text/plain"
+      (change)="onFileSelected($event)" />
+  </div>
+
+  <!-- Option 2: Mermaid-Code einfügen -->
+  <div class="lk-mm-caption lk-mm-or">
+    {{ 'MODALS.IMPORT_MERMAID.LABEL_TEXT_AREA' | translate }}
+  </div>
   <mat-form-field class="max-width">
     <textarea
       matInput
@@ -12,21 +26,19 @@
       [(ngModel)]="mermaidInput"
       cdkTextareaAutosize
       #autosize="cdkTextareaAutosize"
-      cdkAutosizeMinRows="5"
-      placeholder="mindmap
-        ...
-      "
-      cdkAutosizeMaxRows="20">
+      cdkAutosizeMinRows="6"
+      cdkAutosizeMaxRows="20"
+      placeholder="mindmap&#10;  root((Zentrales Thema))&#10;    Idee 1&#10;      Detail A&#10;    Idee 2">
     </textarea>
   </mat-form-field>
+
+  <div class="lk-mm-hint">{{ 'MODALS.IMPORT_MERMAID.HINT' | translate }}</div>
 </mat-dialog-content>
-<mat-dialog-actions>
-  <button mat-raised-button [mat-dialog-close]="true">
+<mat-dialog-actions class="lk-mm-actions">
+  <button mat-stroked-button [mat-dialog-close]="true">
     {{ 'MODALS.GENERAL.BUTTON_CLOSE' | translate }}
   </button>
-  <div>
-    <button mat-raised-button (click)="import()" color="primary" class="ml-5">
-      {{ 'MODALS.IMPORT_MERMAID.IMPORT' | translate }}
-    </button>
-  </div>
+  <button mat-flat-button (click)="import()" color="primary" class="ml-5">
+    {{ 'MODALS.IMPORT_MERMAID.IMPORT' | translate }}
+  </button>
 </mat-dialog-actions>

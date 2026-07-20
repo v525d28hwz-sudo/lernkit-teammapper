@@ -42,6 +42,20 @@ export class DialogImportMermaidComponent {
   private router = inject(Router);
 
   public mermaidInput = '';
+  public fileName = '';
+
+  // .mmd-/Textdatei einlesen und in das Textfeld übernehmen (gleicher Import-Pfad).
+  onFileSelected(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const file = input.files && input.files[0];
+    if (!file) return;
+    this.fileName = file.name;
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.mermaidInput = String(reader.result || '');
+    };
+    reader.readAsText(file);
+  }
 
   async import() {
     const success = await this.importService.importFromMermaid(

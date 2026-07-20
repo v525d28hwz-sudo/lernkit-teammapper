@@ -94,12 +94,14 @@
       "BUTTON_RECONNECT": "Neu verbinden"
     },
     "IMPORT_MERMAID": {
-      "TITLE": "Mermaid Mindmap Import",
-      "CONTENT": "Importiere eine Mindmap auf Basis von Mermaid. Mermaid ist eine Syntax zum Beschreiben von Diagrammen und kann entweder manuell oder bspw. mit generativer KI einfach erzeugt werden.",
+      "TITLE": "Mermaid-Mindmap importieren",
+      "CONTENT": "Erzeuge eine Mindmap aus Mermaid-Code – z. B. dem Code, den dir AIS.chat schreibt. Lade eine .mmd-Datei hoch oder füge den Code direkt ein. Unterstützt wird die Mermaid-mindmap-Syntax.",
       "IMPORT": "Importieren",
       "LABEL_CREATE_FROM_AI": "Beschreibung der Mindmap",
       "BUTTON_CREATE_FROM_AI": "Generieren",
-      "LABEL_TEXT_AREA": "Mermaid"
+      "LABEL_FILE": "Mermaid-Datei (.mmd) hochladen",
+      "LABEL_TEXT_AREA": "… oder Mermaid-Code hier einfügen",
+      "HINT": "Der Code muss Mermaid-mindmap-Syntax sein (beginnt mit „mindmap“). Flussdiagramme (flowchart/graph) werden nicht unterstützt – bitte AIS.chat um eine „Mermaid-Mindmap“."
     },
     "IMPORT_AI": {
       "TITLE": "KI-Mindmap-Generator",

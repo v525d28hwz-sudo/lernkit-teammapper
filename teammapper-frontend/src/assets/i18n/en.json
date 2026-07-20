@@ -94,12 +94,14 @@
       "BUTTON_RECONNECT": "Reconnect"
     },
     "IMPORT_MERMAID": {
-      "TITLE": "Mermaid Mindmap Import",
-      "CONTENT": "Import mindmaps using Mermaid syntax. Create your mindmap by either generating it with AI assistance or writing the Mermaid code manually.",
+      "TITLE": "Import Mermaid mindmap",
+      "CONTENT": "Create a mindmap from Mermaid code – e.g. the code an AI assistant writes for you. Upload an .mmd file or paste the code directly. Mermaid mindmap syntax is supported.",
       "IMPORT": "Import",
       "LABEL_CREATE_FROM_AI": "Mindmap description",
       "BUTTON_CREATE_FROM_AI": "Generate",
-      "LABEL_TEXT_AREA": "Mermaid"
+      "LABEL_FILE": "Upload Mermaid file (.mmd)",
+      "LABEL_TEXT_AREA": "… or paste Mermaid code here",
+      "HINT": "The code must use Mermaid mindmap syntax (starts with “mindmap”). Flowcharts (flowchart/graph) are not supported – ask for a “Mermaid mindmap”."
     },
     "IMPORT_AI": {
       "TITLE": "AI Mindmap Generator",

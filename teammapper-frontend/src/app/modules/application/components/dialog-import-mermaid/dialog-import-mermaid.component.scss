@@ -1,10 +1,67 @@
-@use '@angular/material' as mat;
-@use 'src/theme.scss';
+:host {
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+}
 
 .max-width {
   width: 100%;
 }
 
 .ml-5 {
-  margin-left: 5pt;
+  margin-left: 8px;
+}
+
+.lk-mm-intro {
+  font-size: 14px;
+  line-height: 1.5;
+  color: #5c677d;
+}
+
+.lk-mm-caption {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  color: #1a1a2e;
+}
+
+.lk-mm-file {
+  margin: 16px 0 4px;
+  padding: 12px 14px;
+  background: #f4f5f7;
+  border: 1px solid #e4e2dc;
+  border-radius: 10px;
+
+  .lk-mm-caption {
+    margin-bottom: 8px;
+  }
+
+  input[type='file'] {
+    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-size: 12px;
+    max-width: 100%;
+  }
+}
+
+.lk-mm-or {
+  margin-top: 16px;
+}
+
+.lk-mm-hint {
+  margin-top: 6px;
+  font-size: 12px;
+  line-height: 1.5;
+  color: #5c677d;
+  white-space: pre-line;
+}
+
+.lk-mm-actions {
+  justify-content: center !important;
+  gap: 10px;
+  padding-top: 4px;
+
+  button {
+    border-radius: 22px;
+    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-weight: 700;
+    letter-spacing: 0.2px;
+  }
 }
