@@ -158,7 +158,7 @@
       "SECTIONS": [
         {
           "TITLE": "Mindmaps",
-          "SUBTITLE": "TeamMapper folgt dem Tony Buzan Ansatz, welcher Bilder und Farben nutzt, um das Erinnerungsvermögen zu verbessern und die Kreativität anzuregen.",
+          "SUBTITLE": "Mindmaps folgen dem Tony Buzan Ansatz, welcher Bilder und Farben nutzt, um das Erinnerungsvermögen zu verbessern und die Kreativität anzuregen.",
           "CARDS": [
             {
               "TITLE": "Farben und Bilder",
@@ -200,8 +200,8 @@
   },
   "MESSAGES": {
     "NO_SAVED_MAPS": "Keine Mindmap vorhanden!",
-    "INITIAL_INFORMATION": "»TeamMapper« ist bereit ☺",
-    "WELCOME_MESSAGE": "Willkommen zur Anwendung »TeamMapper« ☺",
+    "INITIAL_INFORMATION": "»lernkit Mindmap« ist bereit ☺",
+    "WELCOME_MESSAGE": "Willkommen bei der lernkit-Mindmap ☺",
     "MAP_DELETION_CONFIRM": "Bist du sicher, dass du die Mindmap löschen möchtest?",
     "UNLOAD_WARN": "Seite wirklich verlassen?",
     "JSON_FILE_SIZE_TOO_LARGE": "Die Datei ist größer als 1 MB und kann möglicherweise später nicht importiert werden. Bitte Datei verkleinern (z.B. Bilder entfernen)."

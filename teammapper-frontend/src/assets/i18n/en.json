@@ -158,7 +158,7 @@
       "SECTIONS": [
         {
           "TITLE": "Mind maps",
-          "SUBTITLE": "teammapper follows the Tony Buzan approach, which uses the evocative power of images and colors to make the memorization of concepts easier, stimulating creativity and mental associations.",
+          "SUBTITLE": "Mindmaps follow the Tony Buzan approach, which uses the evocative power of images and colors to make the memorization of concepts easier, stimulating creativity and mental associations.",
           "CARDS": [
             {
               "TITLE": "Colors and images",
@@ -200,8 +200,8 @@
   },
   "MESSAGES": {
     "NO_SAVED_MAPS": "No saved maps!",
-    "INITIAL_INFORMATION": "TeamMapper is ready ☺",
-    "WELCOME_MESSAGE": "Welcome to the TeamMapper app ☺",
+    "INITIAL_INFORMATION": "»lernkit Mindmap« is ready ☺",
+    "WELCOME_MESSAGE": "Welcome to the lernkit Mindmap app ☺",
     "MAP_DELETION_CONFIRM": "Are you sure you want to delete the map?",
     "JSON_FILE_SIZE_TOO_LARGE": "The file is exceeding 1 MB in file size and could cause problems during import. Please reduce the file size e.g. by removing images."
   },
