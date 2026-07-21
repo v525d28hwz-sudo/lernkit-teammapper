@@ -2,62 +2,58 @@
   <teammapper-header></teammapper-header>
   <teammapper-jumbotron></teammapper-jumbotron>
 
-  <section class="about-section" id="section-0">
+  <!-- Beschreibung + Merkmale -->
+  <section class="about-section" id="section-info">
+    <div class="container lk-info">
+      <p class="lk-info__lead">
+        {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_DESCRIPTION' | translate }}
+      </p>
+      <ul class="lk-merkmale">
+        <li>
+          {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_PROPERTIES.0' | translate }}
+        </li>
+        <li>
+          {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_PROPERTIES.1' | translate }}
+        </li>
+        <li>
+          {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_PROPERTIES.2' | translate }}
+        </li>
+        <li>
+          {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_PROPERTIES.3' | translate }}
+        </li>
+        <li>
+          {{ 'PAGES.ABOUT.INTRODUCTION.APPLICATION_PROPERTIES.4' | translate }}
+        </li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Die wichtigsten Funktionen -->
+  <section class="about-section" id="section-funktionen">
     <div class="container">
-      <h1>
-        <fa-icon [icon]="faBrain" mat-card-avatar size="1x"></fa-icon>
-        &nbsp;&nbsp;{{ 'PAGES.ABOUT.SECTIONS.0.TITLE' | translate }}
-      </h1>
-      <p>{{ 'PAGES.ABOUT.SECTIONS.0.SUBTITLE' | translate }}</p>
-      <div class="cards">
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.0.TITLE' | translate }}
-            </mat-card-title>
-          </mat-card-header>
-          <img
-            alt="Beispiel-Mindmap mit farbigen Knoten"
-            mat-card-image
-            src="./assets/images/lernkit-mm-1.svg" />
-          <mat-card-content>
-            <p>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.0.CONTENT' | translate }}
-            </p>
-          </mat-card-content>
-        </mat-card>
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.1.TITLE' | translate }}
-            </mat-card-title>
-          </mat-card-header>
-          <img
-            alt="Sternenförmige Beispiel-Mindmap"
-            mat-card-image
-            src="./assets/images/lernkit-mm-2.svg" />
-          <mat-card-content>
-            <p>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.1.CONTENT' | translate }}
-            </p>
-          </mat-card-content>
-        </mat-card>
-        <mat-card>
-          <mat-card-header>
-            <mat-card-title>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.2.TITLE' | translate }}
-            </mat-card-title>
-          </mat-card-header>
-          <img
-            alt="Beispiel-Mindmap in Baumform"
-            mat-card-image
-            src="./assets/images/lernkit-mm-3.svg" />
-          <mat-card-content>
-            <p>
-              {{ 'PAGES.ABOUT.SECTIONS.0.CARDS.2.CONTENT' | translate }}
-            </p>
-          </mat-card-content>
-        </mat-card>
+      <h1>Die wichtigsten Funktionen</h1>
+      <div class="lk-funktionen">
+        <div class="lk-fkarte">
+          <div class="lk-fkarte__titel">Gemeinsam in Echtzeit</div>
+          <p>
+            Mehrere bearbeiten dieselbe Mindmap gleichzeitig. Teilen per Link
+            oder QR-Code, ganz ohne Anmeldung.
+          </p>
+        </div>
+        <div class="lk-fkarte">
+          <div class="lk-fkarte__titel">Bilder &amp; Icons an Ästen</div>
+          <p>
+            Knoten mit Bildern oder Icons anreichern — inkl. Fach- und
+            Schul-Icons (Chemie, Bio, Mathe …) und farbigen Zweigen.
+          </p>
+        </div>
+        <div class="lk-fkarte">
+          <div class="lk-fkarte__titel">Import &amp; Export</div>
+          <p>
+            Mermaid-Code oder .mmd-Datei importieren (z. B. aus AIS.chat), als
+            Mermaid, JSON, PDF, PNG oder SVG exportieren.
+          </p>
+        </div>
       </div>
     </div>
   </section>

@@ -3,6 +3,19 @@ footer.lk-fuss {
   background-color: #2a2623;
   padding: 20px 0;
 
+  // Nutzungshinweis (Bildungskontext) oberhalb der Fußzeilen-Leiste
+  .lk-fuss__hinweis {
+    max-width: 1170px;
+    margin: 0 auto 14px;
+    padding: 0 24px;
+    font: 400 12px/1.55 'BaWueSans', sans-serif;
+    color: rgba(255, 255, 255, 0.5);
+
+    strong {
+      color: rgba(255, 255, 255, 0.72);
+    }
+  }
+
   .lk-fuss__innen {
     max-width: 1170px;
     margin: 0 auto;

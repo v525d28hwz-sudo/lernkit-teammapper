@@ -25,6 +25,43 @@ section.jumbotron {
     overflow-wrap: break-word !important;
   }
 
+  // Einspaltiger Hero (Kicker · Titel · Intro · CTA · Hinweis)
+  .lk-hero-col {
+    max-width: 640px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .lk-kicker {
+    font-family: 'BaWueSans', sans-serif;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: rgba(224, 242, 240, 0.55);
+    margin-bottom: 10px;
+  }
+
+  .lk-hero-col > h1 {
+    font-family: 'BaWueSans', sans-serif;
+    font-weight: 700;
+    font-size: 40px;
+    line-height: 1.05;
+    margin: 0 0 14px;
+    color: #e0f2f0 !important;
+  }
+
+  .lk-hero-intro {
+    font-family: 'BaWueSans', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    color: rgba(255, 255, 255, 0.62) !important;
+    max-width: 560px;
+    margin: 0 0 20px;
+  }
+
   > div {
     padding: 20px 0;
 

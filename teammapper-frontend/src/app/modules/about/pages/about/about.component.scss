@@ -69,4 +69,83 @@ div.about {
       }
     }
   }
+
+  // Beschreibung + Merkmale (heller Abschnitt unter dem Hero)
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+  }
+
+  .lk-info {
+    max-width: 780px;
+
+    &__lead {
+      font-family: 'BaWueSans', sans-serif;
+      font-size: 17px;
+      line-height: 1.65;
+      color: #2a2623;
+      margin: 4px 0 22px;
+    }
+  }
+
+  .lk-merkmale {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    gap: 10px;
+
+    li {
+      position: relative;
+      padding: 10px 14px 10px 40px;
+      background: #e0f2f0;
+      border: 1px solid #b2dfdb;
+      border-radius: 10px;
+      font-family: 'BaWueSans', sans-serif;
+      font-size: 14.5px;
+      line-height: 1.45;
+      color: #1a2e2b;
+
+      &::before {
+        content: '✓';
+        position: absolute;
+        left: 14px;
+        top: 10px;
+        color: #00897b;
+        font-weight: 700;
+      }
+    }
+  }
+
+  // Die wichtigsten Funktionen (Karten)
+  .lk-funktionen {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 16px;
+    margin-top: 8px;
+  }
+
+  .lk-fkarte {
+    background: #ffffff;
+    border: 1px solid #e4e0da;
+    border-radius: 14px;
+    padding: 20px 20px 18px;
+    box-shadow: 0 1px 3px rgba(42, 38, 35, 0.06);
+
+    &__titel {
+      font-family: 'BaWueSans', sans-serif;
+      font-weight: 700;
+      font-size: 16px;
+      color: #00695c;
+      margin-bottom: 8px;
+    }
+
+    p {
+      font-family: 'BaWueSans', sans-serif;
+      font-size: 14px;
+      line-height: 1.55;
+      color: #4a453f;
+      margin: 0;
+    }
+  }
 }
