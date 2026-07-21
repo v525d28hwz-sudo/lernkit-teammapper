@@ -345,7 +345,10 @@ export default class Draw {
 
     if (DOMPurify.sanitize(node.link.href) !== '') {
       domLink.setAttribute('href', DOMPurify.sanitize(node.link.href));
-      domLink.setAttribute('target', '_self');
+      // In neuem Tab öffnen (lernkit) statt die Mindmap zu verlassen;
+      // rel=noopener/noreferrer als Absicherung des neuen Kontexts.
+      domLink.setAttribute('target', '_blank');
+      domLink.setAttribute('rel', 'noopener noreferrer');
     } else {
       domLink.remove();
     }
