@@ -1,11 +1,24 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g clip-path="url(#clip0_2122_3537)">
-<path d="M12 2.87744L-0.000366211 9.00008L12 15.1227L19.5 11.2962L22 10.0207V17.0001H24V9.00026L12 2.87744Z" fill="#2A2623"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M4.5 12.8009V17.3L11.9999 21.1181L19.5 17.3V12.8009L12 16.62L4.5 12.8009Z" fill="#2A2623"/>
-</g>
-<defs>
-<clipPath id="clip0_2122_3537">
-<rect width="24" height="24" fill="white"/>
-</clipPath>
-</defs>
+<!--
+category: Document
+tags: [document, official, attest, signature, birth, death, gift, authenticity, seal, course, complete, qualification]
+version: "1.33"
+unicode: "ed76"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 15a3 3 0 1 0 6 0a3 3 0 1 0 -6 0" />
+  <path d="M13 17.5v4.5l2 -1.5l2 1.5v-4.5" />
+  <path d="M10 19h-5a2 2 0 0 1 -2 -2v-10c0 -1.1 .9 -2 2 -2h14a2 2 0 0 1 2 2v10a2 2 0 0 1 -1 1.73" />
+  <path d="M6 9l12 0" />
+  <path d="M6 12l3 0" />
+  <path d="M6 15l2 0" />
 </svg>

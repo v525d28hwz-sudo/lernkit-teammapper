@@ -1,4 +1,21 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M1.99999 19C1.99999 17.3431 3.34314 16 4.99999 16C6.65685 16 7.99999 17.3431 7.99999 19C7.99999 20.6569 6.65685 22 4.99999 22H1.99999V19Z" fill="#2A2623"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M9.08755 9H6.61803L5.11803 12H6.53755L9.08755 9ZM6.58578 14H1.88196L5.38196 7H10.8147C13.5875 4.06747 16.7595 2 21 2H22V3C22 7.24046 19.9325 10.4125 17 13.1853V18.618L9.99999 22.118V17.4142L6.58578 14ZM12 17.4624V18.882L15 17.382V14.9124L12 17.4624Z" fill="#2A2623"/>
+<!--
+tags: [universe, galaxy, space, journey, discover, extraterrestrial, spaceship, rocket, location, navigation]
+category: Map
+version: "1.11"
+unicode: "ec45"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M4 13a8 8 0 0 1 7 7a6 6 0 0 0 3 -5a9 9 0 0 0 6 -8a3 3 0 0 0 -3 -3a9 9 0 0 0 -8 6a6 6 0 0 0 -5 3" />
+  <path d="M7 14a6 6 0 0 0 -3 6a6 6 0 0 0 6 -3" />
+  <path d="M14 9a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" />
 </svg>

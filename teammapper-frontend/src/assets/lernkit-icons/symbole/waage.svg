@@ -1,3 +1,23 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M13.0019 2H11.0019V4H9.7658L7.7658 5H2.00187V7H4.11445L1.29297 15.4644L2.00893 15.8701C3.16012 16.5223 4.30971 16.8825 5.50187 16.8825C6.69403 16.8825 7.84362 16.5223 8.99481 15.8701L9.71077 15.4644L6.8893 7H8.23794L10.2379 6H11.0019V19H6.00187V21H18.0019V19H13.0019V6H13.7658L15.7658 7H17.1144L14.293 15.4644L15.0089 15.8701C16.1601 16.5223 17.3097 16.8825 18.5019 16.8825C19.694 16.8825 20.8436 16.5223 21.9948 15.8701L22.7108 15.4644L19.8893 7H22.0019V5H16.2379L14.2379 4H13.0019V2Z" fill="#2A2623"/>
+<!--
+category: System
+tags: [weigh, balance, amount, heavy, light, libra, scale]
+version: "1.1"
+unicode: "ebc2"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M7 20l10 0" />
+  <path d="M6 6l6 -1l6 1" />
+  <path d="M12 3l0 17" />
+  <path d="M9 12l-3 -6l-3 6a3 3 0 0 0 6 0" />
+  <path d="M21 12l-3 -6l-3 6a3 3 0 0 0 6 0" />
 </svg>

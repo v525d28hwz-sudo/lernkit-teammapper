@@ -1,5 +1,22 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M7.5 6.5C7.5 4.01472 9.51472 2 12 2C14.4853 2 16.5 4.01472 16.5 6.5C16.5 8.98528 14.4853 11 12 11C9.51472 11 7.5 8.98528 7.5 6.5Z" fill="#2A2623"/>
-<path d="M17 14V17H14V19H17V22H19V19H22V17H19V14H17Z" fill="#2A2623"/>
-<path d="M11.9998 21V15H14.9998V12.4767L14.2514 12.2821C13.5399 12.0971 12.7864 12 11.9998 12C7.242 12 3.91643 15.5211 3.50418 19.9064L3.40137 21H11.9998Z" fill="#2A2623"/>
+<!--
+tags: [add, create, new, person, people, follow, subscribe, role, user, plus]
+category: System
+version: "1.0"
+unicode: "eb4b"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 7a4 4 0 1 0 8 0a4 4 0 0 0 -8 0" />
+  <path d="M16 19h6" />
+  <path d="M19 16v6" />
+  <path d="M6 21v-2a4 4 0 0 1 4 -4h4" />
 </svg>

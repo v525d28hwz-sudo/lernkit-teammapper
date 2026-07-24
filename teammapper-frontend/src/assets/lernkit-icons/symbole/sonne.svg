@@ -1,11 +1,20 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M13 1H11V4H13V1Z" fill="#2A2623"/>
-<path d="M13 20H11V23H13V20Z" fill="#2A2623"/>
-<path d="M20.4841 4.93005L18.3598 7.05427L16.9456 5.64005L19.0698 3.51584L20.4841 4.93005Z" fill="#2A2623"/>
-<path d="M7.05437 18.36L5.64016 16.9458L3.51594 19.07L4.93016 20.4842L7.05437 18.36Z" fill="#2A2623"/>
-<path d="M20 11H23V13H20V11Z" fill="#2A2623"/>
-<path d="M1 11V13H4V11H1Z" fill="#2A2623"/>
-<path d="M18.3598 16.9458L20.4841 19.07L19.0698 20.4842L16.9456 18.36L18.3598 16.9458Z" fill="#2A2623"/>
-<path d="M4.93016 3.51584L3.51594 4.93005L5.64016 7.05427L7.05437 5.64005L4.93016 3.51584Z" fill="#2A2623"/>
-<path d="M7.75736 7.75736C10.1005 5.41421 13.8995 5.41421 16.2426 7.75736C18.5858 10.1005 18.5858 13.8995 16.2426 16.2426C13.8995 18.5858 10.1005 18.5858 7.75736 16.2426C5.41421 13.8995 5.41421 10.1005 7.75736 7.75736Z" fill="#2A2623"/>
+<!--
+tags: [weather, light, mode, brightness, sun, climate, forecast, meteorology, atmospheric, conditions]
+category: Weather
+version: "1.0"
+unicode: "eb30"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M8 12a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
+  <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
 </svg>

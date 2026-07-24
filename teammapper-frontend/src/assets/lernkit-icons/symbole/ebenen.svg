@@ -1,5 +1,21 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M22.2361 12.0001L12 17.1181L1.76393 12.0001L3.99999 10.8821L12 14.8821L20 10.8821L22.2361 12.0001Z" fill="#2A2623"/>
-<path d="M22.2361 16.0001L12 21.1181L1.76392 16.0001L3.99997 14.8821L12 18.8821L20 14.8821L22.2361 16.0001Z" fill="#2A2623"/>
-<path d="M12 2.88208L1.76392 8.00011L12 13.1181L22.2361 8.00011L12 2.88208Z" fill="#2A2623"/>
+<!--
+tags: [pile, elements, layout, wrap, stack, creative, artistic, visual, aesthetic, style]
+category: Design
+version: "1.39"
+unicode: "eef7"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 4l-8 4l8 4l8 -4l-8 -4" />
+  <path d="M4 12l8 4l8 -4" />
+  <path d="M4 16l8 4l8 -4" />
 </svg>

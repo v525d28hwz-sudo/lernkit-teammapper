@@ -1,1 +1,21 @@
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="#2A2623"><rect x="4" y="6" width="16" height="2.6" rx="1.1"/><rect x="7.4" y="7.6" width="2.6" height="10.4" rx="1.1"/><rect x="14" y="7.6" width="2.6" height="9" rx="1.1"/></svg>
+<!--
+tags: [mathematic, sign, expression, math, calculation, equation, pi, mathematics, numeric, formula]
+category: Math
+version: "1.100"
+unicode: "f4ee"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M7 20v-16" />
+  <path d="M17 4v16" />
+  <path d="M20 4h-16" />
+</svg>

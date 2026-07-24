@@ -54,14 +54,29 @@ export class DialogLernkitIconsComponent implements OnInit {
   public katSymbole = signal('Alle');
   public katMotive = signal('Alle');
 
+  // ZSL-Motive: passwortgeschützt. Bis zur Freischaltung werden sie NICHT
+  // angezeigt und NICHT durchsucht (gefiltertMotive liefert dann []).
+  private readonly motivePasswort = 'ZSL2026';
+  public motiveUnlocked = signal(false);
+  public motivePwWrong = signal(false);
+
   public kategorienSymbole = computed(() => this.kategorien(this.symbole()));
   public kategorienMotive = computed(() => this.kategorien(this.motive()));
   public gefiltertSymbole = computed(() =>
     this.filter(this.symbole(), this.katSymbole())
   );
   public gefiltertMotive = computed(() =>
-    this.filter(this.motive(), this.katMotive())
+    this.motiveUnlocked() ? this.filter(this.motive(), this.katMotive()) : []
   );
+
+  unlockMotive(pw: string) {
+    if ((pw || '').trim() === this.motivePasswort) {
+      this.motiveUnlocked.set(true);
+      this.motivePwWrong.set(false);
+    } else {
+      this.motivePwWrong.set(true);
+    }
+  }
 
   async ngOnInit() {
     try {

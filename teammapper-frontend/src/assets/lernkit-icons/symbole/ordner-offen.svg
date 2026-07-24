@@ -1,3 +1,19 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M10.5352 3H2V20H19.9852L23.111 10H21V6H12.5352L10.5352 3ZM19 10V8H11.4648L9.46482 5H4V18H4.76481L7.26481 10H19Z" fill="#2A2623"/>
+<!--
+category: Document
+tags: [access, unseal, uncover, unlock, expose, reveal, unshield, available, accessible, visible]
+version: "2.24"
+unicode: "faf7"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M5 19l2.757 -7.351a1 1 0 0 1 .936 -.649h12.307a1 1 0 0 1 .986 1.164l-.996 5.211a2 2 0 0 1 -1.964 1.625h-14.026a2 2 0 0 1 -2 -2v-11a2 2 0 0 1 2 -2h4l3 3h7a2 2 0 0 1 2 2v2" />
 </svg>

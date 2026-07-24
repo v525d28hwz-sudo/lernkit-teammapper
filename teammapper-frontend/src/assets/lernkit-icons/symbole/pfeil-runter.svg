@@ -1,3 +1,21 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M13 3V17.5858L18 12.5858L19.4142 14L12 21.4142L4.58582 14L6.00003 12.5858L11 17.5858V3H13Z" fill="#2A2623"/>
+<!--
+tags: [proceed, swipe, below, bottom, arrow, down, direction, pointer, decrease, navigation]
+category: Arrows
+version: "1.0"
+unicode: "ea16"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M12 5l0 14" />
+  <path d="M18 13l-6 6" />
+  <path d="M6 13l6 6" />
 </svg>

@@ -105,3 +105,64 @@
     font-weight: 700;
   }
 }
+
+/* ZSL-Motive: Passwortschutz */
+.lk-ic-pw {
+  padding: 28px 20px;
+  text-align: center;
+}
+.lk-ic-pw-info {
+  margin: 0 0 14px;
+  color: #5c677d;
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-size: 13.5px;
+}
+.lk-ic-pw-row {
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+.lk-ic-pw-input {
+  height: 38px;
+  padding: 0 12px;
+  border: 1px solid #d0d5dd;
+  border-radius: 10px;
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-size: 14px;
+  min-width: 180px;
+}
+.lk-ic-pw-input:focus {
+  outline: none;
+  border-color: #00897b;
+}
+.lk-ic-pw-btn {
+  height: 38px;
+  padding: 0 18px;
+  border: none;
+  border-radius: 10px;
+  background: #00897b;
+  color: #fff;
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-weight: 700;
+  font-size: 13.5px;
+  cursor: pointer;
+}
+.lk-ic-pw-btn:hover {
+  background: #00695c;
+}
+.lk-ic-pw-err {
+  display: inline-block;
+  margin-top: 10px;
+  color: #c62828;
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-size: 12.5px;
+}
+
+.lk-ic-credit {
+  margin: 10px 2px 0;
+  text-align: right;
+  color: #9aa0ae;
+  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-size: 11px;
+}

@@ -1,3 +1,22 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M5 8.53518V4H3V2H21V4H19V8.53518L13.8028 12L19 15.4648V20H21V22H3V20H5V15.4648L10.1972 12L5 8.53518ZM7 7V4H17V7H7ZM17 18V16.5352L12 13.2019L7 16.5352V18H17Z" fill="#2A2623"/>
+<!--
+tags: [time, timer, sand, clock, hourglass, control, operation, function, interface, management]
+category: System
+version: "1.47"
+unicode: "ef93"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M6.5 7h11" />
+  <path d="M6.5 17h11" />
+  <path d="M6 20v-2a6 6 0 1 1 12 0v2a1 1 0 0 1 -1 1h-10a1 1 0 0 1 -1 -1" />
+  <path d="M6 4v2a6 6 0 1 0 12 0v-2a1 1 0 0 0 -1 -1h-10a1 1 0 0 0 -1 1" />
 </svg>

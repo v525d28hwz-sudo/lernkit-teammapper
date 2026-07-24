@@ -1,3 +1,19 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M12.4889 21.3725C21.0168 16.5927 23.1149 10.9028 21.5108 6.90294C20.7319 4.96087 19.0972 3.56916 17.1691 3.13926C15.4716 2.76077 13.6165 3.14222 11.9999 4.42553C10.3833 3.14222 8.52827 2.76077 6.83075 3.13927C4.90269 3.56917 3.26796 4.96089 2.4891 6.90295C0.884955 10.9029 2.98312 16.5927 11.5111 21.3725L12 21.6466L12.4889 21.3725Z" fill="#2A2623"/>
+<!--
+tags: [love, emotion, like, favorite, relationship, heart, geometry, form, figure, pattern]
+category: Shapes
+version: "1.0"
+unicode: "eabe"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M19.5 12.572l-7.5 7.428l-7.5 -7.428a5 5 0 1 1 7.5 -6.566a5 5 0 1 1 7.5 6.572" />
 </svg>

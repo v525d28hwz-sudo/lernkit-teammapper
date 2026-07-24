@@ -1,6 +1,23 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M8 2V6H6V2H8Z" fill="#2A2623"/>
-<path d="M12 2V6H10V2H12Z" fill="#2A2623"/>
-<path d="M16 6V2H14V6H16Z" fill="#2A2623"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M18 7H4V22H18V16H18.5C20.433 16 22 14.433 22 12.5C22 10.567 20.433 9 18.5 9H18V7ZM18 11V14H18.5C19.3284 14 20 13.3284 20 12.5C20 11.6716 19.3284 11 18.5 11H18Z" fill="#2A2623"/>
+<!--
+tags: [espresso, hot, cup, latte, cafe, drink, coffee, meal, cuisine, eating]
+category: Food
+version: "1.40"
+unicode: "ef0e"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 14c.83 .642 2.077 1.017 3.5 1c1.423 .017 2.67 -.358 3.5 -1c.83 -.642 2.077 -1.017 3.5 -1c1.423 -.017 2.67 .358 3.5 1" />
+  <path d="M8 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+  <path d="M12 3a2.4 2.4 0 0 0 -1 2a2.4 2.4 0 0 0 1 2" />
+  <path d="M3 10h14v5a6 6 0 0 1 -6 6h-2a6 6 0 0 1 -6 -6v-5" />
+  <path d="M16.746 16.726a3 3 0 1 0 .252 -5.555" />
 </svg>

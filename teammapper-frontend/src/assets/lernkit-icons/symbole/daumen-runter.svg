@@ -1,4 +1,19 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M11.6298 22.0863L11.9227 21.3853C13 17.4999 16 15.4449 16 12.73V6.2747C16 5.12827 15.3364 3.99944 14.1644 3.57267C11.5136 2.60738 9.76649 2.41096 7.04045 2.6472C4.94961 2.8284 3.37789 4.43145 2.94231 6.36736L2.09756 10.1218C1.53488 12.6226 3.43667 14.9999 6 14.9999L9 14.9999C8.5 17.9999 7.23208 21.5366 11.6298 22.0863Z" fill="#2A2623"/>
-<path d="M22 14.4999H17V3.49991H22V14.4999Z" fill="#2A2623"/>
+<!--
+tags: [dislike, bad, emotion, thumb, down, bottom, decrease, control, operation, fall]
+category: System
+version: "1.0"
+unicode: "eb3b"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M7 13v-8a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v7a1 1 0 0 0 1 1h3a4 4 0 0 1 4 4v1a2 2 0 0 0 4 0v-5h3a2 2 0 0 0 2 -2l-1 -5a2 3 0 0 0 -2 -2h-7a3 3 0 0 0 -3 3" />
 </svg>

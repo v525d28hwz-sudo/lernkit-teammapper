@@ -1,3 +1,20 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M2 6.5C2 5.12055 3.11658 4 4.49855 4H20V7H22V20H5C3.34315 20 2 18.6569 2 17V6.5ZM4 6.5C4 6.77614 4.22386 7 4.5 7H18V6H4.49855C4.22367 6 4 6.2226 4 6.5ZM15 13.5C15 12.6716 15.6716 12 16.5 12C17.3284 12 18 12.6716 18 13.5C18 14.3284 17.3284 15 16.5 15C15.6716 15 15 14.3284 15 13.5Z" fill="#2A2623"/>
+<!--
+category: E-commerce
+tags: [money, pay, banknote, coin, payment, bank, wallet]
+version: "1.2"
+unicode: "eb75"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M17 8v-3a1 1 0 0 0 -1 -1h-10a2 2 0 0 0 0 4h12a1 1 0 0 1 1 1v3m0 4v3a1 1 0 0 1 -1 1h-12a2 2 0 0 1 -2 -2v-12" />
+  <path d="M20 12v4h-4a2 2 0 0 1 0 -4h4" />
 </svg>

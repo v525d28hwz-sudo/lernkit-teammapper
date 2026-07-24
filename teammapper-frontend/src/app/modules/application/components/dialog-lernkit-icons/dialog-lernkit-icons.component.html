@@ -37,33 +37,57 @@
     </mat-tab>
 
     <mat-tab [label]="'MODALS.ICONS.TAB_MOTIVE' | translate">
-      <div class="lk-ic-cats">
-        @for (k of kategorienMotive(); track k) {
-          <button
-            type="button"
-            class="lk-ic-cat"
-            [class.aktiv]="katMotive() === k"
-            (click)="katMotive.set(k)">
-            {{ k }}
-          </button>
-        }
-      </div>
-      <div class="lk-ic-grid">
-        @for (ic of gefiltertMotive(); track ic.file) {
-          <button
-            type="button"
-            class="lk-ic-cell"
-            [title]="ic.label"
-            (click)="pick('motive', ic.file)">
-            <img [src]="iconUrl('motive', ic.file)" [alt]="ic.label" />
-          </button>
-        }
-        @if (gefiltertMotive().length === 0) {
-          <div class="lk-ic-empty">{{ 'MODALS.ICONS.EMPTY' | translate }}</div>
-        }
-      </div>
+      @if (!motiveUnlocked()) {
+        <div class="lk-ic-pw">
+          <p class="lk-ic-pw-info">
+            Dieser Bereich (ZSL-Motive) ist passwortgeschützt.
+          </p>
+          <div class="lk-ic-pw-row">
+            <input
+              #pw
+              class="lk-ic-pw-input"
+              type="password"
+              placeholder="Passwort"
+              (keyup.enter)="unlockMotive(pw.value)" />
+            <button type="button" class="lk-ic-pw-btn" (click)="unlockMotive(pw.value)">
+              Freischalten
+            </button>
+          </div>
+          @if (motivePwWrong()) {
+            <span class="lk-ic-pw-err">Falsches Passwort.</span>
+          }
+        </div>
+      } @else {
+        <div class="lk-ic-cats">
+          @for (k of kategorienMotive(); track k) {
+            <button
+              type="button"
+              class="lk-ic-cat"
+              [class.aktiv]="katMotive() === k"
+              (click)="katMotive.set(k)">
+              {{ k }}
+            </button>
+          }
+        </div>
+        <div class="lk-ic-grid">
+          @for (ic of gefiltertMotive(); track ic.file) {
+            <button
+              type="button"
+              class="lk-ic-cell"
+              [title]="ic.label"
+              (click)="pick('motive', ic.file)">
+              <img [src]="iconUrl('motive', ic.file)" [alt]="ic.label" />
+            </button>
+          }
+          @if (gefiltertMotive().length === 0) {
+            <div class="lk-ic-empty">{{ 'MODALS.ICONS.EMPTY' | translate }}</div>
+          }
+        </div>
+      }
     </mat-tab>
   </mat-tab-group>
+
+  <p class="lk-ic-credit">Symbole: Tabler Icons (MIT-Lizenz)</p>
 </mat-dialog-content>
 <mat-dialog-actions class="lk-ic-actions">
   <button mat-flat-button color="primary" [mat-dialog-close]="true">

@@ -1,3 +1,21 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M6.5 2V6.99695C6.5 8.65455 5.84152 10.2443 4.66942 11.4164L4 12.0858V16H11V22H13V16H20V12.0858L19.3306 11.4164C18.1585 10.2443 17.5 8.65455 17.5 6.99695V2H6.5Z" fill="#2A2623"/>
+<!--
+tags: [thing, localization, maps, clip, place, location, pin, navigation, attach, fix]
+category: Map
+version: "1.16"
+unicode: "ec9c"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M15 4.5l-4 4l-4 1.5l-1.5 1.5l7 7l1.5 -1.5l1.5 -4l4 -4" />
+  <path d="M9 15l-4.5 4.5" />
+  <path d="M14.5 4l5.5 5.5" />
 </svg>

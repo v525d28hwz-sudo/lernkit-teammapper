@@ -1,4 +1,20 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M3 21V3H21V14H14V21H3Z" fill="#2A2623"/>
-<path d="M16 21H16.4142L21 16.4142V16H16V21Z" fill="#2A2623"/>
+<!--
+tags: [checkbox, brief, record, write, message, note, file, paper, text, information]
+category: Document
+version: "1.2"
+unicode: "eb6d"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M13 20l7 -7" />
+  <path d="M13 20v-6a1 1 0 0 1 1 -1h6v-7a2 2 0 0 0 -2 -2h-12a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h7" />
 </svg>

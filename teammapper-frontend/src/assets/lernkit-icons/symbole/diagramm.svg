@@ -1,3 +1,22 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path fill-rule="evenodd" clip-rule="evenodd" d="M2 3H22V19H16.3257L17.2362 22.1868L15.3132 22.7362L14.2457 19H9.7543L8.6868 22.7362L6.76375 22.1868L7.67427 19H2V3ZM9 12H7V15H9V12ZM13 7V15H11V7H13ZM17 10H15V15H17V10Z" fill="#2A2623"/>
+<!--
+tags: [statistics, diagram, graph, rhythm, data, analysis, chart, bar, visualization, analytics]
+category: Charts
+version: "1.0"
+unicode: "ea59"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 13a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v6a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -6" />
+  <path d="M15 9a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v10a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -10" />
+  <path d="M9 5a1 1 0 0 1 1 -1h4a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-4a1 1 0 0 1 -1 -1l0 -14" />
+  <path d="M4 20h14" />
 </svg>

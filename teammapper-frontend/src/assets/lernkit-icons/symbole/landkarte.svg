@@ -1,5 +1,21 @@
-<svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-<path d="M2 5.52946L8 3.52946V18.6376L2 20.6376V5.52946Z" fill="#2A2623"/>
-<path d="M14 19.971L10 18.6376V3.52946L14 4.86279V19.971Z" fill="#2A2623"/>
-<path d="M16 19.971L22 17.971V2.86279L16 4.86279V19.971Z" fill="#2A2623"/>
+<!--
+tags: [navigation, location, travel, map, geography, place, position]
+category: Map
+version: "1.0"
+unicode: "eae9"
+-->
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  width="24"
+  height="24"
+  viewBox="0 0 24 24"
+  fill="none"
+  stroke="#2A2623"
+  stroke-width="2"
+  stroke-linecap="round"
+  stroke-linejoin="round"
+>
+  <path d="M3 7l6 -3l6 3l6 -3v13l-6 3l-6 -3l-6 3v-13" />
+  <path d="M9 4v13" />
+  <path d="M15 7v13" />
 </svg>
