@@ -7,7 +7,7 @@
 
 section.jumbotron {
   // Dunkler Hero (lernkit --dark), damit die Teal-Akzentfarbe den Buttons/Toolbar vorbehalten bleibt
-  background-color: #2a2623;
+  background-color: #0F172A;
   padding: 44px 0 40px;
   text-align: center;
   align-items: center;
@@ -35,26 +35,26 @@ section.jumbotron {
   }
 
   .lk-kicker {
-    font-family: 'BaWueSans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 10px;
     font-weight: 400;
     letter-spacing: 3px;
     text-transform: uppercase;
-    color: rgba(224, 242, 240, 0.55);
+    color: rgba(204, 251, 241, 0.55);
     margin-bottom: 10px;
   }
 
   .lk-hero-col > h1 {
-    font-family: 'BaWueSans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     font-size: 40px;
     line-height: 1.05;
     margin: 0 0 14px;
-    color: #e0f2f0 !important;
+    color: #CCFBF1 !important;
   }
 
   .lk-hero-intro {
-    font-family: 'BaWueSans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-size: 16px;
     line-height: 1.6;
     color: rgba(255, 255, 255, 0.62) !important;
@@ -132,7 +132,7 @@ section.jumbotron {
 
   // CTA-Button: Teal gefüllt + schlanke helle Outline zur Hervorhebung
   button.lk-create {
-    font-family: 'BaWueSans', sans-serif;
+    font-family: 'Inter', sans-serif;
     font-weight: 700;
     letter-spacing: 0.3px;
     border-radius: 24px !important;
@@ -150,22 +150,22 @@ section.jumbotron {
 
     .lk-hinweis__innen {
       max-width: 560px;
-      background: #e0f2f0;
+      background: #CCFBF1;
       border: 1px solid #b2dfdb;
       border-radius: 12px;
       padding: 12px 18px;
       text-align: center;
-      font-family: 'BaWueSans', sans-serif;
+      font-family: 'Inter', sans-serif;
     }
 
     .lk-hinweis__loesch {
       margin: 0;
       font-size: 14px;
       font-weight: 600;
-      color: #1a1a2e;
+      color: #0F172A;
 
       strong {
-        color: #00695c;
+        color: #0F766E;
       }
     }
 
@@ -176,10 +176,10 @@ section.jumbotron {
     .lk-hinweis__ds {
       margin: 6px 0 0;
       font-size: 11.5px;
-      color: #5c677d;
+      color: #64748B;
 
       a {
-        color: #00897b;
+        color: #0D9488;
         text-decoration: none;
       }
       a:hover {

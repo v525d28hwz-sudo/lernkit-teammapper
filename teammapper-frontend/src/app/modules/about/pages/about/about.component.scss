@@ -13,7 +13,7 @@ div.about {
   }
 
   section:nth-child(even) {
-    background-color: #fafafa;
+    background-color: #F8FAFC;
   }
 
   section.about-section {
@@ -80,10 +80,10 @@ div.about {
     max-width: 780px;
 
     &__lead {
-      font-family: 'BaWueSans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 17px;
       line-height: 1.65;
-      color: #2a2623;
+      color: #0F172A;
       margin: 4px 0 22px;
     }
   }
@@ -98,10 +98,10 @@ div.about {
     li {
       position: relative;
       padding: 10px 14px 10px 40px;
-      background: #e0f2f0;
+      background: #CCFBF1;
       border: 1px solid #b2dfdb;
       border-radius: 10px;
-      font-family: 'BaWueSans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 14.5px;
       line-height: 1.45;
       color: #1a2e2b;
@@ -111,7 +111,7 @@ div.about {
         position: absolute;
         left: 14px;
         top: 10px;
-        color: #00897b;
+        color: #0D9488;
         font-weight: 700;
       }
     }
@@ -130,18 +130,18 @@ div.about {
     border: 1px solid #e4e0da;
     border-radius: 14px;
     padding: 20px 20px 18px;
-    box-shadow: 0 1px 3px rgba(42, 38, 35, 0.06);
+    box-shadow: 0 1px 3px rgba(15, 23, 42, 0.06);
 
     &__titel {
-      font-family: 'BaWueSans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-weight: 700;
       font-size: 16px;
-      color: #00695c;
+      color: #0F766E;
       margin-bottom: 8px;
     }
 
     p {
-      font-family: 'BaWueSans', sans-serif;
+      font-family: 'Inter', sans-serif;
       font-size: 14px;
       line-height: 1.55;
       color: #4a453f;
