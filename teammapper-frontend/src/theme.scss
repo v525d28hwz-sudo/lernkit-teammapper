@@ -6,7 +6,7 @@
 // Define the palettes for your theme using the Material Design palettes available in palette.scss
 // (imported above). For each palette, you can optionally specify a default, lighter, and darker
 // hue. Available color palettes: https://www.google.com/design/spec/style/color.html
-// lernkit-Akzent = Material Teal 600 (#00897B), passend zu den Feedback-Tools
+// lernkit-Akzent = Material Teal 600 (#0D9488), passend zu den Feedback-Tools
 $app-primary: mat.m2-define-palette(mat.$m2-teal-palette, 600);
 $app-accent: mat.m2-define-palette(mat.$m2-gray-palette, 50);
 
@@ -23,7 +23,7 @@ $app-theme: mat.m2-define-light-theme(
     ),
     typography:
       mat.m2-define-typography-config(
-        $font-family: '"BaWueSans", "Fira Sans", sans-serif',
+        $font-family: '"Inter", "Fira Sans", sans-serif',
       ),
     density: 0,
   )

@@ -11,8 +11,8 @@ header.lk-topbar {
   flex-wrap: wrap;
   padding: 0 24px;
   min-height: 60px;
-  background: #f4f5f7;
-  border-bottom: 2px solid #2a2623;
+  background: #F8FAFC;
+  border-bottom: 2px solid #0F172A;
   position: sticky;
   top: 0;
   z-index: 100;
@@ -25,18 +25,18 @@ header.lk-topbar {
 }
 
 .lk-logo {
-  font: 700 20px 'BaWueSans', sans-serif;
-  color: #2a2623;
+  font: 700 20px 'Inter', sans-serif;
+  color: #0F172A;
   letter-spacing: 0.5px;
   text-decoration: none;
 }
 
 .lk-badge {
-  background: #2a2623;
+  background: #0F172A;
   color: #e3eefa;
   padding: 3px 10px;
   border-radius: 3px;
-  font: 700 9px 'BaWueSans', sans-serif;
+  font: 700 9px 'Inter', sans-serif;
   letter-spacing: 2px;
   text-transform: uppercase;
 }
@@ -49,14 +49,14 @@ header.lk-topbar {
 }
 
 .lk-nav a {
-  font: 400 13px 'BaWueSans', sans-serif;
-  color: rgba(42, 38, 35, 0.55);
+  font: 400 13px 'Inter', sans-serif;
+  color: rgba(15, 23, 42, 0.55);
   text-decoration: none;
   padding: 4px 0;
 }
 
 .lk-nav a:hover {
-  color: #2a2623;
+  color: #0F172A;
 }
 
 @media only screen and (max-width: 600px) {

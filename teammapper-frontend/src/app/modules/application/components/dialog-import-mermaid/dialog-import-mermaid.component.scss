@@ -1,5 +1,5 @@
 :host {
-  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-family: 'Inter', 'Fira Sans', sans-serif;
 }
 
 .max-width {
@@ -13,21 +13,21 @@
 .lk-mm-intro {
   font-size: 14px;
   line-height: 1.5;
-  color: #5c677d;
+  color: #64748B;
 }
 
 .lk-mm-caption {
   display: block;
   font-size: 13px;
   font-weight: 700;
-  color: #1a1a2e;
+  color: #0F172A;
 }
 
 .lk-mm-file {
   margin: 16px 0 4px;
   padding: 12px 14px;
-  background: #f4f5f7;
-  border: 1px solid #e4e2dc;
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
   border-radius: 10px;
 
   .lk-mm-caption {
@@ -35,7 +35,7 @@
   }
 
   input[type='file'] {
-    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-family: 'Inter', 'Fira Sans', sans-serif;
     font-size: 12px;
     max-width: 100%;
   }
@@ -49,7 +49,7 @@
   margin-top: 6px;
   font-size: 12px;
   line-height: 1.5;
-  color: #5c677d;
+  color: #64748B;
   white-space: pre-line;
 }
 
@@ -60,7 +60,7 @@
 
   button {
     border-radius: 22px;
-    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-family: 'Inter', 'Fira Sans', sans-serif;
     font-weight: 700;
     letter-spacing: 0.2px;
   }

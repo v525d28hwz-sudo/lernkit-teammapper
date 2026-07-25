@@ -1,5 +1,5 @@
 :host {
-  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-family: 'Inter', 'Fira Sans', sans-serif;
 }
 
 .about-modal-section {
@@ -11,7 +11,7 @@
 
 .lk-about-meta {
   font-size: 13px;
-  color: #5c677d;
+  color: #64748B;
 }
 
 .lk-about-links {
@@ -23,7 +23,7 @@
   font-size: 13px;
 
   a {
-    color: #00897b;
+    color: #0D9488;
     text-decoration: none;
     display: inline-flex;
     align-items: center;
@@ -43,7 +43,7 @@
 
   button {
     border-radius: 22px;
-    font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+    font-family: 'Inter', 'Fira Sans', sans-serif;
     font-weight: 700;
     letter-spacing: 0.2px;
   }
@@ -54,5 +54,5 @@
 }
 
 .mat-list-item {
-  font-family: 'BaWueSans', 'Fira Sans', sans-serif;
+  font-family: 'Inter', 'Fira Sans', sans-serif;
 }
