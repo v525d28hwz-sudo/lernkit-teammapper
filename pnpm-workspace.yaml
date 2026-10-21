@@ -30,7 +30,13 @@ overrides:
   'underscore@<=1.13.7': '1.13.8'
   'picomatch@>=4.0.0 <4.0.4': '>=4.0.4 <5.0.0'
   'lodash@<4.18.0': '>=4.18.0'
-  'follow-redirects@<1.16.0': '>=1.16.0'
+  # lernkit: GHSA follow-redirects 1.16.0 (credential header leaks) -> 1.16.1.
+  'follow-redirects@<1.16.1': '>=1.16.1 <2.0.0'
+  # lernkit: proxy-addr < 2.0.8 (critical, IP spoofing via IPv4-mapped IPv6
+  # trust subnet). Parent: @nestjs/platform-express > express.
+  'proxy-addr@<2.0.8': '>=2.0.8 <3.0.0'
+  # lernkit: sanitize-html < 2.18.0 (XSS bypasses). Direct backend dependency.
+  'sanitize-html@<2.18.0': '>=2.18.0 <3.0.0'
   # GHSA-crvj-82cr-hjcx / -g6gw-c38x-mqfc / -gqvv-2mrq-wpjv / -frvp-7c67-39w9.
   # Parent: @angular/cli > @modelcontextprotocol/sdk.
   'hono@<4.13.5': '>=4.13.5 <5.0.0'

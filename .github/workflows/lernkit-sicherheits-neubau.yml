@@ -1,0 +1,114 @@
+# lernkit: Zweiwöchentlicher Sicherheits-Neubau des maps-Images. Holt das
+# aktuelle Basis-Image (node:alpine) mit seinen Sicherheitsupdates; die
+# Abhängigkeiten bleiben dank Lockfile gleich.
+#
+# Ablauf: neu bauen -> Image mit frischer Postgres-Datenbank starten und prüfen
+# (Migrationen, Startseite, Einstellungen, Map anlegen inkl. lernkit-SVG-Icon)
+# -> NUR wenn alles grün ist, :latest nach GHCR pushen. Der Server zieht das
+# Image erst beim nächsten Coolify „Pull Latest Images & Restart“; dafür legt
+# der Workflow ein Issue als Erinnerung an. Schlägt eine Prüfung fehl, bleibt
+# :latest unverändert und GitHub schickt eine Fehler-Mail.
+name: lernkit Sicherheits-Neubau (alle 2 Wochen)
+
+on:
+  schedule:
+    # montags 03:47 UTC; der Job "woche" lässt nur gerade Kalenderwochen durch
+    - cron: '47 3 * * 1'
+  workflow_dispatch:
+
+concurrency:
+  group: lernkit-image
+  cancel-in-progress: false
+
+jobs:
+  woche:
+    runs-on: ubuntu-latest
+    outputs:
+      los: ${{ steps.pruefen.outputs.los }}
+    steps:
+      - id: pruefen
+        run: |
+          if [ "${{ github.event_name }}" = "schedule" ] && [ $((10#$(date +%V) % 2)) -ne 0 ]; then
+            echo "Ungerade Kalenderwoche - diesmal kein Neubau."
+            echo "los=nein" >> "$GITHUB_OUTPUT"
+          else
+            echo "los=ja" >> "$GITHUB_OUTPUT"
+          fi
+
+  neubau:
+    needs: woche
+    if: needs.woche.outputs.los == 'ja'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+      issues: write
+    env:
+      IMAGE: ghcr.io/${{ github.repository }}:latest
+    services:
+      postgres:
+        image: postgres:15-alpine
+        env:
+          POSTGRES_DB: teammapper
+          POSTGRES_USER: teammapper
+          POSTGRES_PASSWORD: ci-test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U teammapper"
+          --health-interval 5s --health-timeout 5s --health-retries 20
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Image neu bauen (aktuelles Basis-Image, ohne Cache)
+        run: docker build --pull --no-cache --target production -t "$IMAGE" .
+
+      - name: Prüfstand starten
+        run: |
+          docker run -d --name maps --network host \
+            -e MODE=PROD -e PORT=3000 \
+            -e POSTGRES_HOST=localhost -e POSTGRES_PORT=5432 \
+            -e POSTGRES_USER=teammapper -e POSTGRES_PASSWORD=ci-test -e POSTGRES_DATABASE=teammapper \
+            -e POSTGRES_SSL=false -e POSTGRES_SSL_REJECT_UNAUTHORIZED=false \
+            -e POSTGRES_QUERY_TIMEOUT=100000 -e POSTGRES_STATEMENT_TIMEOUT=100000 \
+            -e DELETE_AFTER_DAYS=365 -e JWT_SECRET=ci-test-secret-ci-test-secret \
+            "$IMAGE"
+
+      - name: Prüfungen
+        run: |
+          set -e
+          for i in $(seq 1 60); do curl -fsS http://localhost:3000/api/settings >/dev/null 2>&1 && break; sleep 3; done
+          curl -fsS http://localhost:3000/api/settings | grep -q '"name":"lernkit Mindmap"'
+          echo "Einstellungen ok (lernkit-Override aktiv)"
+          code=$(curl -s -o /dev/null -w '%{http_code}' http://localhost:3000/); echo "Startseite: $code"; [ "$code" = 200 ]
+          body='{"rootNode":{"name":"CI-Probe","colors":{"name":"#000000","background":"#ffffff","branch":""},"font":{"size":20,"style":"normal","weight":"normal"},"image":{"src":"data:image/svg+xml;base64,PHN2Zz4=","size":60}}}'
+          antwort=$(curl -fsS -X POST -H 'Content-Type: application/json' -d "$body" http://localhost:3000/api/maps)
+          id=$(echo "$antwort" | grep -o '"uuid":"[0-9a-f-]*"' | head -1 | cut -d'"' -f4)
+          [ -n "$id" ] || { echo "FEHLER: Map nicht angelegt: $antwort"; exit 1; }
+          curl -fsS "http://localhost:3000/api/maps/$id" | grep -q 'data:image/svg+xml;base64,PHN2Zz4='
+          echo "Map $id angelegt, lernkit-SVG-Icon erhalten"
+          sleep 5
+          [ "$(docker inspect -f '{{.State.Running}}' maps)" = true ] || { echo "FEHLER: Container läuft nicht"; exit 1; }
+          echo "Alle Prüfungen grün."
+
+      - name: Logs bei Fehler
+        if: failure()
+        run: docker logs maps --tail 120 || true
+
+      - name: Geprüftes Image veröffentlichen
+        run: docker push "$IMAGE"
+
+      - name: Erinnerung zum Einspielen anlegen
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh issue create --repo "${{ github.repository }}" \
+            --title "maps: neues geprüftes Image bereit ($(date +%d.%m.%Y))" \
+            --body "Der zweiwöchentliche Sicherheits-Neubau war erfolgreich und alle Prüfungen sind grün. Zum Einspielen in Coolify: Projects → Badge-App → maps → Advanced → „Pull Latest Images & Restart“. Danach dieses Issue schließen." \
+            || echo "Issue konnte nicht angelegt werden (Issues im Repo deaktiviert?)"
