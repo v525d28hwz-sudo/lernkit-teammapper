@@ -1,6 +1,11 @@
 @if (node?.colors) {
   <div class="colors-panel">
-    <div #background class="background"></div>
+    <!-- lernkit: Tippen auf den Hintergrund schließt den Farbwähler auch auf iPad/iPhone
+         (iOS meldet dort kein mousedown auf nicht klickbaren Flächen). -->
+    <div
+      #background
+      class="background"
+      (pointerdown)="closePickers($event)"></div>
 
     <div class="panel">
       <input

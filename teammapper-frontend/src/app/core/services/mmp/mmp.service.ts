@@ -655,50 +655,28 @@ export class MmpService implements OnDestroy {
       unit: 'pt',
       format: 'A4',
     });
+    // lernkit: hochaufgelöstes Bild (siehe mmp Export.imageScale) mit Rand
+    // seitenfüllend und zentriert platzieren.
     const pdfWidth: number = pdf.internal.pageSize.getWidth();
     const pdfHeight: number = pdf.internal.pageSize.getHeight();
-
-    const scaleFactorWidth: number = pdfWidth / htmlImageElement.width;
-    const scaleFactorHeight: number = pdfHeight / htmlImageElement.height;
-
-    if (
-      pdfWidth > htmlImageElement.width &&
-      pdfHeight > htmlImageElement.height
-    ) {
-      // 0.75 to convert px to pt
-      pdf.addImage(
-        imageUri,
-        0,
-        0,
-        htmlImageElement.width * 0.75,
-        htmlImageElement.height * 0.75,
-        '',
-        'MEDIUM',
-        0
-      );
-    } else if (scaleFactorWidth < scaleFactorHeight) {
-      pdf.addImage(
-        imageUri,
-        0,
-        0,
-        htmlImageElement.width * scaleFactorWidth,
-        htmlImageElement.height * scaleFactorWidth,
-        '',
-        'MEDIUM',
-        0
-      );
-    } else {
-      pdf.addImage(
-        imageUri,
-        0,
-        0,
-        htmlImageElement.width * scaleFactorHeight,
-        htmlImageElement.height * scaleFactorHeight,
-        '',
-        'MEDIUM',
-        0
-      );
-    }
+    const margin = 28;
+    const fit = Math.min(
+      (pdfWidth - 2 * margin) / htmlImageElement.width,
+      (pdfHeight - 2 * margin) / htmlImageElement.height
+    );
+    const width = htmlImageElement.width * fit;
+    const height = htmlImageElement.height * fit;
+    pdf.addImage(
+      imageUri,
+      'PNG',
+      (pdfWidth - width) / 2,
+      (pdfHeight - height) / 2,
+      width,
+      height,
+      '',
+      'MEDIUM',
+      0
+    );
 
     pdf.save(`${name}.${format}`);
 

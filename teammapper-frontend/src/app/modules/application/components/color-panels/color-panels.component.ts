@@ -3,7 +3,9 @@ import {
   ElementRef,
   Input,
   OnInit,
+  QueryList,
   ViewChild,
+  ViewChildren,
   inject,
 } from '@angular/core';
 import { ExportNodeProperties } from '@mmp/map/types';
@@ -24,6 +26,8 @@ export class ColorPanelsComponent implements OnInit {
   @Input() public editDisabled: boolean;
 
   @ViewChild('background') public background: ElementRef;
+  @ViewChildren(ColorPickerDirective)
+  public pickers: QueryList<ColorPickerDirective>;
 
   public options: { width: string; presetColors: string[] };
 
@@ -58,6 +62,12 @@ export class ColorPanelsComponent implements OnInit {
 
   public colorPickerChange(property, value) {
     this.mmpService.updateNode(property, value, true);
+  }
+
+  // lernkit: alle offenen Farbwähler schließen (Tippen auf den Hintergrund).
+  public closePickers(event?: Event) {
+    event?.preventDefault();
+    this.pickers?.forEach(picker => picker.closeDialog());
   }
 
   public colorPickerToggleChange(opening, property, value) {

@@ -60,7 +60,7 @@ export default class Export {
       image.onload = () => {
         const canvas = document.createElement('canvas'),
           context = canvas.getContext('2d'),
-          scale = window.devicePixelRatio || 1;
+          scale = Export.imageScale(image.width, image.height);
 
         // need to adjust scale of the image
         // see https://developer.mozilla.org/en-US/docs/Web/API/Window/devicePixelRatio
@@ -70,7 +70,7 @@ export default class Export {
         canvas.height = Math.floor(image.height * scale);
         context.scale(scale, scale);
 
-        context.drawImage(image, 0, 0);
+        context.drawImage(image, 0, 0, image.width, image.height);
         context.globalCompositeOperation = 'destination-over';
         context.fillStyle = '#ffffff';
         context.fillRect(0, 0, canvas.width, canvas.height);
@@ -91,6 +91,63 @@ export default class Export {
       };
     });
   };
+
+  /**
+   * lernkit: Auflösungsfaktor für PNG/JPEG/PDF. Kleine Maps werden auf ca. 4000 px
+   * (lange Seite) hochgerechnet, höchstens 4-fach; die Canvas-Fläche bleibt unter
+   * 16 Mio. Pixeln (Grenze von Safari auf iPad/iPhone).
+   */
+  public static imageScale(width: number, height: number): number {
+    const w = Math.max(1, width),
+      h = Math.max(1, height);
+    let scale = Math.max(
+      window.devicePixelRatio || 1,
+      Math.min(4, 4000 / Math.max(w, h))
+    );
+    scale = Math.min(scale, Math.sqrt(16e6 / (w * h)));
+    return Math.max(scale, 0.1);
+  }
+
+  /**
+   * lernkit: @font-face-Regeln der in der Map verwendeten Schriften mit eingebetteten
+   * Schriftdateien (data:-URI) zurückgeben. Ein SVG-Bild darf keine externen Dateien
+   * laden, ohne Einbettung erscheint der Text sonst in einer Ersatzschrift.
+   */
+  private async embedFonts(css: string, clone: Element): Promise<string> {
+    const used = new Set<string>();
+    clone.querySelectorAll('[font-family]').forEach(el => {
+      el.getAttribute('font-family')
+        .split(',')
+        .forEach(f => used.add(f.trim().replace(/["']/g, '').toLowerCase()));
+    });
+    const rules = css.match(/@font-face\s*{[^}]*}/g) || [];
+    let rest = css;
+    let fonts = '';
+    for (const rule of rules) {
+      rest = rest.replace(rule, '');
+      const family = (rule.match(/font-family:\s*["']?([^;"']+)/) || [])[1];
+      if (!family || !used.has(family.trim().toLowerCase())) continue;
+      let embedded = rule;
+      const urls = rule.match(/url\(["']?([^"')]+)["']?\)/g) || [];
+      for (const u of urls) {
+        const href = u.replace(/^url\(["']?/, '').replace(/["']?\)$/, '');
+        if (href.startsWith('data:')) continue;
+        try {
+          const res = await fetch(new URL(href, document.baseURI).href);
+          const data = await new Promise<string>(resolve => {
+            const reader = new FileReader();
+            reader.onloadend = () => resolve(reader.result as string);
+            res.blob().then(b => reader.readAsDataURL(b));
+          });
+          embedded = embedded.replace(u, 'url("' + data + '")');
+        } catch {
+          // Schrift nicht ladbar: Regel unverändert lassen
+        }
+      }
+      fonts += embedded;
+    }
+    return fonts + rest;
+  }
 
   /**
    * Convert the mind map svg in the data URI.
@@ -116,13 +173,11 @@ export default class Export {
     svg.setAttribute('height', h);
     svg.setAttribute('viewBox', [x, y, w, h].join(' '));
 
-    // If there is css, insert it
+    // If there is css, insert it (Schriften werden unten eingebettet)
+    const style = document.createElement('style'),
+      defs = document.createElement('defs');
     if (css !== '') {
-      const style = document.createElement('style'),
-        defs = document.createElement('defs');
-
       style.setAttribute('type', 'text/css');
-      style.innerHTML = '<![CDATA[\n' + css + '\n]]>';
       defs.appendChild(style);
       svg.appendChild(defs);
     }
@@ -171,11 +226,24 @@ export default class Export {
             (fo.firstElementChild as HTMLElement).style.fontSize
           )
           .attr('fill', (fo.firstElementChild as HTMLElement).style.color)
+          // lernkit: Fett/Kursiv beim Export erhalten
+          .attr(
+            'font-weight',
+            (fo.firstElementChild as HTMLElement).style.fontWeight || null
+          )
+          .attr(
+            'font-style',
+            (fo.firstElementChild as HTMLElement).style.fontStyle || null
+          )
           .html(textSVG);
         fo.remove();
       });
 
-    this.convertImages(clone, () => {
+    this.convertImages(clone, async () => {
+      if (css !== '') {
+        const fullCss = await this.embedFonts(css, clone);
+        style.innerHTML = '<![CDATA[\n' + fullCss + '\n]]>';
+      }
       const xmls = new XMLSerializer(),
         reader = new FileReader();
 
@@ -200,7 +268,11 @@ export default class Export {
     element: HTMLElement,
     callback: (...args: any[]) => void
   ) {
-    const images = element.querySelectorAll('image');
+    // lernkit: eingebettete Bilder (data:-URI, z. B. SVG-Icons) bleiben unverändert und
+    // damit scharf; nur externe Bilder werden in höherer Auflösung gerastert.
+    const images = Array.from(element.querySelectorAll('image')).filter(
+      image => !(image.getAttribute('href') || '').startsWith('data:')
+    );
     let counter = images.length;
 
     if (counter > 0) {
@@ -215,9 +287,11 @@ export default class Export {
         img.src = href;
 
         img.onload = function () {
-          canvas.width = img.width;
-          canvas.height = img.height;
-          ctx.drawImage(img, 0, 0);
+          const w = parseFloat(image.getAttribute('width')) || img.width,
+            f = Math.min(4, Math.max(1, (4 * w) / img.width));
+          canvas.width = Math.round(img.width * f);
+          canvas.height = Math.round(img.height * f);
+          ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
 
           image.setAttribute('href', canvas.toDataURL('image/png'));
 

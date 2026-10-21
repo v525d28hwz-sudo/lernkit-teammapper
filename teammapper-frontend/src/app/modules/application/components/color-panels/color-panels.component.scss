@@ -7,6 +7,9 @@ div.colors-panel {
     left: 0;
     height: 100%;
     width: 100%;
+    // iOS: Fläche als antippbar kennzeichnen, damit Taps Ereignisse auslösen
+    cursor: pointer;
+    touch-action: none;
   }
 
   div.panel {
