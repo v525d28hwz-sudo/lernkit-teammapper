@@ -2,7 +2,7 @@ import {
   mapClientNodeToMmpNode,
   mapClientBasicNodeToMmpRootNode,
 } from './clientServerMapping'
-import { IMmpClientNode } from '../types'
+import { IMmpClientNode } from '@teammapper/shared'
 
 const buildClientNode = (
   overrides: Partial<IMmpClientNode> = {}
@@ -15,8 +15,7 @@ const buildClientNode = (
   image: { src: '', size: 0 },
   link: { href: '' },
   k: 1,
-  locked: false,
-  detached: false,
+  protected: false,
   isRoot: false,
   parent: 'parent-uuid',
   ...overrides,
@@ -31,9 +30,18 @@ describe('mapClientNodeToMmpNode sanitization', () => {
     expect(result.name).toBe('Hello')
   })
 
-  it('should reject SVG image source', () => {
+  // lernkit: kleine base64-SVG-Icons bleiben erlaubt, nicht-base64-SVG nicht
+  it('should keep a small base64 SVG image source (lernkit icons)', () => {
     const client = buildClientNode({
       image: { src: 'data:image/svg+xml;base64,PHN2Zz4=', size: 60 },
+    })
+    const result = mapClientNodeToMmpNode(client, 'map-id')
+    expect(result.imageSrc).toBe('data:image/svg+xml;base64,PHN2Zz4=')
+  })
+
+  it('should reject a non-base64 SVG image source', () => {
+    const client = buildClientNode({
+      image: { src: 'data:image/svg+xml,<svg onload="x()"/>', size: 60 },
     })
     const result = mapClientNodeToMmpNode(client, 'map-id')
     expect(result.imageSrc).toBe('')
@@ -76,6 +84,13 @@ describe('mapClientNodeToMmpNode sanitization', () => {
   })
 })
 
+describe('mapClientNodeToMmpNode protection', () => {
+  it('keeps the protected flag', () => {
+    const client = buildClientNode({ protected: true })
+    expect(mapClientNodeToMmpNode(client, 'map-id').protected).toBe(true)
+  })
+})
+
 describe('mapClientBasicNodeToMmpRootNode sanitization', () => {
   it('should sanitize name with HTML', () => {
     const basics = {
@@ -88,12 +103,12 @@ describe('mapClientBasicNodeToMmpRootNode sanitization', () => {
     expect(result.name).toBe('Root')
   })
 
-  it('should reject SVG in image src', () => {
+  it('should reject a non-base64 SVG in image src', () => {
     const basics = {
       name: 'Root',
       colors: { name: '#000000', background: '#ffffff', branch: '#333333' },
       font: { style: 'normal', size: 20, weight: 'normal' },
-      image: { src: 'data:image/svg+xml;base64,PHN2Zz4=', size: 60 },
+      image: { src: 'data:image/svg+xml,<svg/>', size: 60 },
     }
     const result = mapClientBasicNodeToMmpRootNode(basics, 'map-id')
     expect(result.imageSrc).toBe('')

@@ -36,6 +36,7 @@
     "CUT_NODE": "Taglia nodo selezionato",
     "PASTE_NODE": "Incolla nodo copiato",
     "HIDE_CHILD_NODES": "Nascondere nodi figli",
+    "DISTRIBUTE_NODES": "Distribuire tutti i nodi uniformemente",
     "MOVE_NODE_TO_THE_LEFT": "Muovi nodo a sinistra",
     "MOVE_NODE_TO_THE_RIGHT": "Muovi nodo a destra",
     "MOVE_NODE_DOWN": "Muovi nodo in basso",
@@ -45,7 +46,8 @@
     "SELECT_NODE_BELOW": "Seleziona nodo in alto",
     "SELECT_NODE_ABOVE": "Seleziona nodo in basso",
     "EDIT_NODE": "Permetti di modificare il testo del nodo",
-    "COUPLE_NODE": "Blocca o sblocca il nodo",
+    "PROTECT_BRANCH": "Proteggi questo ramo",
+    "RELEASE_PROTECTION": "Rimuovi la protezione",
     "NODE_IMAGE": "Aggiungi un'immagine al nodo",
     "NODE_IMAGE_REMOVE": "Rimuove un'immagine dal nodo",
     "PICTOGRAM": "Pittogramma",
@@ -55,7 +57,7 @@
     "TEXT_SIZE": "Cambia la dimensione del testo e del nodo",
     "IMAGE_SIZE": "Cambia la dimensione dell'immage del nodo",
     "ADD_NODE": "Aggiungi un nodo",
-    "ADD_DETACHED_NODE": "Aggiungi un nodo staccato",
+    "ADD_TREE": "Aggiungi un albero",
     "REMOVE_NODE": "Rimuovi un nodo",
     "ZOOM_IN_MAP": "Esegui uno zoom-avanti",
     "ZOOM_OUT_MAP": "Esegui uno zoom-indietro",
@@ -81,7 +83,7 @@
     "FONT_INCREMENT": "Dimensione passo del font",
     "FONT_INCREASE": "Aumenta font",
     "FONT_DECREASE": "Diminuisci font",
-    "INFO": "Apre la schermata delle informazioni"
+    "INFO": "Apre informazioni e scorciatoie da tastiera"
   },
   "MODALS": {
     "GENERAL": {
@@ -105,6 +107,9 @@
       "CONTENT": "Genera una mappa mentale direttamente dalla tua descrizione usando l'IA. Descrivi semplicemente ciò che vuoi mappare e l'IA la creerà per te.",
       "LABEL_DESCRIPTION": "Descrivi la tua mappa mentale",
       "PLACEHOLDER": "Ad esempio, crea una mappa mentale di una casa con stanze, mobili e giardino",
+      "LABEL_LEVELS": "Livelli sotto la radice",
+      "LABEL_CHILDREN_PER_NODE": "Nodi figli per nodo",
+      "MODEL": "Modello: {{model}}",
       "BUTTON_GENERATE": "Genera e Importa"
     },
     "PICTOGRAMS": {
@@ -128,10 +133,8 @@
       "LINK_TYPE_EDIT": "Osservare e modificare"
     },
     "INFO": {
-      "DELETED_AT": "La mappa mentale verrà eliminata a:",
-      "DELETE_AFTER_DAYS": "Le mappe mentali verranno eliminate da questo server dopo {{deleteAfterDays}} giorni.",
-      "DELETE": "Elimina la mappa mentale",
-      "CONFIRM_DELETE": "Eliminare?"
+      "SHORTCUTS_TITLE": "Scorciatoie da tastiera",
+      "DELETION_MOVED": "Nota: la data di eliminazione di questa mappa mentale si trova ora nelle impostazioni, in Opzioni mappa. Chi ha creato la mappa può anche eliminarla da lì."
     },
     "LINK": {
       "URL": "Link URL (https://...)"
@@ -190,10 +193,13 @@
       "ROOT_NODE_NAME": "Nome nodo radice",
       "NODE_NAME": "Nome nodo",
       "TITLE": "Impostazioni",
-      "TTL": "Ultima data di eliminazione conosciuta"
-    },
-    "SHORTCUTS": {
-      "TITLE": "Scorciatoie da tastiera"
+      "TTL": "Ultima data di eliminazione conosciuta",
+      "DARK_MODE": "Modalità scura",
+      "DELETION": "Eliminazione",
+      "DELETED_AT": "Data di eliminazione:",
+      "DELETE_AFTER_DAYS": "Le mappe mentali verranno eliminate da questo server dopo {{deleteAfterDays}} giorni.",
+      "DELETE": "Elimina la mappa mentale",
+      "CONFIRM_DELETE": "Eliminare?"
     }
   },
   "MESSAGES": {
@@ -209,16 +215,19 @@
     "NODE_COPIED": "Nodo copiato con successo!",
     "NODE_CUT": "Nodo tagliato con successo!",
     "MAP_IMPORT_SUCCESS": "Mappa mentale importata con successo",
+    "MAP_SYNCING": "Caricamento della mappa mentale…",
+    "INVALID_MODIFICATION_SECRET": "Il link di modifica non è valido. La mappa mentale si apre in sola lettura.",
     "MAP_UPDATE_SUCCESS": "Mappa mentale aggiornata con successo!",
     "WARNINGS": {
+      "NODE_PROTECTED": "Questo ramo è protetto. Rimuovi la protezione per modificarlo.",
       "MAP_IMPORT_IN_PROGRESS": "Importazione della mappa mentale in corso",
-      "MAP_UPDATE_IN_PROGRESS": "Aggiornamento della mappa mentale..."
+      "MAP_UPDATE_IN_PROGRESS": "Aggiornamento della mappa mentale...",
+      "MERMAID_SEVERAL_TREES": "Ogni albero è diventato un proprio blocco mindmap. Gli strumenti Mermaid al di fuori di TeamMapper mostrano un blocco alla volta."
     },
     "ERRORS": {
       "ROOT_NODE_COPIED": "Non è possibile copiare il nodo radice!",
       "ROOT_NODE_CUT": "Non è possibile tagliare il nodo radice!",
       "ROOT_NODE_DELETED": "Non è possibile eliminare il nodo radice!",
-      "ROOT_NODE_LOCKED": "Non è possibile bloccare il nodo radice!",
       "NO_NODES_IN_CLIPBOARD": "Non ci sono nodi negli appunti!",
       "NODE_COPY_GENERIC": "Si è verificato un errore durante il tentativo di copiare il nodo.",
       "NODE_CUT_GENERIC": "Si è verificato un errore durante il tentativo di tagliare il nodo.",
@@ -228,10 +237,14 @@
       "EXPORT_IMAGE_ERROR": "Si è verificato un errore durante l'esportazione dell'immagine. La mappa mentale potrebbe essere troppo grande.",
       "MAP_COULD_NOT_BE_FOUND": "Impossibile trovare la mappa mentale!",
       "IMPORT_ERROR": "Non è stato possibile importare la mappa mentale!",
-      "AI_MERMAID_ERROR": "Mermaid non può essere generato"
+      "AI_MERMAID_ERROR": "Mermaid non può essere generato",
+      "IMAGE_STORAGE_FULL": "Lo spazio per le immagini di questa mappa mentale è pieno. Un'immagine rimossa libera il suo spazio entro 7 giorni dal caricamento.",
+      "IMAGE_UPLOAD_ERROR": "Non è stato possibile caricare l'immagine.",
+      "DELETE_MAP_ERROR": "Non è stato possibile eliminare la mappa mentale."
     },
     "DELETE_MAP_SUCCESS": "Mappa mentale cancellata con successo!",
     "AI_MERMAID_GENERATED_SUCCESS": "Mermaid generato con successo!",
+    "AI_MERMAID_TRUNCATED": "Il modello ha raggiunto il limite di output prima di completare la mappa mentale. Prova con meno livelli o nodi figli.",
     "AI_MERMAID_GENERATING": "Creazione di Mermaid...",
     "AI_DESCRIPTION_REQUIRED": "Si prega di fornire una descrizione per la mappa mentale"
   },

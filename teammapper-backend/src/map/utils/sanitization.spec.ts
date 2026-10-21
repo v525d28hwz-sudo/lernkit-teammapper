@@ -53,8 +53,32 @@ describe('sanitizeImageSrc', () => {
     expect(sanitizeImageSrc(src)).toBe(src)
   })
 
-  it('should reject SVG data URI', () => {
-    expect(sanitizeImageSrc('data:image/svg+xml;base64,PHN2Zy4=')).toBe('')
+  it('should accept an image reference with a lowercase uuid', () => {
+    const src = 'image:aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee'
+    expect(sanitizeImageSrc(src)).toBe(src)
+  })
+
+  it.each([
+    'image:../secret',
+    'image:AAAAAAAA-BBBB-4CCC-8DDD-EEEEEEEEEEEE',
+    'image:aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee?x=1',
+    'image:',
+  ])('should reject the malformed reference %p', (src) => {
+    expect(sanitizeImageSrc(src)).toBe('')
+  })
+
+  // lernkit: kleine base64-SVG-Icons erlaubt, übergroße oder nicht-base64 nicht
+  it('should keep a small base64 SVG data URI (lernkit icons)', () => {
+    expect(sanitizeImageSrc('data:image/svg+xml;base64,PHN2Zy4=')).toBe(
+      'data:image/svg+xml;base64,PHN2Zy4='
+    )
+  })
+
+  it('should reject an oversized or non-base64 SVG data URI', () => {
+    expect(
+      sanitizeImageSrc('data:image/svg+xml;base64,' + 'A'.repeat(20000))
+    ).toBe('')
+    expect(sanitizeImageSrc('data:image/svg+xml,<svg/>')).toBe('')
   })
 
   it('should reject javascript URI', () => {
@@ -182,7 +206,7 @@ describe('sanitizeNodeFields', () => {
   it('should sanitize all string fields on a partial node', () => {
     const node: Partial<MmpNode> = {
       name: '<script>xss</script>Hello',
-      imageSrc: 'data:image/svg+xml;base64,PHN2Zz4=',
+      imageSrc: 'data:image/svg+xml,<svg onload="x()"/>',
       linkHref: 'javascript:alert(1)',
       colorsName: '<b>red</b>',
       colorsBackground: '#ffffff',
@@ -229,7 +253,7 @@ describe('sanitizeNodeFields', () => {
       coordinatesX: 100,
       coordinatesY: 200,
       fontSize: 14,
-      locked: true,
+      protected: true,
       nodeMapId: 'map-123',
     }
 
@@ -240,7 +264,7 @@ describe('sanitizeNodeFields', () => {
       coordinatesX: 100,
       coordinatesY: 200,
       fontSize: 14,
-      locked: true,
+      protected: true,
       nodeMapId: 'map-123',
     })
   })

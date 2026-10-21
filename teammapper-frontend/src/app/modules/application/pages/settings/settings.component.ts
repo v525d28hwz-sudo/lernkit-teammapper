@@ -1,12 +1,13 @@
-import { Component, inject } from '@angular/core';
-import { UserSettings } from '../../../../shared/models/settings.model';
+import { Component, Signal, computed, inject } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { CachedMapOptions, UserSettings } from '@teammapper/shared';
+import { AdditionalMapOptions } from 'src/app/core/services/mmp/mmp.service';
 import { SettingsService } from '../../../../core/services/settings/settings.service';
 import { MmpService } from '../../../../core/services/mmp/mmp.service';
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { Location, AsyncPipe } from '@angular/common';
 import { Observable } from 'rxjs';
 import { MapSyncService } from 'src/app/core/services/map-sync/map-sync.service';
-import { CachedMapOptions } from 'src/app/shared/models/cached-map.model';
 import { MatToolbar } from '@angular/material/toolbar';
 import { MatDialogTitle } from '@angular/material/dialog';
 import { MatIconButton } from '@angular/material/button';
@@ -25,6 +26,7 @@ import { FormsModule } from '@angular/forms';
 import { MatInput } from '@angular/material/input';
 import { InverseBoolPipe } from '../../../../shared/pipes/inverse-bool.pipe';
 import { MindmapsOverview } from 'src/app/shared/components/mindmaps-overview/mindmaps-overview.component';
+import { MapDeletionComponent } from '../../components/map-deletion/map-deletion.component';
 
 @Component({
   selector: 'teammapper-settings',
@@ -32,6 +34,7 @@ import { MindmapsOverview } from 'src/app/shared/components/mindmaps-overview/mi
   styleUrls: ['./settings.component.scss'],
   imports: [
     MindmapsOverview,
+    MapDeletionComponent,
     MatToolbar,
     MatDialogTitle,
     MatIconButton,
@@ -61,48 +64,99 @@ export class SettingsComponent {
   private location = inject(Location);
 
   public readonly languages: string[];
-  public settings: UserSettings;
-  public mapOptions: CachedMapOptions;
-  public editMode: Observable<boolean>;
+  public settings: UserSettings | null;
+  private readonly appliedMapOptions = toSignal(
+    this.mmpService.additionalMapOptions$,
+    { initialValue: null }
+  );
+  /**
+   * The copy of the map settings the form edits. A peer's change replaces it.
+   */
+  public readonly mapOptions: Signal<AdditionalMapOptions | null> = computed(
+    () => {
+      const options = this.appliedMapOptions();
+      return options && { ...options };
+    }
+  );
+  public editMode: Observable<boolean | null>;
 
   constructor() {
     this.languages = SettingsService.LANGUAGES;
     this.settings = this.settingsService.getCachedUserSettings();
-    this.mapOptions = this.mmpService.getAdditionalMapOptions();
     this.editMode = this.settingsService.getEditModeObservable();
   }
 
   public async updateGeneralMapOptions() {
+    if (!this.settings) return;
+
     await this.settingsService.updateCachedSettings(this.settings);
   }
 
-  public async updateMapOptions() {
-    await this.validateMapOptionsInput();
-    this.mapSyncService.updateMapOptions(this.mapOptions);
+  /**
+   * Apply the edited map settings. The call runs synchronously, so the new
+   * values reach MmpService before the user types into the next field.
+   */
+  public updateMapOptions(key: keyof AdditionalMapOptions, event: Event) {
+    const applied = this.appliedMapOptions();
+    const input = event.target;
+    if (!applied || !(input instanceof HTMLInputElement)) return;
+
+    // Read the changed field directly and merge it with the latest applied
+    // settings. The form may still hold values from before a local edit or a
+    // peer's update, until Angular refreshes its bindings.
+    const options = { ...applied, [key]: input.valueAsNumber };
+
+    this.mapSyncService.updateMapOptions(validMapOptions(options, applied));
   }
 
   public async updateLanguage() {
+    if (!this.settings) return;
+
     await this.settingsService.updateCachedSettings(this.settings);
 
     this.translateService.use(this.settings.general.language);
   }
 
+  public async updateDarkMode() {
+    if (!this.settings) return;
+
+    await this.settingsService.setDarkMode(this.settings.general.darkMode);
+  }
+
   public back() {
     this.location.back();
   }
+}
 
-  private async validateMapOptionsInput() {
-    const defaultSettings: UserSettings = (
-      await this.settingsService.getDefaultSettings()
-    ).userSettings;
-    if (
-      this.mapOptions.fontIncrement > this.mapOptions.fontMaxSize ||
-      this.mapOptions.fontIncrement < 1
-    )
-      this.mapOptions.fontIncrement = defaultSettings.mapOptions.fontIncrement;
-    if (this.mapOptions.fontMaxSize > 99 || this.mapOptions.fontMaxSize < 15)
-      this.mapOptions.fontMaxSize = defaultSettings.mapOptions.fontMaxSize;
-    if (this.mapOptions.fontMinSize > 99 || this.mapOptions.fontMinSize < 15)
-      this.mapOptions.fontMinSize = defaultSettings.mapOptions.fontMinSize;
-  }
+/**
+ * Validate edited values and preserve the other stored map settings, including
+ * values from older maps outside the form's range. MmpService puts the
+ * configured default in place of each invalid edit.
+ */
+function validMapOptions(
+  options: AdditionalMapOptions,
+  applied: AdditionalMapOptions
+): CachedMapOptions {
+  const validOrUnchanged = (
+    value: number,
+    stored: number,
+    min: number,
+    max: number
+  ) => (value === stored || (value >= min && value <= max) ? value : undefined);
+  const { fontIncrement, fontMaxSize } = options;
+  return {
+    fontMinSize: validOrUnchanged(
+      options.fontMinSize,
+      applied.fontMinSize,
+      15,
+      99
+    ),
+    fontMaxSize: validOrUnchanged(fontMaxSize, applied.fontMaxSize, 15, 99),
+    fontIncrement: validOrUnchanged(
+      fontIncrement,
+      applied.fontIncrement,
+      1,
+      fontMaxSize
+    ),
+  };
 }

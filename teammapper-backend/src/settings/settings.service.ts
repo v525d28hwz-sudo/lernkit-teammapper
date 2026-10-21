@@ -3,7 +3,7 @@ import * as fs from 'fs'
 import * as path from 'path'
 import deepmerge from 'deepmerge'
 import configService from '../config.service'
-import { Settings } from './settings.types'
+import { Settings } from '@teammapper/shared'
 
 @Injectable()
 export class SettingsService {
@@ -38,7 +38,11 @@ export class SettingsService {
     }
 
     const settings = deepmerge(defaultSettings, overrideSettings) as Settings
-    settings.systemSettings.featureFlags.ai = configService.isAiEnabled()
+    const aiEnabled = configService.isAiEnabled()
+    settings.systemSettings.featureFlags.ai = aiEnabled
+    settings.systemSettings.info.aiModel = aiEnabled
+      ? (configService.getLLMConfig().model ?? null)
+      : null
     return settings
   }
 }

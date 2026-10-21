@@ -3,6 +3,10 @@ import * as syncProtocol from 'y-protocols/sync'
 import * as awarenessProtocol from 'y-protocols/awareness'
 import * as encoding from 'lib0/encoding'
 import * as decoding from 'lib0/decoding'
+import {
+  YJS_SECRET_SUBPROTOCOL_PREFIX,
+  YJS_SUBPROTOCOL,
+} from '@teammapper/shared'
 
 // Message types matching y-websocket client protocol
 export const MESSAGE_SYNC = 0
@@ -33,11 +37,6 @@ export interface ConnectionMeta {
   awarenessClientIds: Set<number>
   isAlive: boolean
   ip: string
-}
-
-export interface ParsedQueryParams {
-  mapId: string | null
-  secret: string | null
 }
 
 // Encodes a SyncStep1 message for initial doc state exchange
@@ -117,22 +116,50 @@ export const extractPathname = (url: string | undefined): string => {
   }
 }
 
-// Parses mapId and secret from WebSocket URL query or path params
-// Supports both legacy (/yjs?mapId=<id>) and y-websocket (/yjs/<id>?secret=...)
-export const parseQueryParams = (
-  url: string | undefined
-): ParsedQueryParams => {
-  if (!url) return { mapId: null, secret: null }
+// Reads the map id from the WebSocket URL, as the `mapId` query param
+// (/yjs?mapId=<id>) or as the path segment y-websocket appends (/yjs/<id>).
+// The modification secret arrives as a subprotocol (see
+// `parseSecretSubprotocol`), and the gateway ignores a `secret` query param.
+export const parseMapId = (url: string | undefined): string | null => {
+  if (!url) return null
   try {
     const parsed = new URL(url, 'http://localhost')
     const pathParts = parsed.pathname.split('/').filter(Boolean)
-    const mapId =
+    return (
       parsed.searchParams.get('mapId') ??
       (pathParts.length >= 2 ? pathParts[1] : null)
-    return { mapId, secret: parsed.searchParams.get('secret') }
+    )
   } catch {
-    return { mapId: null, secret: null }
+    return null
   }
+}
+
+// Selects the Yjs subprotocol and skips the secret one, so the handshake
+// response carries no modification secret
+export const selectSubprotocol = (protocols: Set<string>): string | false =>
+  protocols.has(YJS_SUBPROTOCOL) ? YJS_SUBPROTOCOL : false
+
+// Lists the subprotocols a `Sec-WebSocket-Protocol` header offers
+const offeredSubprotocols = (header: string | undefined): string[] =>
+  header ? header.split(',').map((protocol) => protocol.trim()) : []
+
+// Whether the client offers the current Yjs subprotocol. A client that
+// offers another version, or none, runs an older frontend that cannot read
+// the map data this server writes, and the gateway refuses its upgrade with
+// HTTP 426
+export const offersCurrentSubprotocol = (header: string | undefined): boolean =>
+  offeredSubprotocols(header).includes(YJS_SUBPROTOCOL)
+
+// Reads the modification secret from an offered subprotocol
+// `teammapper.secret.<secret>` in a `Sec-WebSocket-Protocol` header
+export const parseSecretSubprotocol = (
+  header: string | undefined
+): string | null => {
+  const offer = offeredSubprotocols(header).find((protocol) =>
+    protocol.startsWith(YJS_SECRET_SUBPROTOCOL_PREFIX)
+  )
+  const secret = offer?.slice(YJS_SECRET_SUBPROTOCOL_PREFIX.length)
+  return secret ? secret : null
 }
 
 // Checks write access: writable if map has no secret, or secret matches

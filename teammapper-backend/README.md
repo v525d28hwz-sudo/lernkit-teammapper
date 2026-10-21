@@ -85,11 +85,28 @@ Copy `.env.default` to `.env` and configure the variables below.
 | Variable | Description | Default |
 |---|---|---|
 | `FEATURE_YJS_RATE_LIMITING` | Enable WebSocket connection rate limiting | `false` |
-| `WS_TRUST_PROXY` | Trust `X-Forwarded-For` header for client IP resolution (enable when behind a reverse proxy) | `false` |
+| `WS_TRUST_PROXY` | Trust the `X-Forwarded-For` header for client IP resolution behind a reverse proxy: `false`, `true`, or the number of proxies in front of the backend | `false` |
 | `WS_GLOBAL_MAX_CONNECTIONS` | Maximum total WebSocket connections | `500` |
 | `WS_PER_IP_MAX_CONNECTIONS` | Maximum WebSocket connections per IP | `50` |
 | `WS_PER_IP_RATE_LIMIT` | Maximum connection attempts per IP within the rate window | `10` |
 | `WS_PER_IP_RATE_WINDOW_MS` | Sliding window duration for rate limiting in ms | `10000` |
+
+`WS_TRUST_PROXY` also sets Express `trust proxy`, so the image upload rate limit reads the same client IP. Its values:
+
+- `false` reads the client IP from the socket and leaves Express `trust proxy` unset.
+- A number, such as `1` behind one nginx or `2` behind a CDN and nginx, skips that many proxies from the right of `X-Forwarded-For`. A client cannot spoof its IP this way, and the proxy addresses may change. Prefer this value.
+- `true` takes the leftmost `X-Forwarded-For` entry. A client can send that entry itself and dodge the rate limits, unless the proxy overwrites the header, as nginx does with `proxy_set_header X-Forwarded-For $remote_addr`.
+
+### Node images
+
+| Variable | Description | Default |
+|---|---|---|
+| `MAX_IMAGE_BYTES_PER_MAP` | Total bytes of the images one map may hold; the server answers 413 to an upload above it | `2000000` |
+| `UPLOAD_IMAGE_MAX_SIZE_BYTES` | Largest single image upload in bytes; the server answers 413 to a larger file | `150000` |
+| `UPLOAD_IMAGE_RATE_LIMIT` | Maximum image uploads per client IP within the rate window | `30` |
+| `UPLOAD_IMAGE_RATE_WINDOW_MS` | Window of the image upload rate limit in ms | `60000` |
+
+Map duplication allows 5 requests per minute per backend process and one active duplication across instances. Configure the shared rate with `DUPLICATE_MAP_RATE_LIMIT` and `DUPLICATE_MAP_RATE_WINDOW_MS`; `DUPLICATE_MAP_MAX_IMAGE_BYTES` sets its total image storage budget (default 1 GB).
 
 ### AI / LLM Integration
 
@@ -102,10 +119,18 @@ Copy `.env.default` to `.env` and configure the variables below.
 | `AI_LLM_TPM` | Tokens per minute limit (per-process, soft) | - |
 | `AI_LLM_TPD` | Tokens per day limit (DB-backed, hard ceiling across restarts/instances) | - |
 | `AI_LLM_RPM` | Requests per minute limit (per-process) | - |
-| `AI_LLM_MAX_OUTPUT_TOKENS` | Per-call cap on generated tokens | `1024` |
-| `AI_LLM_TIMEOUT_MS` | Per-call abort timeout in ms | `30000` |
+| `AI_LLM_MAX_OUTPUT_TOKENS` | Per-call cap on generated tokens, reasoning included | `4096` |
+| `AI_LLM_TIMEOUT_MS` | Per-call abort timeout in ms | `60000` |
 
 > **Migration note:** The previous `stackit` provider value for `AI_LLM_PROVIDER` has been replaced by `openai-compatible`. If you were using `AI_LLM_PROVIDER=stackit`, change it to `AI_LLM_PROVIDER=openai-compatible`.
+
+> **Migration note:** Each call now reserves its full output cap against
+> `AI_LLM_TPM` and `AI_LLM_TPD` until the LLM reports its real usage. With the
+> default cap, one call reserves about 4300 tokens, so a lower `AI_LLM_TPM` or
+> `AI_LLM_TPD` rejects every call, and a limit of `0` rejects every call on
+> purpose. A model without a reasoning phase needs less: 1024 tokens and 30000 ms
+> were the defaults before reasoning models. `LOG_LEVEL=debug` logs the token
+> counts of each call.
 
 ### Authentication
 
@@ -137,7 +162,7 @@ The `ServeStaticModule` uses a `renderPath` regex to restrict the SPA fallback t
 /map         → Map landing
 /map/:id     → Map editor
 /app/settings   → Settings
-/app/shortcuts  → Shortcuts
+/app/shortcuts  → Not-found page (retired, kept so old links reach the SPA)
 ```
 
 **Why `renderPath` is needed:** Without it, any unknown path returns `index.html` with HTTP 200. This causes bots and crawlers that ignore `<base href="/">` to resolve the relative asset paths in the HTML against the current URL, creating infinitely nesting request loops (e.g. `/map/assets/icons/assets/icons/...`).

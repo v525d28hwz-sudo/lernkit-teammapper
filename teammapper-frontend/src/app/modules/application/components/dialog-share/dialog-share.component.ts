@@ -11,7 +11,6 @@ import { API_URL, HttpService } from 'src/app/core/http/http.service';
 import { UtilsService } from 'src/app/core/services/utils/utils.service';
 import { ToastrService } from 'ngx-toastr';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { Router } from '@angular/router';
 import {
   MatDialogRef,
   MatDialogTitle,
@@ -61,14 +60,13 @@ export class DialogShareComponent implements OnInit {
   private utilsService = inject(UtilsService);
   private storageService = inject(StorageService);
   private dialogRef = inject<MatDialogRef<DialogShareComponent>>(MatDialogRef);
-  private router = inject(Router);
 
   @ViewChild('qrcodecanvas', { static: true })
-  qrCodeCanvas: ElementRef<HTMLCanvasElement>;
+  private qrCodeCanvasRef: ElementRef<HTMLCanvasElement> | null = null;
   @ViewChild('sharedialog', { static: true })
-  shareDialog: ElementRef<HTMLElement>;
+  private shareDialogRef: ElementRef<HTMLElement> | null = null;
   @ViewChild('inputlink', { static: true })
-  inputLink: ElementRef<HTMLInputElement>;
+  private inputLinkRef: ElementRef<HTMLInputElement> | null = null;
 
   public showEditableLink = true;
   private editorLink: string = window.location.href;
@@ -78,7 +76,33 @@ export class DialogShareComponent implements OnInit {
     window.location.host +
     window.location.pathname +
     window.location.search;
-  private qrCode: QRCodeStyling;
+  private qrCode: QRCodeStyling | null = null;
+
+  /**
+   * The three elements the dialog drives. All three are static queries, so
+   * Angular has filled them in by `ngOnInit`; reading one earlier is a
+   * programming error, and these throw instead of returning undefined.
+   */
+  private get qrCodeCanvas(): ElementRef<HTMLCanvasElement> {
+    if (!this.qrCodeCanvasRef) {
+      throw new Error('The share dialog has no QR code canvas yet');
+    }
+    return this.qrCodeCanvasRef;
+  }
+
+  private get shareDialog(): ElementRef<HTMLElement> {
+    if (!this.shareDialogRef) {
+      throw new Error('The share dialog has not been rendered yet');
+    }
+    return this.shareDialogRef;
+  }
+
+  private get inputLink(): ElementRef<HTMLInputElement> {
+    if (!this.inputLinkRef) {
+      throw new Error('The share dialog has no link input yet');
+    }
+    return this.inputLinkRef;
+  }
 
   ngOnInit() {
     this.appendQrCode();
@@ -90,7 +114,6 @@ export class DialogShareComponent implements OnInit {
 
   appendQrCode() {
     const size: number = window.innerWidth > 500 ? 300 : 200;
-
     this.qrCode = new QRCodeStyling({
       ...qrcodeStyling,
       width: size,
@@ -110,14 +133,15 @@ export class DialogShareComponent implements OnInit {
     this.toastrService.success(successMessage);
   }
 
-  async duplicateMindMap() {
-    // getCurrentMap from the MmpService doesn't give us the UUID of the map, only a legacy id and the root note ID, so we'll have to use the URL params.
+  async duplicateMindMap(): Promise<void> {
+    // MmpService holds no map uuid, and the second path segment of the URL
+    // is the map's uuid.
     const id = window.location.pathname.split('/')[2];
     const response = await this.httpService.post(
       API_URL.ROOT,
       '/maps/' + id + '/duplicate'
     );
-    if (!response.ok) return null;
+    if (!response.ok) return;
 
     const newMap = await response.json();
     if (newMap && newMap.map.uuid) {
@@ -141,7 +165,7 @@ export class DialogShareComponent implements OnInit {
   }
 
   downloadQrCode() {
-    this.qrCode.download();
+    this.qrCode?.download();
   }
 
   getLink() {

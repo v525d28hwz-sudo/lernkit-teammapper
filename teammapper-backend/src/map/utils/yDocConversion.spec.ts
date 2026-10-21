@@ -16,8 +16,7 @@ const createTestNode = (overrides: Partial<MmpNode> = {}): MmpNode => {
   node.nodeParentId = null
   node.name = 'Test Node'
   node.root = true
-  node.locked = false
-  node.detached = false
+  node.protected = false
   node.k = 1.5
   node.coordinatesX = 100
   node.coordinatesY = 200
@@ -49,20 +48,26 @@ const createTestMap = (overrides: Partial<MmpMap> = {}): MmpMap => {
   return map
 }
 
+const groupOf = (yNode: Y.Map<unknown>, key: string) =>
+  (yNode.get(key) as Y.Map<unknown>).toJSON()
+
 const yNodeToPlainObject = (yNode: Y.Map<unknown>) => ({
   id: yNode.get('id'),
   parent: yNode.get('parent'),
   name: yNode.get('name'),
   isRoot: yNode.get('isRoot'),
-  locked: yNode.get('locked'),
-  detached: yNode.get('detached'),
+  protected: yNode.get('protected'),
   k: yNode.get('k'),
   coordinates: yNode.get('coordinates'),
-  colors: yNode.get('colors'),
-  font: yNode.get('font'),
-  image: yNode.get('image'),
-  link: yNode.get('link'),
+  colors: groupOf(yNode, 'colors'),
+  font: groupOf(yNode, 'font'),
+  image: groupOf(yNode, 'image'),
+  link: groupOf(yNode, 'link'),
 })
+
+// Sends every update `from` holds and `to` lacks
+const sync = (from: Y.Doc, to: Y.Doc): void =>
+  Y.applyUpdate(to, Y.encodeStateAsUpdate(from, Y.encodeStateVector(to)))
 
 const populateAndGet = (
   node: MmpNode
@@ -83,8 +88,7 @@ describe('yDocConversion', () => {
         parent: null,
         name: 'Test Node',
         isRoot: true,
-        locked: false,
-        detached: false,
+        protected: false,
         k: 1.5,
         coordinates: { x: 100, y: 200 },
         colors: { name: '#333333', background: '#ffffff', branch: '#999999' },
@@ -92,6 +96,23 @@ describe('yDocConversion', () => {
         image: { src: 'data:image/png;base64,iVBORw0KGgo=', size: 80 },
         link: { href: 'https://example.com' },
       })
+
+      doc.destroy()
+    })
+
+    it('writes no detached entry', () => {
+      const { yNode, doc } = populateAndGet(createTestNode())
+
+      expect(yNode.has('detached')).toBe(false)
+
+      doc.destroy()
+    })
+
+    it('round-trips the protected flag', () => {
+      const { yNode, doc } = populateAndGet(createTestNode({ protected: true }))
+
+      expect(yNode.get('protected')).toBe(true)
+      expect(yMapToMmpNode('node-1', yNode, 'map-1').protected).toBe(true)
 
       doc.destroy()
     })
@@ -109,14 +130,13 @@ describe('yDocConversion', () => {
           imageSrc: null,
           imageSize: null,
           linkHref: null,
-          locked: null,
           k: null,
         })
       )
 
       expect(yNodeToPlainObject(yNode)).toMatchObject({
         name: '',
-        locked: false,
+        protected: false,
         k: 1,
         colors: { name: '', background: '', branch: '' },
         font: { style: '', size: 12, weight: '' },
@@ -126,18 +146,75 @@ describe('yDocConversion', () => {
 
       doc.destroy()
     })
+
+    it('stores each attribute group as a nested Y.Map', () => {
+      const { yNode, doc } = populateAndGet(createTestNode())
+
+      expect(
+        ['colors', 'font', 'image', 'link'].map(
+          (key) => yNode.get(key) instanceof Y.Map
+        )
+      ).toEqual([true, true, true, true])
+
+      doc.destroy()
+    })
+
+    it('merges concurrent edits of different attributes in one group', () => {
+      const { doc } = populateAndGet(createTestNode())
+      const [first, second] = [new Y.Doc(), new Y.Doc()]
+      sync(doc, first)
+      sync(doc, second)
+      const colorsIn = (client: Y.Doc) =>
+        (client.getMap('nodes').get('node-1') as Y.Map<unknown>).get(
+          'colors'
+        ) as Y.Map<unknown>
+
+      colorsIn(first).set('background', '#ff0000')
+      colorsIn(second).set('name', '#00ff00')
+      sync(first, doc)
+      sync(second, doc)
+
+      const nodesMap = doc.getMap('nodes') as Y.Map<Y.Map<unknown>>
+      expect(
+        yMapToMmpNode('node-1', nodesMap.get('node-1')!, 'map-1')
+      ).toMatchObject({
+        colorsBackground: '#ff0000',
+        colorsName: '#00ff00',
+        colorsBranch: '#999999',
+      })
+
+      ;[doc, first, second].forEach((d) => d.destroy())
+    })
   })
 
   describe('yMapToMmpNode', () => {
+    it('reads attribute groups a client stored as plain objects', () => {
+      const { yNode, doc } = populateAndGet(createTestNode())
+      doc.transact(() => {
+        yNode.set('colors', { name: '#111111', background: '', branch: '' })
+        yNode.set('font', { style: 'normal', size: 20, weight: 'normal' })
+        yNode.set('image', { src: '', size: 0 })
+        yNode.set('link', { href: 'https://example.org' })
+      })
+
+      expect(yMapToMmpNode('node-1', yNode, 'map-1')).toMatchObject({
+        colorsName: '#111111',
+        fontSize: 20,
+        imageSize: 0,
+        linkHref: 'https://example.org',
+      })
+
+      doc.destroy()
+    })
+
     it('converts Y.Map back to MmpNode with all fields', () => {
       const { yNode, doc } = populateAndGet(createTestNode())
 
-      expect(yMapToMmpNode(yNode, 'map-1')).toMatchObject({
+      expect(yMapToMmpNode('node-1', yNode, 'map-1')).toMatchObject({
         id: 'node-1',
         name: 'Test Node',
         root: true,
-        locked: false,
-        detached: false,
+        protected: false,
         k: 1.5,
         coordinatesX: 100,
         coordinatesY: 200,
@@ -156,12 +233,45 @@ describe('yDocConversion', () => {
       doc.destroy()
     })
 
+    it('takes the id from the key, not from the id field', () => {
+      const { yNode, doc } = populateAndGet(createTestNode())
+      yNode.set('id', 'other-node')
+
+      expect(yMapToMmpNode('node-1', yNode, 'map-1').id).toBe('node-1')
+
+      doc.destroy()
+    })
+
+    it('takes the id from the key when the id field is missing', () => {
+      const { yNode, doc } = populateAndGet(createTestNode())
+      yNode.delete('id')
+
+      expect(yMapToMmpNode('node-1', yNode, 'map-1').id).toBe('node-1')
+
+      doc.destroy()
+    })
+
     it('sets nodeParentId to undefined for null parent', () => {
       const { yNode, doc } = populateAndGet(
         createTestNode({ nodeParentId: null })
       )
 
-      expect(yMapToMmpNode(yNode, 'map-1').nodeParentId).toBeUndefined()
+      expect(
+        yMapToMmpNode('node-1', yNode, 'map-1').nodeParentId
+      ).toBeUndefined()
+
+      doc.destroy()
+    })
+
+    it('sets nodeParentId to undefined for an empty string parent, as an older client writes it', () => {
+      const { yNode, doc } = populateAndGet(
+        createTestNode({ nodeParentId: null })
+      )
+      yNode.set('parent', '')
+
+      expect(
+        yMapToMmpNode('node-1', yNode, 'map-1').nodeParentId
+      ).toBeUndefined()
 
       doc.destroy()
     })
@@ -171,7 +281,9 @@ describe('yDocConversion', () => {
         createTestNode({ nodeParentId: 'parent-id', root: false })
       )
 
-      expect(yMapToMmpNode(yNode, 'map-1').nodeParentId).toBe('parent-id')
+      expect(yMapToMmpNode('node-1', yNode, 'map-1').nodeParentId).toBe(
+        'parent-id'
+      )
 
       doc.destroy()
     })
@@ -197,6 +309,15 @@ describe('yDocConversion', () => {
       populateYMapFromMapOptions(optionsMap, createTestMap({ name: null }))
 
       expect(yMapToMapOptions(optionsMap).name).toBeNull()
+
+      doc.destroy()
+    })
+
+    it('falls back to a max font size of 48 when none is stored', () => {
+      const doc = new Y.Doc()
+      const optionsMap = doc.getMap('mapOptions') as Y.Map<unknown>
+
+      expect(yMapToMapOptions(optionsMap).options.fontMaxSize).toBe(48)
 
       doc.destroy()
     })
@@ -247,6 +368,24 @@ describe('yDocConversion', () => {
     })
   })
 
+  describe('node images', () => {
+    it.each([
+      ['a reference', 'image:aaaaaaaa-bbbb-4ccc-8ddd-eeeeeeeeeeee'],
+      ['a data URL', 'data:image/png;base64,iVBORw0KGgo='],
+    ])('keeps %s unchanged through hydrate and persist', (_label, src) => {
+      const doc = new Y.Doc()
+      hydrateYDoc(doc, [createTestNode({ imageSrc: src })], createTestMap())
+      const yNode = (doc.getMap('nodes') as Y.Map<Y.Map<unknown>>).get(
+        'node-1'
+      )!
+
+      expect(groupOf(yNode, 'image')).toEqual({ src, size: 80 })
+      expect(yMapToMmpNode('node-1', yNode, 'map-1').imageSrc).toBe(src)
+
+      doc.destroy()
+    })
+  })
+
   describe('yMapToMmpNode sanitization', () => {
     it('should sanitize malicious fields from Y.Map data', () => {
       const doc = new Y.Doc()
@@ -258,8 +397,7 @@ describe('yDocConversion', () => {
         yNode.set('parent', null)
         yNode.set('name', '<img src=x onerror=alert(1)>Hello')
         yNode.set('isRoot', true)
-        yNode.set('locked', false)
-        yNode.set('detached', false)
+        yNode.set('protected', false)
         yNode.set('k', 1)
         yNode.set('coordinates', { x: 0, y: 0 })
         yNode.set('colors', {
@@ -269,7 +407,7 @@ describe('yDocConversion', () => {
         })
         yNode.set('font', { style: 'normal', size: 14, weight: 'normal' })
         yNode.set('image', {
-          src: 'data:image/svg+xml;base64,PHN2Zz4=',
+          src: 'data:image/svg+xml,<svg onload="x()"/>',
           size: 60,
         })
         yNode.set('link', { href: 'javascript:alert(1)' })
@@ -278,7 +416,7 @@ describe('yDocConversion', () => {
       })
 
       const yNode = nodesMap.get('node-xss')!
-      const result = yMapToMmpNode(yNode, 'map-1')
+      const result = yMapToMmpNode('node-xss', yNode, 'map-1')
 
       expect(result.name).toBe('Hello')
       expect(result.imageSrc).toBe('')

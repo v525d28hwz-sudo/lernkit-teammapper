@@ -1,5 +1,5 @@
 import { Component, OnInit, inject } from '@angular/core';
-import { Router, RouterOutlet } from '@angular/router';
+import { RouterOutlet } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import { SettingsService } from './core/services/settings/settings.service';
 import { ShortcutsService } from './core/services/shortcuts/shortcuts.service';
@@ -14,16 +14,13 @@ import { routeAnimation } from './shared/animations/route.animation';
 })
 export class RootComponent implements OnInit {
   private translateService = inject(TranslateService);
-  private router = inject(Router);
   private settingsService = inject(SettingsService);
   private shortcutsService = inject(ShortcutsService);
 
   public tapCounter = 0;
 
   public async ngOnInit() {
-    const settings = this.settingsService.getCachedUserSettings();
-
-    await this.initTranslations(settings.general.language);
+    await this.initTranslations(this.settingsService.getLanguage());
 
     this.shortcutsService.init();
 

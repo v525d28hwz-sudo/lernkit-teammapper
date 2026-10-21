@@ -1,6 +1,39 @@
 import * as Y from 'yjs';
-import { ExportNodeProperties } from '@mmp/map/types';
-import { ReversePropertyMapping } from './server-types';
+import {
+  collectSubtreeIds,
+  ExportNodeProperties,
+  YJS_SECRET_SUBPROTOCOL_PREFIX,
+  YJS_SUBPROTOCOL,
+} from '@teammapper/shared';
+
+/**
+ * The Y.Doc's `nodes` map. Any peer with write access can store any value
+ * under a key, so the type promises no Y.Map: read entries through `nodeAt`
+ * and `nodeEntries`, which skip every other value.
+ */
+export type NodesMap = Y.Map<unknown>;
+
+export function nodesMapOf(doc: Y.Doc): NodesMap {
+  return doc.getMap('nodes');
+}
+
+/** The node stored under `id`, or undefined when the entry is no Y.Map. */
+export function nodeAt<T>(
+  nodesMap: Y.Map<T>,
+  id: string
+): Y.Map<unknown> | undefined {
+  const entry = nodesMap.get(id);
+  return entry instanceof Y.Map ? entry : undefined;
+}
+
+/** Every node of the map with its key, without the entries that are no Y.Map. */
+export function nodeEntries<T>(nodesMap: Y.Map<T>): [string, Y.Map<unknown>][] {
+  const entries: [string, Y.Map<unknown>][] = [];
+  nodesMap.forEach((entry, id) => {
+    if (entry instanceof Y.Map) entries.push([id, entry]);
+  });
+  return entries;
+}
 
 export type ClientColorMapping = Record<string, ClientColorMappingValue>;
 
@@ -9,58 +42,81 @@ export interface ClientColorMappingValue {
   color: string;
 }
 
+/** The keys a node's Y.Map holds, one per node attribute. */
+const NODE_KEYS = [
+  'id',
+  'parent',
+  'k',
+  'name',
+  'isRoot',
+  'protected',
+  'coordinates',
+  'colors',
+  'font',
+  'image',
+  'link',
+] as const satisfies readonly (keyof ExportNodeProperties)[];
+
+/**
+ * A node's attributes as its Y.Map stores them. A peer may write a value of
+ * any type under any key, so every value is unknown until mmp's
+ * `resolveNode` checks it.
+ */
+export type StoredNode = Partial<Record<(typeof NODE_KEYS)[number], unknown>>;
+
+/** The keys of a node's Y.Map that hold an attribute group as a nested Y.Map. */
+const ATTRIBUTE_GROUPS: ReadonlySet<string> = new Set([
+  'colors',
+  'font',
+  'image',
+  'link',
+]);
+
+/**
+ * The value as a node's Y.Map stores it under `key`: an attribute group given
+ * as a plain object becomes a nested Y.Map, and every other value stays as it
+ * is.
+ */
+export function toStoredValue(key: string, value: unknown): unknown {
+  if (!ATTRIBUTE_GROUPS.has(key)) return value;
+  if (typeof value !== 'object' || value === null) return value;
+  return new Y.Map(Object.entries(value));
+}
+
+/**
+ * The stored value as plain JSON, with a nested Y.Map converted to a plain
+ * object. A value of any other type passes through unchanged, so a group a
+ * peer wrote as a plain object reads like a nested one.
+ */
+export function toPlainValue(value: unknown): unknown {
+  return value instanceof Y.Map ? value.toJSON() : value;
+}
+
+/**
+ * Write every attribute of the node that is not undefined to its Y.Map. A
+ * root's parent goes in as null, also when the caller passes ''.
+ */
 export function populateYMapFromNodeProps(
   yNode: Y.Map<unknown>,
   nodeProps: ExportNodeProperties
 ): void {
-  yNode.set('id', nodeProps.id);
-  yNode.set('parent', nodeProps.parent ?? null);
-  yNode.set('name', nodeProps.name ?? '');
-  yNode.set('isRoot', nodeProps.isRoot ?? false);
-  yNode.set('locked', nodeProps.locked ?? false);
-  yNode.set('detached', nodeProps.detached ?? false);
-  yNode.set('k', nodeProps.k ?? 1);
-  yNode.set('coordinates', nodeProps.coordinates ?? { x: 0, y: 0 });
-  yNode.set(
-    'colors',
-    nodeProps.colors ?? { name: '', background: '', branch: '' }
-  );
-  yNode.set('font', nodeProps.font ?? { size: 12, style: '', weight: '' });
-  yNode.set('image', nodeProps.image ?? { src: '', size: 0 });
-  yNode.set('link', nodeProps.link ?? { href: '' });
+  for (const key of NODE_KEYS) {
+    const value = key === 'parent' ? nodeProps.parent || null : nodeProps[key];
+    if (value !== undefined) yNode.set(key, toStoredValue(key, value));
+  }
 }
 
-export function yMapToNodeProps(yNode: Y.Map<unknown>): ExportNodeProperties {
-  return {
-    id: yNode.get('id') as string,
-    parent: (yNode.get('parent') as string) ?? null,
-    k: (yNode.get('k') as number) ?? 1,
-    name: (yNode.get('name') as string) ?? '',
-    isRoot: (yNode.get('isRoot') as boolean) ?? false,
-    locked: (yNode.get('locked') as boolean) ?? false,
-    detached: (yNode.get('detached') as boolean) ?? false,
-    coordinates: (yNode.get('coordinates') as { x: number; y: number }) ?? {
-      x: 0,
-      y: 0,
-    },
-    colors: (yNode.get('colors') as ExportNodeProperties['colors']) ?? {
-      name: '',
-      background: '',
-      branch: '',
-    },
-    font: (yNode.get('font') as ExportNodeProperties['font']) ?? {
-      size: 12,
-      style: '',
-      weight: '',
-    },
-    image: (yNode.get('image') as ExportNodeProperties['image']) ?? {
-      src: '',
-      size: 0,
-    },
-    link: (yNode.get('link') as ExportNodeProperties['link']) ?? {
-      href: '',
-    },
-  };
+/**
+ * The node as its Y.Map stores it, with each attribute group as a plain
+ * object. A key the Y.Map lacks stays absent, and mmp's `resolveNode` fills
+ * it on read.
+ */
+export function yMapToNodeProps(yNode: Y.Map<unknown>): StoredNode {
+  const record: StoredNode = {};
+  for (const key of NODE_KEYS) {
+    if (yNode.has(key)) record[key] = toPlainValue(yNode.get(key));
+  }
+  return record;
 }
 
 export function buildYjsWsUrl(): string {
@@ -69,6 +125,31 @@ export function buildYjsWsUrl(): string {
   const baseHref = document.querySelector('base')?.getAttribute('href') ?? '/';
   const path = baseHref.endsWith('/') ? baseHref : baseHref + '/';
   return `${protocol}//${host}${path}yjs`;
+}
+
+/**
+ * Lists the subprotocols the Yjs WebSocket offers. The browser `WebSocket`
+ * sends no custom header, and a URL would put the secret into access logs, so
+ * the client offers the modification secret as a second subprotocol. Without a
+ * secret the client offers `YJS_SUBPROTOCOL` alone.
+ */
+export function buildYjsProtocols(secret: string | null): string[] {
+  return secret
+    ? [YJS_SUBPROTOCOL, `${YJS_SECRET_SUBPROTOCOL_PREFIX}${secret}`]
+    : [YJS_SUBPROTOCOL];
+}
+
+// RFC 7230 token characters, the set RFC 6455 requires of a subprotocol.
+const TOKEN_PATTERN = /^[!#$%&'*+\-.^_`|~0-9A-Za-z]+$/;
+
+/**
+ * Returns the secret when it consists of token characters only, and an empty
+ * string otherwise. The secret comes from the URL fragment, and the browser
+ * throws on a subprotocol with a non-token character and on a header value
+ * above U+00FF. A dropped secret opens the map read-only.
+ */
+export function toTransmittableSecret(secret: string | null): string {
+  return secret && TOKEN_PATTERN.test(secret) ? secret : '';
 }
 
 export function resolveClientColor(
@@ -99,126 +180,15 @@ export function findAffectedNodes(
   return nodes;
 }
 
-export interface MmpPropertyUpdate {
-  prop: string;
-  val: unknown;
-}
-
-export function resolveMmpPropertyUpdate(
-  yjsKey: string,
-  value: unknown
-): MmpPropertyUpdate[] {
-  const mapping =
-    ReversePropertyMapping[yjsKey as keyof typeof ReversePropertyMapping];
-  if (!mapping) return [];
-
-  if (typeof mapping === 'string') {
-    return [{ prop: mapping, val: value }];
-  }
-
-  return resolveCompoundMmpUpdates(
-    mapping as Record<string, string>,
-    value as Record<string, unknown>
-  );
-}
-
-// Groups non-root nodes by their parent ID
-const groupByParent = (
-  nodes: readonly ExportNodeProperties[]
-): ReadonlyMap<string, readonly ExportNodeProperties[]> =>
-  nodes
-    .filter(n => !n.isRoot)
-    .reduce((acc, node) => {
-      const pid = node.parent ?? '';
-      acc.set(pid, [...(acc.get(pid) ?? []), node]);
-      return acc;
-    }, new Map<string, ExportNodeProperties[]>());
-
-// Recursive BFS: processes head of queue, enqueues its children, accumulates result
-const collectBreadthFirst = (
-  queue: readonly ExportNodeProperties[],
-  childrenOf: ReadonlyMap<string, readonly ExportNodeProperties[]>,
-  collected: readonly ExportNodeProperties[] = []
-): readonly ExportNodeProperties[] => {
-  if (queue.length === 0) return collected;
-  const [current, ...rest] = queue;
-  const kids = childrenOf.get(current.id) ?? [];
-  return collectBreadthFirst([...rest, ...kids], childrenOf, [
-    ...collected,
-    current,
-  ]);
-};
-
-// Appends nodes not reachable from root to prevent data loss
-const appendOrphans = (
-  ordered: readonly ExportNodeProperties[],
-  all: readonly ExportNodeProperties[]
-): ExportNodeProperties[] => {
-  const visited = new Set(ordered.map(n => n.id));
-  return [...ordered, ...all.filter(n => !visited.has(n.id))];
-};
-
-// Sorts nodes so root comes first and parents always precede their children (BFS order).
-// Orphaned nodes (not reachable from root) are appended at the end to prevent data loss.
-export const sortParentFirst = (
-  nodes: readonly ExportNodeProperties[]
-): ExportNodeProperties[] => {
-  const root = nodes.find(n => n.isRoot);
-  if (!root) return [...nodes];
-
-  const childrenOf = groupByParent(nodes);
-  const ordered = collectBreadthFirst([root], childrenOf);
-  return appendOrphans(ordered, nodes);
-};
-
-// Collects all descendant node IDs by building a parent-to-children
-// index in a single O(N) pass, then BFS-traversing from the given node.
-export function collectDescendantIds(
-  nodesMap: Y.Map<Y.Map<unknown>>,
+// Collects all descendant node IDs using the shared cycle-safe BFS algorithm.
+export function collectDescendantIds<T>(
+  nodesMap: Y.Map<T>,
   nodeId: string
 ): string[] {
-  const childrenOf = new Map<string, string[]>();
-  nodesMap.forEach((yNode: Y.Map<unknown>, key: string) => {
-    const parent = yNode.get('parent') as string | null;
-    if (parent != null) {
-      const siblings = childrenOf.get(parent);
-      if (siblings) {
-        siblings.push(key);
-      } else {
-        childrenOf.set(parent, [key]);
-      }
-    }
-  });
+  const nodes = nodeEntries(nodesMap).map(([id, yNode]) => ({
+    id,
+    parent: (yNode.get('parent') as string | null) ?? null,
+  }));
 
-  const descendants: string[] = [];
-  const visited = new Set<string>([nodeId]);
-  const queue = [nodeId];
-  let i = 0;
-
-  while (i < queue.length) {
-    const children = childrenOf.get(queue[i++]) ?? [];
-    for (const child of children) {
-      if (!visited.has(child)) {
-        visited.add(child);
-        descendants.push(child);
-        queue.push(child);
-      }
-    }
-  }
-
-  return descendants;
-}
-
-export function resolveCompoundMmpUpdates(
-  mapping: Record<string, string>,
-  value: Record<string, unknown>
-): MmpPropertyUpdate[] {
-  if (!value) return [];
-  const updates: MmpPropertyUpdate[] = [];
-  for (const [subKey, mmpProp] of Object.entries(mapping)) {
-    if (subKey in value) {
-      updates.push({ prop: mmpProp, val: value[subKey] });
-    }
-  }
-  return updates;
+  return collectSubtreeIds(nodes, nodeId);
 }

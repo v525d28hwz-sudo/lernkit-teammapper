@@ -36,6 +36,7 @@
     "CUT_NODE": "Coupe le nœud actuel",
     "PASTE_NODE": "Collez le noeud copié",
     "HIDE_CHILD_NODES": "Masquer les nœuds enfants",
+    "DISTRIBUTE_NODES": "Répartir tous les nœuds uniformément",
     "MOVE_NODE_TO_THE_LEFT": "Déplace le nœud vers la gauche",
     "MOVE_NODE_TO_THE_RIGHT": "Déplace le noeud vers la droite",
     "MOVE_NODE_DOWN": "Déplace le nœud vers le bas",
@@ -45,7 +46,8 @@
     "SELECT_NODE_BELOW": "Sélectionne le nœud ci-dessous",
     "SELECT_NODE_ABOVE": "Sélectionne le nœud ci-dessus",
     "EDIT_NODE": "Allows to edit the text of the node",
-    "COUPLE_NODE": "Verrouille ou déverrouille le nœud",
+    "PROTECT_BRANCH": "Protéger cette branche",
+    "RELEASE_PROTECTION": "Lever la protection",
     "NODE_IMAGE": "Ajoute une image au noeud",
     "NODE_IMAGE_REMOVE": "Supprime une image du nœud",
     "PICTOGRAM": "Pictrogram",
@@ -55,7 +57,7 @@
     "TEXT_SIZE": "Change la taille du texte et du noeud",
     "IMAGE_SIZE": "Change la taille de l'image du noeud",
     "ADD_NODE": "Ajoute un noeud",
-    "ADD_DETACHED_NODE": "Add a detached node",
+    "ADD_TREE": "Ajoute un arbre",
     "REMOVE_NODE": "Supprime un noeud",
     "ZOOM_IN_MAP": "Zoom sur la carte",
     "ZOOM_OUT_MAP": "Dézoom la carte",
@@ -81,7 +83,7 @@
     "FONT_INCREMENT": "Font size step",
     "FONT_INCREASE": "Increase font ",
     "FONT_DECREASE": "Decrease font",
-    "INFO": "Ouvre l’écran d’informations"
+    "INFO": "Ouvre les informations et les raccourcis"
   },
   "MODALS": {
     "GENERAL": {
@@ -105,6 +107,9 @@
       "CONTENT": "Générez une carte mentale directement à partir de votre description en utilisant l'IA. Décrivez simplement ce que vous souhaitez cartographier et l'IA la créera pour vous.",
       "LABEL_DESCRIPTION": "Décrivez votre carte mentale",
       "PLACEHOLDER": "Par exemple, créez une carte mentale d'une maison avec les pièces, les meubles et le jardin",
+      "LABEL_LEVELS": "Niveaux sous la racine",
+      "LABEL_CHILDREN_PER_NODE": "Nœuds enfants par nœud",
+      "MODEL": "Modèle : {{model}}",
       "BUTTON_GENERATE": "Générer & Importer"
     },
     "PICTOGRAMS": {
@@ -128,10 +133,8 @@
       "LINK_TYPE_EDIT": "Observe and modify"
     },
     "INFO": {
-      "DELETED_AT": "Mindmap is going to be deleted at:",
-      "DELETE_AFTER_DAYS": "Mindmaps will be deleted on this server after {{deleteAfterDays}} days.",
-      "DELETE": "Delete mindmap",
-      "CONFIRM_DELETE": "Delete?"
+      "SHORTCUTS_TITLE": "Raccourcis",
+      "DELETION_MOVED": "Remarque : la date de suppression de cette carte se trouve désormais dans les paramètres, sous Options de carte. La personne qui a créé la carte peut aussi la supprimer à cet endroit."
     },
     "LINK": {
       "URL": "Link URL (https://...)"
@@ -190,10 +193,13 @@
       "ROOT_NODE_NAME": "Nom du noeud racine",
       "NODE_NAME": "Nom du noeud",
       "TITLE": "Paramètres",
-      "TTL": "Last known date of deletion"
-    },
-    "SHORTCUTS": {
-      "TITLE": "Raccourcis"
+      "TTL": "Dernière date de suppression connue",
+      "DARK_MODE": "Mode sombre",
+      "DELETION": "Suppression",
+      "DELETED_AT": "Date de suppression :",
+      "DELETE_AFTER_DAYS": "Ce serveur supprime les cartes après {{deleteAfterDays}} jours.",
+      "DELETE": "Supprimer la carte",
+      "CONFIRM_DELETE": "Supprimer ?"
     }
   },
   "MESSAGES": {
@@ -209,16 +215,19 @@
     "NODE_COPIED": "Nœud copié avec succès !",
     "NODE_CUT": "Nœud coupé avec succès !",
     "MAP_IMPORT_SUCCESS": "Mindmap importée avec succès !",
+    "MAP_SYNCING": "Chargement de la mindmap…",
+    "INVALID_MODIFICATION_SECRET": "Le lien de modification est invalide. La mindmap s'ouvre en lecture seule.",
     "MAP_UPDATE_SUCCESS": "Mise à jour réussie de la carte heuristique !",
     "WARNINGS": {
+      "NODE_PROTECTED": "Cette branche est protégée. Levez la protection pour la modifier.",
       "MAP_IMPORT_IN_PROGRESS": "Importation de Mindmap en cours",
-      "MAP_UPDATE_IN_PROGRESS": "Mise à jour de la carte heuristique..."
+      "MAP_UPDATE_IN_PROGRESS": "Mise à jour de la carte heuristique...",
+      "MERMAID_SEVERAL_TREES": "Chaque arbre est devenu son propre bloc mindmap. Les outils Mermaid hors de TeamMapper affichent un bloc à la fois."
     },
     "ERRORS": {
       "ROOT_NODE_COPIED": "Il n'est pas possible de copier le noeud racine !",
       "ROOT_NODE_CUT": "Il n'est pas possible de couper le nœud racine !",
       "ROOT_NODE_DELETED": "Il est impossible de supprimer le nœud racine !",
-      "ROOT_NODE_LOCKED": "Il est impossible de verrouiller le nœud racine !",
       "NO_NODES_IN_CLIPBOARD": "Il n'y a aucun nœud dans le presse-papiers !",
       "NODE_COPY_GENERIC": "Une erreur s'est produite lors de la copie du nœud.",
       "NODE_CUT_GENERIC": "Une erreur s'est produite lors de la découpe du nœud.",
@@ -228,10 +237,14 @@
       "EXPORT_IMAGE_ERROR": "Une erreur s'est produite lors de l'exportation de l'image. Il se peut que la mind map soit trop grande.",
       "MAP_COULD_NOT_BE_FOUND": "La carte heuristique est introuvable !",
       "IMPORT_ERROR": "La Mindmap n'a pas pu être importée !",
-      "AI_MERMAID_ERROR": "Mermaid n'a pas pu être généré"
+      "AI_MERMAID_ERROR": "Mermaid n'a pas pu être généré",
+      "IMAGE_STORAGE_FULL": "Le stockage d'images de cette carte mentale est plein. Une image retirée libère sa place dans les 7 jours suivant son téléversement.",
+      "IMAGE_UPLOAD_ERROR": "L'image n'a pas pu être téléversée.",
+      "DELETE_MAP_ERROR": "La carte n'a pas pu être supprimée."
     },
     "DELETE_MAP_SUCCESS": "Mindmap supprimée avec succès !",
     "AI_MERMAID_GENERATED_SUCCESS": "Mermaid généré avec succès !",
+    "AI_MERMAID_TRUNCATED": "Le modèle a atteint sa limite de sortie avant de terminer la carte mentale. Essayez moins de niveaux ou de nœuds enfants.",
     "AI_MERMAID_GENERATING": "Création de Mermaid...",
     "AI_DESCRIPTION_REQUIRED": "Veuillez fournir une description pour la carte mentale"
   },

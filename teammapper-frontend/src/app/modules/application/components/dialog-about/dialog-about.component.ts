@@ -1,13 +1,8 @@
 import { Component, inject } from '@angular/core';
-import { TranslateService, TranslatePipe } from '@ngx-translate/core';
+import { TranslatePipe } from '@ngx-translate/core';
 import { faGithub } from '@fortawesome/free-brands-svg-icons';
-import { MapProperties } from '@mmp/map/types';
 import { SettingsService } from 'src/app/core/services/settings/settings.service';
-import { StorageService } from 'src/app/core/services/storage/storage.service';
-import { MapSyncService } from 'src/app/core/services/map-sync/map-sync.service';
-import { Router } from '@angular/router';
 import {
-  MatDialogRef,
   MatDialogTitle,
   MatDialogContent,
   MatDialogActions,
@@ -16,7 +11,7 @@ import {
 import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatButton } from '@angular/material/button';
-import { AsyncPipe, DatePipe } from '@angular/common';
+import { ShortcutListComponent } from '../shortcut-list/shortcut-list.component';
 
 @Component({
   selector: 'teammapper-dialog-about',
@@ -30,58 +25,24 @@ import { AsyncPipe, DatePipe } from '@angular/common';
     MatDialogActions,
     MatButton,
     MatDialogClose,
-    AsyncPipe,
-    DatePipe,
+    ShortcutListComponent,
     TranslatePipe,
   ],
 })
 export class DialogAboutComponent {
-  private translateService = inject(TranslateService);
   private settingsService = inject(SettingsService);
-  private storageService = inject(StorageService);
-  private mapSyncService = inject(MapSyncService);
-  private dialogRef = inject<MatDialogRef<DialogAboutComponent>>(MatDialogRef);
-  private router = inject(Router);
 
   public faGithub = faGithub;
   public version = '';
   public applicationName = 'TeamMapper';
-  public map: MapProperties;
-  public mapAdminId: Promise<string>;
 
   constructor() {
     const settings = this.settingsService.getCachedSystemSettings();
-    this.version = settings.info?.version || this.version;
-    this.applicationName = settings.info?.name || this.applicationName;
-    this.map = this.mapSyncService.getAttachedMap().cachedMap;
-    this.mapAdminId = this.getMapAdminId();
-  }
-
-  async deleteMap() {
-    if (confirm(this.translateService.instant('MODALS.INFO.CONFIRM_DELETE'))) {
-      await this.mapSyncService.deleteMap(await this.mapAdminId);
-      await this.storageService.remove(this.map.uuid);
-
-      this.dialogRef.close();
-
-      this.router.navigate([''], {
-        queryParams: {
-          toastMessage: this.translateService.instant(
-            'TOASTS.DELETE_MAP_SUCCESS'
-          ),
-        },
-      });
-    }
+    this.version = settings?.info?.version || this.version;
+    this.applicationName = settings?.info?.name || this.applicationName;
   }
 
   language(): string {
-    return this.settingsService.getCachedUserSettings().general.language;
-  }
-
-  async getMapAdminId(): Promise<string | undefined> {
-    const mapData = (await this.storageService.get(this.map.uuid)) as {
-      adminId?: string;
-    } | null;
-    return mapData?.adminId;
+    return this.settingsService.getLanguage();
   }
 }

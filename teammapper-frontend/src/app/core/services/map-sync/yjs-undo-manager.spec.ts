@@ -1,14 +1,12 @@
 import * as Y from 'yjs';
-import {
-  populateYMapFromNodeProps,
-  yMapToNodeProps,
-  sortParentFirst,
-} from './yjs-utils';
-import { ExportNodeProperties } from '@mmp/map/types';
+import { populateYMapFromNodeProps, yMapToNodeProps } from './yjs-utils';
+import { ExportNodeProperties } from '@teammapper/shared';
 
 describe('YjsUndoManager', () => {
   const ORIGIN_LOCAL = 'local';
-  const ORIGIN_IMPORT = 'import';
+  // Anything the undo manager is not configured to track. Real untracked
+  // updates arrive from the WebsocketProvider.
+  const ORIGIN_UNTRACKED = 'remote';
 
   function createMockNode(
     overrides?: Partial<ExportNodeProperties>
@@ -20,13 +18,11 @@ describe('YjsUndoManager', () => {
       k: 1,
       colors: { branch: '#000000' },
       font: { size: 14, style: 'normal', weight: 'normal' },
-      locked: false,
-      hidden: false,
+      protected: false,
       coordinates: undefined,
       image: undefined,
       link: undefined,
       isRoot: false,
-      detached: false,
       ...overrides,
     };
   }
@@ -37,7 +33,7 @@ describe('YjsUndoManager', () => {
     return { doc, nodesMap };
   }
 
-  function createTrackedUndoManager(scope: Y.Map<unknown>): Y.UndoManager {
+  function createTrackedUndoManager<T>(scope: Y.Map<T>): Y.UndoManager {
     return new Y.UndoManager(scope, {
       trackedOrigins: new Set([ORIGIN_LOCAL]),
     });
@@ -66,7 +62,7 @@ describe('YjsUndoManager', () => {
         isRoot: true,
         coordinates: { x: 0, y: 0 },
       },
-      ORIGIN_IMPORT
+      ORIGIN_UNTRACKED
     );
   }
 
@@ -93,8 +89,13 @@ describe('YjsUndoManager', () => {
       expect(undoManager.undoStack.length).toBe(1);
     });
 
-    it('ignores import-origin transactions', () => {
-      addNodeToMap(doc, nodesMap, { id: 'root', isRoot: true }, ORIGIN_IMPORT);
+    it('ignores transactions from an untracked origin', () => {
+      addNodeToMap(
+        doc,
+        nodesMap,
+        { id: 'root', isRoot: true },
+        ORIGIN_UNTRACKED
+      );
 
       expect(undoManager.undoStack.length).toBe(0);
     });
@@ -112,74 +113,6 @@ describe('YjsUndoManager', () => {
       expect(undoManager.undoStack.length).toBe(0);
       undoManager.destroy();
       doc.destroy();
-    });
-  });
-
-  // ─── Echo prevention ─────────────────────────────────────────
-
-  describe('echo prevention', () => {
-    let doc: Y.Doc;
-    let nodesMap: Y.Map<Y.Map<unknown>>;
-    let undoManager: Y.UndoManager;
-
-    beforeEach(() => {
-      ({ doc, nodesMap } = createYjsContext());
-    });
-
-    afterEach(() => {
-      undoManager?.destroy();
-      doc.destroy();
-    });
-
-    function observeWithFilter(um: Y.UndoManager): string[] {
-      const calls: string[] = [];
-      nodesMap.observeDeep((_events, transaction) => {
-        if (transaction.local && transaction.origin !== um) {
-          calls.push('skipped');
-          return;
-        }
-        calls.push('applied');
-      });
-      return calls;
-    }
-
-    it('filters local edits in observer', () => {
-      undoManager = createTrackedUndoManager(nodesMap);
-      const calls = observeWithFilter(undoManager);
-
-      addNodeToMap(doc, nodesMap, { id: 'n1' });
-
-      expect(calls).toEqual(['skipped']);
-    });
-
-    it('passes through UndoManager-originated edits', () => {
-      addNodeToMap(doc, nodesMap, { id: 'n1' });
-      undoManager = createTrackedUndoManager(nodesMap);
-      addNodeToMap(doc, nodesMap, { id: 'n2' });
-
-      const calls = observeWithFilter(undoManager);
-      undoManager.undo();
-
-      expect(calls).toEqual(['applied']);
-    });
-
-    it('passes through remote edits', () => {
-      const remoteDoc = new Y.Doc();
-      const remoteNodesMap = remoteDoc.getMap('nodes') as Y.Map<Y.Map<unknown>>;
-
-      undoManager = createTrackedUndoManager(nodesMap);
-      const calls = observeWithFilter(undoManager);
-
-      remoteDoc.transact(() => {
-        const yNode = new Y.Map<unknown>();
-        populateYMapFromNodeProps(yNode, createMockNode({ id: 'r1' }));
-        remoteNodesMap.set('r1', yNode);
-      });
-
-      Y.applyUpdate(doc, Y.encodeStateAsUpdate(remoteDoc));
-
-      expect(calls).toEqual(['applied']);
-      remoteDoc.destroy();
     });
   });
 
@@ -292,12 +225,13 @@ describe('YjsUndoManager', () => {
       );
     });
 
-    it('undo restores a deleted node with its coordinates', () => {
+    it('undo restores a deleted node with its coordinates and protection', () => {
       const coords = { x: 200, y: -120 };
       addNodeToMap(doc, nodesMap, {
         id: 'n1',
         parent: 'root',
         coordinates: coords,
+        protected: true,
       });
       undoManager.stopCapturing();
       doc.transact(() => nodesMap.delete('n1'), ORIGIN_LOCAL);
@@ -305,7 +239,11 @@ describe('YjsUndoManager', () => {
       undoManager.undo();
 
       expect(yMapToNodeProps(nodesMap.get('n1')!)).toEqual(
-        expect.objectContaining({ id: 'n1', coordinates: coords })
+        expect.objectContaining({
+          id: 'n1',
+          coordinates: coords,
+          protected: true,
+        })
       );
     });
 
@@ -358,22 +296,24 @@ describe('YjsUndoManager', () => {
         B: yMapToNodeProps(nodesMap.get('B')!).coordinates,
       }).toEqual({ size: 3, A: coordsA, B: coordsB });
     });
-  });
 
-  // ─── sortParentFirst ─────────────────────────────────────────
+    it('undo restores a deleted tree with a parentless root', () => {
+      addNodeToMap(doc, nodesMap, { id: 'R', parent: null });
+      addNodeToMap(doc, nodesMap, { id: 'S', parent: 'R' });
+      undoManager.stopCapturing();
+      doc.transact(() => {
+        nodesMap.delete('R');
+        nodesMap.delete('S');
+      }, ORIGIN_LOCAL);
 
-  describe('sortParentFirst', () => {
-    it('sorts deep hierarchy in parent-first order', () => {
-      const nodes = [
-        createMockNode({ id: 'gc', parent: 'child' }),
-        createMockNode({ id: 'child', parent: 'parent' }),
-        createMockNode({ id: 'root', parent: undefined, isRoot: true }),
-        createMockNode({ id: 'parent', parent: 'root' }),
-      ];
+      undoManager.undo();
 
-      const ids = sortParentFirst(nodes).map(n => n.id);
-
-      expect(ids).toEqual(['root', 'parent', 'child', 'gc']);
+      const root = yMapToNodeProps(nodesMap.get('R')!);
+      expect({
+        parent: root.parent,
+        isRoot: root.isRoot,
+        childParent: yMapToNodeProps(nodesMap.get('S')!).parent,
+      }).toEqual({ parent: null, isRoot: false, childParent: 'R' });
     });
   });
 });

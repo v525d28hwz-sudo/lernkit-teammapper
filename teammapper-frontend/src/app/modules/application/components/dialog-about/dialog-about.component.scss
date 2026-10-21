@@ -7,6 +7,15 @@
     margin: 0 auto 1.2rem;
     display: block;
   }
+
+  .hint-box {
+    margin-bottom: 1rem;
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--color-border);
+    border-left: 4px solid var(--color-primary);
+    border-radius: 4px;
+    background-color: var(--color-bg-secondary);
+  }
 }
 
 .lk-about-meta {
@@ -55,4 +64,8 @@
 
 .mat-list-item {
   font-family: 'Inter', 'Fira Sans', sans-serif;
+}
+
+.shortcuts-section {
+  margin-top: 1.5rem;
 }

@@ -3,6 +3,10 @@
 import { DataSourceOptions } from 'typeorm'
 import { LogLevel } from '@nestjs/common'
 import { join } from 'path'
+import {
+  DEFAULT_YJS_MAP_LIMITS,
+  DEFAULT_YJS_MESSAGE_LIMITS,
+} from './map/utils/yjsLimits'
 
 interface EnvProps {
   [k: string]: string | undefined
@@ -19,6 +23,9 @@ export interface LLMProps {
   maxOutputTokens?: string
   timeoutMs?: string
 }
+
+/** Whether to trust X-Forwarded-For: never, always, or for that many hops. */
+export type TrustProxy = boolean | number
 
 class ConfigService {
   private env: EnvProps
@@ -75,14 +82,54 @@ class ConfigService {
     return value?.toLowerCase() === 'true'
   }
 
-  public isWsTrustProxy(): boolean {
-    const value = this.getValue('WS_TRUST_PROXY', false)
-    return value?.toLowerCase() === 'true'
+  /**
+   * Reads WS_TRUST_PROXY: `true` trusts every proxy, a positive integer
+   * trusts that many hops, anything else trusts none.
+   */
+  public getTrustProxy(): TrustProxy {
+    const value = this.getValue('WS_TRUST_PROXY', false)?.trim().toLowerCase()
+    if (value === 'true') return true
+    if (value && /^[1-9]\d*$/.test(value)) return parseInt(value, 10)
+    return false
   }
 
   public isYjsRateLimitingEnabled(): boolean {
     const value = this.getValue('FEATURE_YJS_RATE_LIMITING', false)
     return value?.toLowerCase() === 'true'
+  }
+
+  public getYjsMapLimits() {
+    return {
+      maxBytes: this.parsePositiveInt(
+        'YJS_MAP_MAX_BYTES',
+        DEFAULT_YJS_MAP_LIMITS.maxBytes
+      ),
+      maxEntries: this.parsePositiveInt(
+        'YJS_MAP_MAX_ENTRIES',
+        DEFAULT_YJS_MAP_LIMITS.maxEntries
+      ),
+      maxNodes: this.parsePositiveInt(
+        'YJS_MAP_MAX_NODES',
+        DEFAULT_YJS_MAP_LIMITS.maxNodes
+      ),
+    }
+  }
+
+  public getYjsMessageLimits() {
+    return {
+      windowMs: this.parsePositiveInt(
+        'YJS_MESSAGE_WINDOW_MS',
+        DEFAULT_YJS_MESSAGE_LIMITS.windowMs
+      ),
+      maxMessages: this.parsePositiveInt(
+        'YJS_MESSAGE_MAX_COUNT',
+        DEFAULT_YJS_MESSAGE_LIMITS.maxMessages
+      ),
+      maxBytes: this.parsePositiveInt(
+        'YJS_MESSAGE_MAX_BYTES',
+        DEFAULT_YJS_MESSAGE_LIMITS.maxBytes
+      ),
+    }
   }
 
   public getWsGlobalMaxConnections(): number {
@@ -99,6 +146,37 @@ class ConfigService {
 
   public getWsPerIpRateWindowMs(): number {
     return this.parsePositiveInt('WS_PER_IP_RATE_WINDOW_MS', 10000)
+  }
+
+  /** Total bytes of the images one map may hold; 2 MB by default. */
+  public getMaxImageBytesPerMap(): number {
+    return this.parsePositiveInt('MAX_IMAGE_BYTES_PER_MAP', 2_000_000)
+  }
+
+  /** Largest single image upload in bytes; the frontend resize stays below the default. */
+  public getUploadImageMaxSizeBytes(): number {
+    return this.parsePositiveInt('UPLOAD_IMAGE_MAX_SIZE_BYTES', 150_000)
+  }
+
+  public getUploadImageRateLimit(): number {
+    return this.parsePositiveInt('UPLOAD_IMAGE_RATE_LIMIT', 30)
+  }
+
+  public getUploadImageRateWindowMs(): number {
+    return this.parsePositiveInt('UPLOAD_IMAGE_RATE_WINDOW_MS', 60_000)
+  }
+
+  public getDuplicateMapRateLimit(): number {
+    return this.parsePositiveInt('DUPLICATE_MAP_RATE_LIMIT', 5)
+  }
+
+  public getDuplicateMapRateWindowMs(): number {
+    return this.parsePositiveInt('DUPLICATE_MAP_RATE_WINDOW_MS', 60_000)
+  }
+
+  /** Duplication stops when stored images across all maps would exceed 1 GB. */
+  public getDuplicateMapMaxImageBytes(): number {
+    return this.parsePositiveInt('DUPLICATE_MAP_MAX_IMAGE_BYTES', 1_000_000_000)
   }
 
   private parsePositiveInt(key: string, fallback: number): number {

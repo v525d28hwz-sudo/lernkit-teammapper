@@ -1,14 +1,11 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subscription, Observable } from 'rxjs';
-import {
-  ConnectionStatus,
-  MapSyncService,
-} from '../../../../core/services/map-sync/map-sync.service';
+import { combineLatest, map, Subscription } from 'rxjs';
+import { ConnectionStatus } from '../../../../core/services/map-sync/map-sync-context';
+import { MapSyncService } from '../../../../core/services/map-sync/map-sync.service';
 import { MmpService } from '../../../../core/services/mmp/mmp.service';
 import { SettingsService } from '../../../../core/services/settings/settings.service';
 import { UtilsService } from '../../../../core/services/utils/utils.service';
 import { ActivatedRoute, Router } from '@angular/router';
-import { ExportNodeProperties } from '@mmp/map/types';
 import { StorageService } from 'src/app/core/services/storage/storage.service';
 import { ServerMap } from 'src/app/core/services/map-sync/server-types';
 import { DialogService } from 'src/app/core/services/dialog/dialog.service';
@@ -19,13 +16,12 @@ import { FloatingButtonsComponent } from '../../components/floating-buttons/floa
 import { ToolbarComponent } from '../../components/toolbar/toolbar.component';
 import { MapComponent } from '../../components/map/map.component';
 import { AsyncPipe } from '@angular/common';
-import { InverseBoolPipe } from '../../../../shared/pipes/inverse-bool.pipe';
 
 // Initialization process of a map:
 // 1) Render the wrapper element inside the map angular html component
 // 2) Wait for data fetching completion (triggered within application component)
-// 3) Init mmp library and fill map with data when available
-// 4) Register to server events
+// 3) Open the connection to the map
+// 4) Create the mmp map over the map data once the connection syncs
 @Component({
   selector: 'teammapper-application',
   templateUrl: './application.component.html',
@@ -38,7 +34,6 @@ import { InverseBoolPipe } from '../../../../shared/pipes/inverse-bool.pipe';
     ToolbarComponent,
     MapComponent,
     AsyncPipe,
-    InverseBoolPipe,
   ],
 })
 export class ApplicationComponent implements OnInit, OnDestroy {
@@ -51,11 +46,15 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   private route = inject(ActivatedRoute);
   private router = inject(Router);
 
-  public node: Observable<ExportNodeProperties>;
-  public editMode: Observable<boolean>;
+  public node = this.mapSyncService.getAttachedNodeObservable();
+  // Editing needs edit mode and a map, which exists from the first sync on.
+  public editDisabled = combineLatest([
+    this.settingsService.getEditModeObservable(),
+    this.mmpService.mapCreated$,
+  ]).pipe(map(([editMode, mapCreated]) => editMode !== true || !mapCreated));
 
-  private imageDropSubscription: Subscription;
-  private connectionStatusSubscription: Subscription;
+  private imageDropSubscription: Subscription | null = null;
+  private connectionStatusSubscription: Subscription | null = null;
 
   async ngOnInit() {
     this.storageService.cleanExpired();
@@ -64,37 +63,38 @@ export class ApplicationComponent implements OnInit, OnDestroy {
 
     this.handleImageDropObservable();
 
-    this.node = this.mapSyncService.getAttachedNodeObservable();
     this.connectionStatusSubscription = this.mapSyncService
       .getConnectionStatusObservable()
       .subscribe((status: ConnectionStatus) => {
-        if (status === 'connected') this.dialogService.closeDisconnectDialog();
+        // A null status means no connection is open any more, so the dialog
+        // has nothing left to report and closes with the connected case.
         if (status === 'disconnected')
           this.dialogService.openDisconnectDialog();
+        else this.dialogService.closeDisconnectDialog();
       });
-    this.editMode = this.settingsService.getEditModeObservable();
   }
 
   ngOnDestroy() {
-    this.imageDropSubscription.unsubscribe();
-    this.connectionStatusSubscription.unsubscribe();
+    this.imageDropSubscription?.unsubscribe();
+    this.connectionStatusSubscription?.unsubscribe();
+    // The dialog is an overlay, so it outlives this component unless we close
+    // it here: teardown order can drop the status that would have closed it.
+    this.dialogService.closeDisconnectDialog();
   }
 
   public handleImageDropObservable() {
     this.imageDropSubscription =
-      UtilsService.observableDroppedImages().subscribe((image: string) => {
-        this.mmpService.updateNode('imageSrc', image);
+      UtilsService.observableDroppedImages().subscribe((image: File) => {
+        // addNodeImage shows its own errors, so nothing awaits it.
+        void this.mmpService.addNodeImage(image, true);
       });
   }
 
   // Initializes the map by either loading an existing one or creating a new one
   private async initMap() {
-    const givenId: string = this.route.snapshot.paramMap.get('id');
-    const modificationSecret: string = this.route.snapshot.fragment;
-    const map: ServerMap = await this.loadAndPrepareWithMap(
-      givenId,
-      modificationSecret
-    );
+    const givenId = this.route.snapshot.paramMap.get('id');
+    const modificationSecret = this.route.snapshot.fragment;
+    const map = await this.loadAndPrepareWithMap(givenId, modificationSecret);
 
     // not found, return to start page
     if (!map) {
@@ -104,9 +104,9 @@ export class ApplicationComponent implements OnInit, OnDestroy {
   }
 
   private async loadAndPrepareWithMap(
-    mapId: string,
-    modificationSecret: string
-  ): Promise<ServerMap> {
+    mapId: string | null,
+    modificationSecret: string | null
+  ): Promise<ServerMap | null> {
     if (!mapId) {
       console.error(
         'No map ID provided - this should not happen with the guard in place'

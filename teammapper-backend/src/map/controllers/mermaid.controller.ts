@@ -8,8 +8,7 @@ import {
 import * as v from 'valibot'
 import { AiService } from '../services/ai.service'
 import { RateLimitExceptionFilter } from './rate-limit-exception.filter'
-import { MermaidCreateSchema } from '../schemas/mermaid.schema'
-import { sanitizeIssues } from '../schemas/sanitize-issues'
+import { MermaidCreateSchema, sanitizeIssues } from '@teammapper/shared'
 
 @UseFilters(RateLimitExceptionFilter)
 @Controller('api/mermaid')
@@ -22,9 +21,11 @@ export default class AiController {
     if (!result.success) {
       throw new BadRequestException(sanitizeIssues(result.issues))
     }
-    return this.aiService.generateMermaid(
-      result.output.mindmapDescription,
-      result.output.language
-    )
+    const { mindmapDescription, language, levels, childrenPerNode } =
+      result.output
+    return this.aiService.generateMermaid(mindmapDescription, language, {
+      levels,
+      childrenPerNode,
+    })
   }
 }

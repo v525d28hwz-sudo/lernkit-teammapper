@@ -12,7 +12,10 @@ import {
   processReadOnlySyncMessage,
   parseAwarenessClientIds,
   extractPathname,
-  parseQueryParams,
+  parseMapId,
+  offersCurrentSubprotocol,
+  parseSecretSubprotocol,
+  selectSubprotocol,
   checkWriteAccess,
   toUint8Array,
 } from './yjsProtocol'
@@ -152,33 +155,63 @@ describe('yjsProtocol', () => {
     })
   })
 
-  describe('parseQueryParams', () => {
-    it('parses mapId and secret', () => {
-      expect(parseQueryParams('/yjs?mapId=abc&secret=xyz')).toEqual({
-        mapId: 'abc',
-        secret: 'xyz',
-      })
+  describe('parseMapId', () => {
+    it.each([
+      ['the mapId query param', '/yjs?mapId=abc&secret=xyz', 'abc'],
+      ['the path segment', '/yjs/abc?secret=xyz', 'abc'],
+      ['a URL without a map id', '/yjs', null],
+      ['a missing URL', undefined, null],
+    ])('reads %s', (_label, url, mapId) => {
+      expect(parseMapId(url)).toBe(mapId)
+    })
+  })
+
+  describe('selectSubprotocol', () => {
+    it('selects the Yjs subprotocol over the secret one', () => {
+      const offered = new Set(['teammapper.v2', 'teammapper.secret.xyz'])
+      expect(selectSubprotocol(offered)).toBe('teammapper.v2')
     })
 
-    it('returns nulls for missing params', () => {
-      expect(parseQueryParams('/yjs')).toEqual({
-        mapId: null,
-        secret: null,
-      })
+    it('selects none when the Yjs subprotocol is not offered', () => {
+      expect(selectSubprotocol(new Set(['teammapper.secret.xyz']))).toBe(false)
+    })
+  })
+
+  describe('offersCurrentSubprotocol', () => {
+    it('accepts an offer of the current version next to the secret', () => {
+      expect(
+        offersCurrentSubprotocol('teammapper.secret.xyz, teammapper.v2')
+      ).toBe(true)
     })
 
-    it('returns nulls for undefined URL', () => {
-      expect(parseQueryParams(undefined)).toEqual({
-        mapId: null,
-        secret: null,
-      })
+    it.each([
+      ['a missing header', undefined],
+      ['an older version', 'teammapper.v1, teammapper.secret.xyz'],
+    ])('refuses %s', (_label, header) => {
+      expect(offersCurrentSubprotocol(header)).toBe(false)
+    })
+  })
+
+  describe('parseSecretSubprotocol', () => {
+    it('reads the secret from the offered subprotocols', () => {
+      expect(
+        parseSecretSubprotocol('teammapper.v2, teammapper.secret.xyz')
+      ).toBe('xyz')
     })
 
-    it('parses mapId without secret', () => {
-      expect(parseQueryParams('/yjs?mapId=abc')).toEqual({
-        mapId: 'abc',
-        secret: null,
-      })
+    it('reads the secret without whitespace after the comma', () => {
+      expect(
+        parseSecretSubprotocol('teammapper.v2,teammapper.secret.xyz')
+      ).toBe('xyz')
+    })
+
+    it.each([
+      ['a missing header', undefined],
+      ['an empty header', ''],
+      ['no secret subprotocol', 'teammapper.v2'],
+      ['an empty secret', 'teammapper.v2, teammapper.secret.'],
+    ])('returns null for %s', (_label, header) => {
+      expect(parseSecretSubprotocol(header)).toBeNull()
     })
   })
 

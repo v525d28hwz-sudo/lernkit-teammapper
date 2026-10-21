@@ -1,0 +1,203 @@
+import * as v from 'valibot';
+import {
+  AI_CHILDREN_PER_NODE,
+  AI_LEVELS,
+  AI_MAX_NODES,
+  MAX_FONT_STYLE_LENGTH,
+  MAX_FONT_WEIGHT_LENGTH,
+  MAX_IMAGE_SRC_LENGTH,
+  MAX_LINK_HREF_LENGTH,
+  MAX_NODE_NAME_LENGTH,
+  MAX_MERMAID_DESCRIPTION_LENGTH,
+  SUPPORTED_LANGUAGES,
+} from '../constants';
+import type { NodeProperty } from '../models';
+
+// An empty string means no color, as on the branch of a root node.
+export const CssColorSchema = v.nullable(
+  v.union([v.literal(''), v.pipe(v.string(), v.regex(/^#[0-9a-fA-F]{3,8}$/))])
+);
+
+export const ColorSchema = v.partial(
+  v.object({
+    name: CssColorSchema,
+    background: CssColorSchema,
+    branch: CssColorSchema,
+    link: CssColorSchema,
+  })
+);
+
+export const CoordinatesSchema = v.object({
+  x: v.number(),
+  y: v.number(),
+});
+
+export const FontSchema = v.partial(
+  v.object({
+    style: v.nullable(v.pipe(v.string(), v.maxLength(MAX_FONT_STYLE_LENGTH))),
+    size: v.nullable(v.number()),
+    weight: v.nullable(v.pipe(v.string(), v.maxLength(MAX_FONT_WEIGHT_LENGTH))),
+  })
+);
+
+export const ImageSchema = v.partial(
+  v.object({
+    src: v.nullable(v.pipe(v.string(), v.maxLength(MAX_IMAGE_SRC_LENGTH))),
+    size: v.nullable(v.number()),
+  })
+);
+
+export const LinkSchema = v.partial(
+  v.object({
+    // An empty string means no link.
+    href: v.nullable(
+      v.union([
+        v.literal(''),
+        v.pipe(
+          v.string(),
+          v.regex(/^https?:\/\//i),
+          v.maxLength(MAX_LINK_HREF_LENGTH)
+        ),
+      ])
+    ),
+  })
+);
+
+export const NodeBasicsSchema = v.object({
+  colors: ColorSchema,
+  font: FontSchema,
+  name: v.nullable(v.pipe(v.string(), v.maxLength(MAX_NODE_NAME_LENGTH))),
+  image: ImageSchema,
+});
+
+export const NodeSchema = v.object({
+  ...NodeBasicsSchema.entries,
+  coordinates: CoordinatesSchema,
+  id: v.pipe(v.string(), v.nonEmpty()),
+  k: v.number(),
+  link: LinkSchema,
+  parent: v.nullable(v.string()),
+  isRoot: v.boolean(),
+  protected: v.optional(v.boolean(), false),
+});
+
+/** The value each node property accepts in a single node update. */
+export const NodePropertySchemas = {
+  name: NodeBasicsSchema.entries.name,
+  protected: v.boolean(),
+  coordinates: CoordinatesSchema,
+  imageSrc: ImageSchema.entries.src,
+  imageSize: ImageSchema.entries.size,
+  linkHref: LinkSchema.entries.href,
+  backgroundColor: CssColorSchema,
+  branchColor: CssColorSchema,
+  fontWeight: FontSchema.entries.weight,
+  fontStyle: FontSchema.entries.style,
+  fontSize: FontSchema.entries.size,
+  nameColor: CssColorSchema,
+} satisfies Record<NodeProperty, v.GenericSchema>;
+
+export const MapOptionsSchema = v.partial(
+  v.object({
+    fontMaxSize: v.number(),
+    fontMinSize: v.number(),
+    fontIncrement: v.number(),
+  })
+);
+
+export const MapCreateSchema = v.object({
+  rootNode: NodeBasicsSchema,
+});
+
+export const MapDeleteSchema = v.object({
+  adminId: v.pipe(v.string(), v.nonEmpty()),
+});
+
+const optionalIntegerInRange = (range: {
+  min: number;
+  max: number;
+  default: number;
+}) =>
+  v.optional(
+    v.pipe(
+      v.number(),
+      v.integer(),
+      v.minValue(range.min),
+      v.maxValue(range.max)
+    ),
+    range.default
+  );
+
+/** Counts the nodes below the main root of a map with the given shape. */
+export const aiMapNodeCount = ({
+  levels,
+  childrenPerNode,
+}: {
+  levels: number;
+  childrenPerNode: number;
+}): number =>
+  Array.from({ length: levels }, (_, i) => childrenPerNode ** (i + 1)).reduce(
+    (sum, count) => sum + count,
+    0
+  );
+
+const MermaidCreateFieldsSchema = v.object({
+  mindmapDescription: v.pipe(
+    v.string(),
+    v.nonEmpty(),
+    v.maxLength(MAX_MERMAID_DESCRIPTION_LENGTH)
+  ),
+  language: v.picklist([...SUPPORTED_LANGUAGES]),
+  levels: optionalIntegerInRange(AI_LEVELS),
+  childrenPerNode: optionalIntegerInRange(AI_CHILDREN_PER_NODE),
+});
+
+export const MermaidCreateSchema = v.pipe(
+  MermaidCreateFieldsSchema,
+  v.check(
+    input => aiMapNodeCount(input) <= AI_MAX_NODES,
+    `The map shape may ask for at most ${AI_MAX_NODES} nodes`
+  )
+);
+
+export type IMmpClientNodeBasics = v.InferOutput<typeof NodeBasicsSchema>;
+export type IMmpClientNode = v.InferOutput<typeof NodeSchema>;
+export type MermaidCreateInput = v.InferOutput<typeof MermaidCreateSchema>;
+export type AiMapShape = Pick<MermaidCreateInput, 'levels' | 'childrenPerNode'>;
+
+// Issue sanitization to prevent sensitive information leakage
+type AnyIssue = v.BaseIssue<unknown>;
+
+export interface SanitizedIssuePathItem {
+  type: v.IssuePathItem['type'];
+  origin: v.IssuePathItem['origin'];
+  key: v.IssuePathItem['key'];
+}
+
+export interface SanitizedIssue {
+  kind: AnyIssue['kind'];
+  type: AnyIssue['type'];
+  expected: AnyIssue['expected'];
+  path?: SanitizedIssuePathItem[];
+  issues?: SanitizedIssue[];
+}
+
+const sanitizePathItem = (item: v.IssuePathItem): SanitizedIssuePathItem => ({
+  type: item.type,
+  origin: item.origin,
+  key: item.key,
+});
+
+const sanitizeIssue = (issue: AnyIssue): SanitizedIssue => {
+  const sanitized: SanitizedIssue = {
+    kind: issue.kind,
+    type: issue.type,
+    expected: issue.expected,
+  };
+  if (issue.path) sanitized.path = issue.path.map(sanitizePathItem);
+  if (issue.issues) sanitized.issues = issue.issues.map(sanitizeIssue);
+  return sanitized;
+};
+
+export const sanitizeIssues = (issues: readonly AnyIssue[]): SanitizedIssue[] =>
+  issues.map(sanitizeIssue);

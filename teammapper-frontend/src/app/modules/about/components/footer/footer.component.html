@@ -31,17 +31,19 @@
       <a href="https://badges.lernkit.de/impressum">Impressum</a>
     </nav>
 
-    <div class="lk-fuss__lang">
-      <mat-select
-        (selectionChange)="updateLanguage()"
-        [(value)]="settings.general.language"
-        [title]="'TOOLTIPS.LANGUAGE' | translate">
-        @for (language of languages; track language) {
-          <mat-option [value]="language">
-            {{ 'LANGUAGES.' + language.toUpperCase() | translate }}
-          </mat-option>
-        }
-      </mat-select>
-    </div>
+    @if (settings; as userSettings) {
+      <div class="lk-fuss__lang">
+        <mat-select
+          (selectionChange)="updateLanguage()"
+          [(value)]="userSettings.general.language"
+          [title]="'TOOLTIPS.LANGUAGE' | translate">
+          @for (language of languages; track language) {
+            <mat-option [value]="language">
+              {{ 'LANGUAGES.' + language.toUpperCase() | translate }}
+            </mat-option>
+          }
+        </mat-select>
+      </div>
+    }
   </div>
 </footer>

@@ -11,7 +11,7 @@ import { MatButton } from '@angular/material/button';
 import { MatTabsModule } from '@angular/material/tabs';
 import { TranslatePipe } from '@ngx-translate/core';
 import { MmpService } from 'src/app/core/services/mmp/mmp.service';
-import { UtilsService } from 'src/app/core/services/utils/utils.service';
+import { blobToDataUrl } from 'src/app/core/services/mmp/node-images';
 
 interface IconEntry {
   file: string;
@@ -41,7 +41,6 @@ interface IconManifest {
 })
 export class DialogLernkitIconsComponent implements OnInit {
   private mmpService = inject(MmpService);
-  private utilsService = inject(UtilsService);
   private dialogRef =
     inject<MatDialogRef<DialogLernkitIconsComponent>>(MatDialogRef);
 
@@ -123,8 +122,10 @@ export class DialogLernkitIconsComponent implements OnInit {
     try {
       const res = await fetch(this.iconUrl(group, file));
       const blob = await res.blob();
-      const dataUri = await this.utilsService.blobToBase64(blob);
-      this.mmpService.addNodeImage(dataUri);
+      // Kleines SVG bleibt eingebettet (scharf im Export, siehe isLernkitSvgDataUrl);
+      // Fotos laufen weiter über den Bild-Upload der Map.
+      const dataUri = await blobToDataUrl(blob);
+      await this.mmpService.updateNode('imageSrc', dataUri);
       this.dialogRef.close();
     } catch (_e) {
       // Fehler beim Laden – nichts einfügen

@@ -1,4 +1,10 @@
-## ADDED Requirements
+# mind-map-core Specification
+
+## Purpose
+
+Defines creating, reloading and deleting mind maps, the landing page, the map canvas and its toolbar, and the language of the interface.
+
+## Requirements
 
 ### Requirement: User can create a new mind map
 The system SHALL allow users to create a new mind map from the home page. Upon creation, the map SHALL be displayed with a default root node labeled "Root node".
@@ -41,30 +47,80 @@ The system SHALL display a landing page with a description of the application an
 - **THEN** the "Recently opened mindmaps" section SHALL be displayed with no entries
 
 ### Requirement: Mind Map Canvas
-The system SHALL render the mind map as an interactive SVG canvas with clickable nodes.
+The system SHALL render the mind map as an interactive SVG canvas with clickable nodes. The canvas SHALL render every tree on the map. Deselecting SHALL leave no node selected.
 
 #### Scenario: Root node displayed
 - **WHEN** a newly created map loads
 - **THEN** a single "Root node" SHALL be displayed on the canvas
+- **AND** the root node SHALL be selected
 
 #### Scenario: Node selection
 - **WHEN** the user clicks a node on the canvas
 - **THEN** that node SHALL become selected and the toolbar buttons SHALL become enabled
 
+#### Scenario: Deselect a node
+- **WHEN** the user deselects the selected node
+- **THEN** no node SHALL be selected, including the main root
+
 #### Scenario: No selection state
 - **WHEN** no node is selected
-- **THEN** node-specific toolbar buttons (add, remove, copy, cut, paste, bold, italic, link, image, pictogram, detached node, group, hide children) SHALL be disabled
+- **THEN** node-specific toolbar buttons (add, remove, copy, cut, bold, italic, link, image, pictogram, group, hide children) SHALL be disabled
+- **AND** the add-tree button SHALL stay enabled
+- **AND** the paste button SHALL stay enabled
+- **AND** the other clients SHALL show no selection for this client
+
+#### Scenario: Several trees rendered
+- **WHEN** a map containing three trees loads
+- **THEN** all three roots and their descendants SHALL be displayed on the canvas
 
 ### Requirement: Map Info and Deletion
-The system SHALL display map metadata and allow map deletion via an info dialog.
+The system SHALL display map metadata, every keyboard shortcut and the map deletion action in one info dialog. The dialog SHALL open over the map without changing the URL or reloading the map.
 
 #### Scenario: Info dialog
 - **WHEN** the user clicks the info button in the map editor
 - **THEN** a dialog titled "TeamMapper {version}" SHALL be displayed showing the app description, deletion policy, deletion date, GitHub link, and a "Delete mindmap" button
+- **AND** below that information the dialog SHALL list every keyboard shortcut with its keys and description
 
 #### Scenario: Deletion policy
 - **WHEN** the info dialog is displayed
 - **THEN** the text "Mindmaps will be deleted on this server after 30 days" SHALL be shown along with the specific deletion date
+
+#### Scenario: Map stays in place
+- **GIVEN** a map with a selected node
+- **WHEN** the user opens and then closes the info dialog
+- **THEN** the URL SHALL be unchanged
+- **AND** the same node SHALL still be selected
+
+#### Scenario: Small screen
+- **WHEN** the info dialog is open on a phone-sized screen
+- **THEN** the shortcut list SHALL show one column
+- **AND** the dialog content SHALL scroll with its actions reachable
+
+### Requirement: Shortcut opens the info dialog
+The system SHALL open the info dialog when the user presses `?` in the map editor. The system SHALL show at most one info dialog at a time.
+
+#### Scenario: Open with the shortcut
+- **WHEN** the user presses `?` in the map editor
+- **THEN** the info dialog SHALL open showing the shortcut list
+
+#### Scenario: No second dialog
+- **GIVEN** the info dialog is open
+- **WHEN** the user presses `?` or clicks the info button
+- **THEN** exactly one info dialog SHALL be open
+
+### Requirement: Map shortcuts rest while the info dialog is open
+While the info dialog is open, no map shortcut SHALL act on the map. Escape SHALL close the dialog, and map shortcuts SHALL work again once it is closed.
+
+#### Scenario: Shortcut inside the dialog
+- **GIVEN** a map with a selected node and the info dialog open
+- **WHEN** the user presses the add node shortcut
+- **THEN** the map SHALL hold the same nodes as before
+
+#### Scenario: Close with Escape
+- **GIVEN** the info dialog is open
+- **WHEN** the user presses Escape
+- **THEN** the dialog SHALL close
+- **AND** the add node shortcut SHALL add a node again
 
 ### Requirement: Internationalization
 The system SHALL support multiple languages selectable from the footer or settings.

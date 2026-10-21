@@ -9,11 +9,25 @@ interface UsageRow {
 }
 
 /**
+ * What a caller needs from the counter to hold a daily token budget. The
+ * DB-backed service below implements it, and so do the in-memory stand-ins the
+ * unit tests and the benchmark run without a database.
+ */
+export interface LlmUsageCounting {
+  reserve(
+    dateUsage: string,
+    tokens: number,
+    cap?: number
+  ): Promise<{ tokensUsed: number; requestsCount: number } | null>
+  adjustTokens(dateUsage: string, delta: number): Promise<void>
+}
+
+/**
  * Anonymized aggregate counter for LLM usage. Stores only per-date totals
  * so the daily token cap is enforced across restarts and multi-instance deployments.
  */
 @Injectable()
-export class LlmUsageCounterService {
+export class LlmUsageCounterService implements LlmUsageCounting {
   constructor(
     @InjectRepository(LlmUsageCounter)
     private readonly repo: Repository<LlmUsageCounter>
@@ -65,20 +79,6 @@ export class LlmUsageCounterService {
     await this.repo.query(
       `UPDATE llm_usage_counter SET "tokensUsed" = GREATEST(0, "tokensUsed" + $2) WHERE "dateUsage" = $1`,
       [dateUsage, delta]
-    )
-  }
-
-  /**
-   * Roll back a reservation entirely (token-wise and request-wise),
-   * e.g. after a failed `generateText` call.
-   */
-  async release(dateUsage: string, tokens: number): Promise<void> {
-    await this.repo.query(
-      `UPDATE llm_usage_counter
-         SET "tokensUsed" = GREATEST(0, "tokensUsed" - $2),
-             "requestsCount" = GREATEST(0, "requestsCount" - 1)
-       WHERE "dateUsage" = $1`,
-      [dateUsage, tokens]
     )
   }
 }

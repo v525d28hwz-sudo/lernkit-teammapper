@@ -114,6 +114,15 @@ For examples with a reverse proxy, see [documentation about deployment](docs/dep
 
 -   Visit the frontend in http://localhost:4200
 
+
+### Secret linting via gitleaks
+If installed, run gitleaks to make sure to secrets are accidentally included:
+
+```
+# Assumes location is set to teammapper repo
+docker run -v "$(pwd)":/path ghcr.io/gitleaks/gitleaks:latest dir /path --verbose --config /path/.gitleaks.toml
+```
+
 ### Test
 
 -   Create a test database
@@ -194,12 +203,42 @@ If needed, you can make the connection to Postgres more secure by using a SSL co
 
     within the docker-compose-prod file.
 
+Anonymous map duplication has shared rate and concurrency limits and an image storage budget. See the [backend configuration](teammapper-backend/README.md#node-images).
+
+#### Migrating node images to image references
+
+TeamMapper stores a node image in its own table, and the node holds an `image:<uuid>` reference to it. Earlier releases wrote each image into the node as a base64 data URL.
+
+The current release supports both forms. Maps with inline data URLs keep loading, rendering, syncing and exporting as before, so the migration is optional and you can run it at any time. We still recommend it: a map that holds inline images sends the full image bytes on every map load and in every sync message. Move existing images to the new storage once after upgrading:
+
+1. Upgrade and start the app. The app runs the migrations on start, which create the image tables.
+2. Extract the inline images. The app can keep running during the job:
+
+    ```bash
+    docker compose --file docker-compose-prod.yml --env-file .env.prod exec app_prod pnpm --filter teammapper-backend run prod:data:images:extract-to-table
+    ```
+
+3. Run the same command a second time. A map open during the first run can write its data URLs back, and each run extracts only the images still held inline.
+4. Read the job's warnings. The job keeps any data URL that is not a valid raster image, such as an SVG, and warns about it on every run.
+
 #### Running jobs
 
 Trigger delete job (also executed daily with cron task scheduler):
 
 ```
 docker compose --file docker-compose-prod.yml --env-file .env.prod exec app_prod pnpm --filter teammapper-backend run prod:data:maps:cleanup
+```
+
+Trigger the unused image cleanup (also executed daily at 01:00 UTC). It deletes images that no node of their map references and that are older than 7 days:
+
+```
+docker compose --file docker-compose-prod.yml --env-file .env.prod exec app_prod pnpm --filter teammapper-backend run prod:data:images:cleanup
+```
+
+Extract the images that nodes hold inline as base64 data URLs into the image tables, replacing each with an image reference. See [Migrating node images to image references](#migrating-node-images-to-image-references) for when and how often to run the job:
+
+```
+docker compose --file docker-compose-prod.yml --env-file .env.prod exec app_prod pnpm --filter teammapper-backend run prod:data:images:extract-to-table
 ```
 
 #### Running further queries
@@ -252,6 +291,15 @@ The following environment variables override the feature flags from the JSON con
 -   Once this docker volume is initialized after the first `docker compose up`, the database-related variables in `.env.prod` will not have any effect; please have this in mind => you will then need to setup your database manually
 
 ## Contributing
+
+The frontend compiles under `strict: true` and Angular's `strictTemplates`.
+`strictPropertyInitialization` is the one flag still off. Run both checks before
+you open a PR:
+
+```bash
+pnpm --filter teammapper-frontend run tsc        # TypeScript
+pnpm --filter teammapper-frontend run build:dev  # Angular templates
+```
 
 1. Fork it
 2. Create your feature branch (`git checkout -b fooBar`)

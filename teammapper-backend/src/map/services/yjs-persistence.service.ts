@@ -5,12 +5,15 @@ import * as Y from 'yjs'
 import { MmpNode } from '../entities/mmpNode.entity'
 import { MmpMap } from '../entities/mmpMap.entity'
 import { yMapToMmpNode, yMapToMapOptions } from '../utils/yDocConversion'
+import { MapUpdateOrigin, isRejectedMap } from '../utils/yjsValidation'
 import { orderNodesFromRoot } from '../utils/nodeOrdering'
 
 interface DebounceEntry {
   doc: Y.Doc
   timer: ReturnType<typeof setTimeout> | null
-  observer: () => void
+  // When the oldest change the pending timer covers arrived
+  pendingSince: number | null
+  observer: (update: Uint8Array, origin: unknown) => void
 }
 
 @Injectable()
@@ -18,7 +21,8 @@ export class YjsPersistenceService implements OnModuleDestroy {
   private readonly logger = new Logger(YjsPersistenceService.name)
   private readonly debounceTimers = new Map<string, DebounceEntry>()
   private readonly DEBOUNCE_MS = 2_000
-  private readonly FLUSH_TIMEOUT_MS = 5_000
+  // Upper bound on how long continuous editing can postpone a persist
+  private readonly MAX_DEBOUNCE_MS = 10_000
 
   constructor(
     @InjectRepository(MmpNode)
@@ -27,17 +31,17 @@ export class YjsPersistenceService implements OnModuleDestroy {
     private readonly mapsRepository: Repository<MmpMap>
   ) {}
 
-  async onModuleDestroy(): Promise<void> {
-    const pendingFlush = this.clearAllTimersAndObservers()
-
-    if (pendingFlush.length === 0) return
-
-    this.logger.log(`Flushing ${pendingFlush.length} pending docs on shutdown`)
-    await this.flushWithTimeout(pendingFlush)
+  // YjsDocManagerService persists every loaded doc on shutdown, so this
+  // removes the observers and cancels the timers without persisting
+  onModuleDestroy(): void {
+    for (const mapId of Array.from(this.debounceTimers.keys())) {
+      this.unregisterDebounce(mapId)
+    }
   }
 
   // Persists a Y.Doc's nodes and options to the database in a transaction
   async persistDoc(mapId: string, doc: Y.Doc): Promise<void> {
+    this.assertMapAccepted(doc)
     const queryRunner =
       this.nodesRepository.manager.connection.createQueryRunner()
     await queryRunner.connect()
@@ -45,7 +49,8 @@ export class YjsPersistenceService implements OnModuleDestroy {
     try {
       await queryRunner.startTransaction()
 
-      const nodesMap = doc.getMap('nodes') as Y.Map<Y.Map<unknown>>
+      this.assertMapAccepted(doc)
+      const nodesMap = doc.getMap('nodes')
       const optionsMap = doc.getMap('mapOptions') as Y.Map<unknown>
       const now = new Date()
 
@@ -60,8 +65,10 @@ export class YjsPersistenceService implements OnModuleDestroy {
       }
 
       // Update map options and lastModified
+      this.assertMapAccepted(doc)
       await this.updateMapMetadata(queryRunner, mapId, optionsMap, now)
 
+      this.assertMapAccepted(doc)
       await queryRunner.commitTransaction()
       this.logger.debug(
         `Persisted Y.Doc for map ${mapId} (${mmpNodes.length} nodes)`
@@ -77,16 +84,25 @@ export class YjsPersistenceService implements OnModuleDestroy {
     }
   }
 
-  // Registers a Y.Doc update observer that triggers debounced persistence
+  // Registers a Y.Doc update observer that triggers debounced persistence.
+  // Every connection calls this, so a second call for the same doc keeps the
+  // pending timer instead of restarting it.
   registerDebounce(mapId: string, doc: Y.Doc): void {
+    if (this.debounceTimers.get(mapId)?.doc === doc) return
     this.unregisterDebounce(mapId)
 
-    const observer = (): void => {
+    const observer = (_update: Uint8Array, origin: unknown): void => {
+      if (origin instanceof MapUpdateOrigin && !origin.accepted) return
       this.resetDebounceTimer(mapId, doc)
     }
 
     doc.on('update', observer)
-    this.debounceTimers.set(mapId, { doc, timer: null, observer })
+    this.debounceTimers.set(mapId, {
+      doc,
+      timer: null,
+      pendingSince: null,
+      observer,
+    })
   }
 
   // Removes debounce observer and cancels pending timer
@@ -99,57 +115,86 @@ export class YjsPersistenceService implements OnModuleDestroy {
     this.debounceTimers.delete(mapId)
   }
 
-  // Immediately persists, skipping debounce (used on last client disconnect)
-  async persistImmediately(mapId: string, doc: Y.Doc): Promise<void> {
+  // Persists without waiting for the debounce, on last client disconnect and
+  // on shutdown. Returns whether the doc reached the database.
+  async persistImmediately(mapId: string, doc: Y.Doc): Promise<boolean> {
     this.cancelDebounceTimer(mapId)
 
     try {
       await this.persistDoc(mapId, doc)
+      return true
     } catch (error) {
       this.logger.error(
         `Immediate persist failed for map ${mapId}: ${error instanceof Error ? error.message : String(error)}`
       )
-      // Do not crash — error is logged, retry will happen on next debounce
+      return false
     }
   }
 
+  // Waits for a pause of DEBOUNCE_MS, but persists at the latest
+  // MAX_DEBOUNCE_MS after the first change it covers
   private resetDebounceTimer(mapId: string, doc: Y.Doc): void {
-    this.cancelDebounceTimer(mapId)
-
     const entry = this.debounceTimers.get(mapId)
     if (!entry) return
 
-    entry.timer = setTimeout(async () => {
-      try {
-        await this.persistDoc(mapId, doc)
-      } catch (error) {
-        this.logger.error(
-          `Debounced persist failed for map ${mapId}: ${error instanceof Error ? error.message : String(error)}`
-        )
-        // Do not crash — retry on next debounce cycle
-      }
-    }, this.DEBOUNCE_MS)
+    if (entry.timer) clearTimeout(entry.timer)
+    const now = Date.now()
+    const pendingSince = entry.pendingSince ?? now
+    entry.pendingSince = pendingSince
+    const delay = Math.min(
+      this.DEBOUNCE_MS,
+      pendingSince + this.MAX_DEBOUNCE_MS - now
+    )
+
+    entry.timer = setTimeout(
+      async () => {
+        entry.timer = null
+        entry.pendingSince = null
+        try {
+          await this.persistDoc(mapId, doc)
+        } catch (error) {
+          this.logger.error(
+            `Debounced persist failed for map ${mapId}: ${error instanceof Error ? error.message : String(error)}`
+          )
+          // The next edit schedules another persist
+        }
+      },
+      Math.max(0, delay)
+    )
+  }
+
+  private assertMapAccepted(doc: Y.Doc): void {
+    if (isRejectedMap(doc))
+      throw new Error('Rejected map state cannot be persisted')
   }
 
   private cancelDebounceTimer(mapId: string): void {
     const entry = this.debounceTimers.get(mapId)
-    if (entry?.timer) {
-      clearTimeout(entry.timer)
-      entry.timer = null
-    }
+    if (!entry) return
+    if (entry.timer) clearTimeout(entry.timer)
+    entry.timer = null
+    entry.pendingSince = null
   }
 
-  // Extracts nodes from Y.Doc, ensuring root is first with stable orderNumbers
+  // Extracts nodes from Y.Doc, ensuring root is first with stable orderNumbers.
+  // Skips every entry that is no Y.Map, since any client with write access can
+  // store one. Throws when no root reaches any node, because deleteRemovedNodes
+  // would otherwise delete every node row of the map.
   private extractNodesFromYDoc(
-    nodesMap: Y.Map<Y.Map<unknown>>,
+    nodesMap: Y.Map<unknown>,
     mapId: string,
     now: Date
   ): Partial<MmpNode>[] {
     const nodes: Partial<MmpNode>[] = []
-    nodesMap.forEach((yNode) => {
-      nodes.push({ ...yMapToMmpNode(yNode, mapId), lastModified: now })
+    nodesMap.forEach((yNode, id) => {
+      if (!(yNode instanceof Y.Map)) return
+      nodes.push({ ...yMapToMmpNode(id, yNode, mapId), lastModified: now })
     })
-    return orderNodesFromRoot(nodes)
+    const ordered = orderNodesFromRoot(nodes)
+    if (nodes.length > 0 && ordered.length === 0) {
+      throw new Error(`No root reaches any of the ${nodes.length} nodes`)
+    }
+    return ordered
   }
 
   private async deleteRemovedNodes(
@@ -172,6 +217,10 @@ export class YjsPersistenceService implements OnModuleDestroy {
     })
   }
 
+  // One INSERT ... ON CONFLICT DO UPDATE for all nodes. `save()` would issue
+  // one UPDATE per existing node in parallel on the same connection, which pg
+  // deprecates (queries on a client must not overlap). Entity instances keep
+  // the @BeforeInsert validation running.
   private async upsertNodes(
     queryRunner: QueryRunner,
     nodes: Partial<MmpNode>[]
@@ -179,7 +228,7 @@ export class YjsPersistenceService implements OnModuleDestroy {
     const entities = nodes.map((node) =>
       queryRunner.manager.create(MmpNode, node)
     )
-    await queryRunner.manager.save(entities)
+    await queryRunner.manager.upsert(MmpNode, entities, ['id', 'nodeMapId'])
   }
 
   private async updateMapMetadata(
@@ -218,37 +267,5 @@ export class YjsPersistenceService implements OnModuleDestroy {
         `Release failed: ${error instanceof Error ? error.message : String(error)}`
       )
     }
-  }
-
-  private clearAllTimersAndObservers(): Array<{
-    mapId: string
-    doc: Y.Doc
-  }> {
-    const pendingFlush: Array<{ mapId: string; doc: Y.Doc }> = []
-
-    for (const [mapId, entry] of this.debounceTimers) {
-      entry.doc.off('update', entry.observer)
-      if (entry.timer) {
-        clearTimeout(entry.timer)
-        pendingFlush.push({ mapId, doc: entry.doc })
-      }
-    }
-    this.debounceTimers.clear()
-
-    return pendingFlush
-  }
-
-  private async flushWithTimeout(
-    entries: Array<{ mapId: string; doc: Y.Doc }>
-  ): Promise<void> {
-    const flushPromise = Promise.allSettled(
-      entries.map(({ mapId, doc }) => this.persistDoc(mapId, doc))
-    )
-
-    const timeoutPromise = new Promise<void>((resolve) =>
-      setTimeout(resolve, this.FLUSH_TIMEOUT_MS)
-    )
-
-    await Promise.race([flushPromise, timeoutPromise])
   }
 }

@@ -1,11 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing'
 import MapsController from './maps.controller'
 import { MapsService } from '../services/maps.service'
+import { ImagesService } from '../services/images.service'
 import { YjsDocManagerService } from '../services/yjs-doc-manager.service'
 import { YjsGateway } from './yjs-gateway.service'
-import { INestApplication, NotFoundException } from '@nestjs/common'
+import { NotFoundException } from '@nestjs/common'
 import { MmpMap } from '../entities/mmpMap.entity'
-import { IMmpClientMap, IMmpClientPrivateMap, Request } from '../types'
+import { ClientMap, ClientPrivateMap } from '@teammapper/shared'
+import { Request } from '../types'
 import { MmpNode } from '../entities/mmpNode.entity'
 import {
   createClientRootNode,
@@ -14,14 +16,18 @@ import {
 } from '../utils/tests/mapFactories'
 import MalformedUUIDError from '../services/uuid.error'
 import request from 'supertest'
+import { NestExpressApplication } from '@nestjs/platform-express'
+import { ThrottlerModule } from '@nestjs/throttler'
 
 describe('MapsController', () => {
   let mapsController: MapsController
   let mapsService: MapsService
   let yjsDocManager: YjsDocManagerService
+  let imagesService: ImagesService
 
   beforeEach(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ThrottlerModule.forRoot([{ ttl: 60_000, limit: 30 }])],
       controllers: [MapsController],
       providers: [
         {
@@ -45,12 +51,22 @@ describe('MapsController', () => {
           provide: YjsGateway,
           useValue: { closeConnectionsForMap: jest.fn() },
         },
+        {
+          provide: ImagesService,
+          useValue: {
+            copyImages: jest.fn(),
+            withDuplicationLimit: jest.fn((operation: () => Promise<unknown>) =>
+              operation()
+            ),
+          },
+        },
       ],
     }).compile()
 
     mapsController = module.get<MapsController>(MapsController)
     mapsService = module.get<MapsService>(MapsService)
     yjsDocManager = module.get<YjsDocManagerService>(YjsDocManagerService)
+    imagesService = module.get<ImagesService>(ImagesService)
   })
 
   describe('duplicate', () => {
@@ -63,8 +79,8 @@ describe('MapsController', () => {
         adminId: 'new-admin-id',
         modificationSecret: 'new-modification-secret',
       })
-      const exportedMap: IMmpClientMap = createMmpClientMap()
-      const result: IMmpClientPrivateMap = {
+      const exportedMap: ClientMap = createMmpClientMap()
+      const result: ClientPrivateMap = {
         map: exportedMap,
         adminId: 'new-admin-id',
         modificationSecret: 'new-modification-secret',
@@ -83,17 +99,41 @@ describe('MapsController', () => {
       const response = await mapsController.duplicate(oldMap.id)
 
       expect(response).toEqual(result)
+      expect(imagesService.copyImages).toHaveBeenCalledWith(
+        oldMap.id,
+        newMap.id,
+        0
+      )
 
       expect(newMap.name).toEqual(oldMap.name)
       expect(newMap.lastModified).toEqual(oldMap.lastModified)
     })
+
+    it.each(['copyImages', 'addNodes', 'exportMapToClient'] as const)(
+      'deletes a partial duplicate when %s fails',
+      async (stage) => {
+        const oldMap = createMmpMap()
+        const newMap = createMmpMap()
+        jest.spyOn(mapsService, 'findMap').mockResolvedValue(oldMap)
+        jest.spyOn(mapsService, 'findNodes').mockResolvedValue([])
+        jest.spyOn(mapsService, 'createEmptyMap').mockResolvedValue(newMap)
+        const failure = new Error('copy failed')
+        if (stage === 'copyImages')
+          jest.spyOn(imagesService, stage).mockRejectedValue(failure)
+        else jest.spyOn(mapsService, stage).mockRejectedValue(failure)
+        await expect(mapsController.duplicate(oldMap.id)).rejects.toThrow(
+          failure
+        )
+        expect(mapsService.deleteMap).toHaveBeenCalledWith(newMap.id)
+      }
+    )
 
     it('should throw NotFoundException if old map is not found', async () => {
       const mapId = 'test-map-id'
 
       jest
         .spyOn(mapsService, 'findMap')
-        .mockRejectedValueOnce(new Error('MalformedUUIDError'))
+        .mockRejectedValueOnce(new MalformedUUIDError('Invalid UUID'))
 
       await expect(mapsController.duplicate(mapId)).rejects.toThrow(
         NotFoundException
@@ -104,7 +144,7 @@ describe('MapsController', () => {
   describe('findOne', () => {
     it('should find the correct map', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({
+      const exportedMap: ClientMap = createMmpClientMap({
         id: mapId,
       })
       const mmpMap = createMmpMap({ modificationSecret: null })
@@ -133,7 +173,7 @@ describe('MapsController', () => {
 
     it('returns writable true when map has no modification secret', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: null })
 
       jest
@@ -148,7 +188,7 @@ describe('MapsController', () => {
 
     it('returns writable true when correct secret is provided', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: 'my-secret' })
 
       jest
@@ -163,7 +203,7 @@ describe('MapsController', () => {
 
     it('returns writable false when wrong secret is provided', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: 'my-secret' })
 
       jest
@@ -178,7 +218,7 @@ describe('MapsController', () => {
 
     it('returns writable false when no secret is provided for protected map', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: 'my-secret' })
 
       jest
@@ -193,7 +233,7 @@ describe('MapsController', () => {
 
     it('bumps lastAccessed for an authorized (writable) read', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: 'my-secret' })
 
       jest
@@ -208,7 +248,7 @@ describe('MapsController', () => {
 
     it('does not bump lastAccessed for an anonymous read of a protected map', async () => {
       const mapId = 'e7f66b65-ffd5-4387-b645-35f8e794c7e7'
-      const exportedMap: IMmpClientMap = createMmpClientMap({ id: mapId })
+      const exportedMap: ClientMap = createMmpClientMap({ id: mapId })
       const mmpMap = createMmpMap({ modificationSecret: 'my-secret' })
 
       jest
@@ -292,11 +332,11 @@ describe('MapsController', () => {
     it('should create a new map if given a root node', async () => {
       const newMap: MmpMap = createMmpMap()
 
-      const exportedMap: IMmpClientMap = createMmpClientMap({
+      const exportedMap: ClientMap = createMmpClientMap({
         uuid: newMap.id,
       })
 
-      const result: IMmpClientPrivateMap = {
+      const result: ClientPrivateMap = {
         map: exportedMap,
         adminId: 'admin-id',
         modificationSecret: 'modification-secret',
@@ -324,9 +364,9 @@ describe('MapsController', () => {
       const pid = 'test-person-id'
 
       const newMap: MmpMap = createMmpMap({ ownerExternalId: pid })
-      const exportedMap: IMmpClientMap = createMmpClientMap({ uuid: newMap.id })
+      const exportedMap: ClientMap = createMmpClientMap({ uuid: newMap.id })
 
-      const result: IMmpClientPrivateMap = {
+      const result: ClientPrivateMap = {
         map: exportedMap,
         adminId: 'admin-id',
         modificationSecret: 'modification-secret',
@@ -354,17 +394,22 @@ describe('MapsController', () => {
 // exact wire format the frontend produces. The unit tests above call the
 // controller method directly and so cannot catch wire-format drift.
 describe('MapsController (HTTP wire contract)', () => {
-  let app: INestApplication
+  let app: NestExpressApplication
   let mapsService: MapsService
 
   beforeAll(async () => {
     const module: TestingModule = await Test.createTestingModule({
+      imports: [ThrottlerModule.forRoot([{ ttl: 60_000, limit: 30 }])],
       controllers: [MapsController],
       providers: [
         {
           provide: MapsService,
           useValue: {
             findMap: jest.fn(),
+            createEmptyMap: jest.fn(),
+            findNodes: jest.fn(),
+            addNodes: jest.fn(),
+            exportMapToClient: jest.fn(),
             deleteMap: jest.fn(),
           },
         },
@@ -376,10 +421,20 @@ describe('MapsController (HTTP wire contract)', () => {
           provide: YjsGateway,
           useValue: { closeConnectionsForMap: jest.fn() },
         },
+        {
+          provide: ImagesService,
+          useValue: {
+            copyImages: jest.fn(),
+            withDuplicationLimit: jest.fn((operation: () => Promise<unknown>) =>
+              operation()
+            ),
+          },
+        },
       ],
     }).compile()
 
-    app = module.createNestApplication()
+    app = module.createNestApplication<NestExpressApplication>()
+    app.set('trust proxy', true)
     await app.init()
     mapsService = module.get<MapsService>(MapsService)
   })
@@ -390,6 +445,36 @@ describe('MapsController (HTTP wire contract)', () => {
 
   afterEach(() => {
     jest.clearAllMocks()
+  })
+
+  it('shares the duplication rate allowance across source maps without requiring an IP identity', async () => {
+    const source = createMmpMap()
+    const target = createMmpMap()
+    jest
+      .spyOn(mapsService, 'findMap')
+      .mockResolvedValue(null)
+      .mockResolvedValueOnce(source)
+    jest.spyOn(mapsService, 'createEmptyMap').mockResolvedValue(target)
+    jest.spyOn(mapsService, 'findNodes').mockResolvedValue([])
+    jest
+      .spyOn(mapsService, 'exportMapToClient')
+      .mockResolvedValue(createMmpClientMap())
+    const response = await request(app.getHttpServer())
+      .post(`/api/maps/${source.id}/duplicate`)
+      .set('X-Forwarded-For', '192.0.2.1')
+      .expect(201)
+    expect(response.body.modificationSecret).toBe(target.modificationSecret)
+    for (let index = 0; index < 4; index++) {
+      await request(app.getHttpServer())
+        .post(`/api/maps/source-${index}/duplicate`)
+        .set('X-Forwarded-For', `192.0.2.${index + 2}`)
+        .expect(404)
+    }
+    await request(app.getHttpServer())
+      .post('/api/maps/another-source/duplicate')
+      .set('X-Forwarded-For', '192.0.2.6')
+      .expect(429)
+    expect(mapsService.findMap).toHaveBeenCalledTimes(5)
   })
 
   describe('DELETE /api/maps/:id', () => {

@@ -1,3 +1,4 @@
+import { ChangeDetectorRef } from '@angular/core';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import {
   TranslateService,
@@ -12,7 +13,7 @@ import { ToolbarComponent } from './toolbar.component';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
-import { ExportNodeProperties } from '@mmp/map/types';
+import { ExportNodeProperties } from '@teammapper/shared';
 import { of, Observable, BehaviorSubject } from 'rxjs';
 import { provideRouter } from '@angular/router';
 
@@ -23,17 +24,23 @@ class FakeTranslateLoader implements TranslateLoader {
 }
 
 class MmpServiceStub {
+  mapCreated$ = new BehaviorSubject<boolean>(true);
   exportMap = jest.fn();
-  nodeChildren = jest.fn().mockReturnValue([]);
   getSelectedNode = jest.fn();
+  hasSelectedNode = jest.fn().mockReturnValue(true);
   selectNode = jest.fn();
   updateNode = jest.fn();
   addNodeLink = jest.fn();
   addNode = jest.fn();
+  addTree = jest.fn();
   removeNodeLink = jest.fn();
   toggleBranchVisibility = jest.fn();
+  childNodesHidden = jest.fn().mockReturnValue(false);
+  distributeNodes = jest.fn();
   addNodeImage = jest.fn();
   importMap = jest.fn();
+  protectingNode = jest.fn().mockReturnValue(null);
+  toggleBranchProtection = jest.fn();
 }
 
 interface TestContext {
@@ -118,6 +125,15 @@ async function setupTestBed(): Promise<TestContext> {
   };
 }
 
+/**
+ * Re-render after a stub changes what the selection getters return. The test
+ * bed runs zoneless, so nothing marks the view dirty on its own.
+ */
+function refresh(ctx: TestContext): void {
+  ctx.fixture.componentRef.injector.get(ChangeDetectorRef).markForCheck();
+  ctx.fixture.detectChanges();
+}
+
 describe('ToolbarComponent', () => {
   let ctx: TestContext;
   const originalFileReader = window.FileReader;
@@ -159,21 +175,16 @@ describe('ToolbarComponent', () => {
     expect(alertSpy).toHaveBeenCalledWith('Large file warning');
   });
 
-  it('should detect hidden nodes', () => {
-    ctx.mmpService.nodeChildren.mockReturnValue([
-      { id: '1', hidden: true } as ExportNodeProperties,
-      { id: '2', hidden: false } as ExportNodeProperties,
-    ]);
+  it('reports hidden child nodes of the selected node', () => {
+    ctx.mmpService.childNodesHidden.mockReturnValue(true);
 
-    expect(ctx.component.hasHiddenNodes).toBe(true);
+    expect(ctx.component.childNodesHidden).toBe(true);
   });
 
-  it('should detect no hidden nodes', () => {
-    ctx.mmpService.nodeChildren.mockReturnValue([
-      { id: '1', hidden: false } as ExportNodeProperties,
-    ]);
+  it('reports no hidden child nodes when the view state shows them', () => {
+    ctx.mmpService.childNodesHidden.mockReturnValue(false);
 
-    expect(ctx.component.hasHiddenNodes).toBe(false);
+    expect(ctx.component.childNodesHidden).toBe(false);
   });
 
   it('should not allow hiding root node', () => {
@@ -250,40 +261,24 @@ describe('ToolbarComponent', () => {
     expect(ctx.mmpService.addNodeLink).not.toHaveBeenCalled();
   });
 
-  it('should reject SVG file type in image upload', () => {
+  it('should reject SVG file type in image upload', async () => {
     const mockFile = new File([''], 'test.svg', { type: 'image/svg+xml' });
-    const mockFileReader = {
-      readAsDataURL: jest.fn(),
-      result: '',
-      onload: null,
-    };
-    window.FileReader = jest.fn(
-      () => mockFileReader
-    ) as unknown as typeof FileReader;
 
-    ctx.component.initImageUpload({
+    await ctx.component.initImageUpload({
       target: { files: [mockFile] },
-    } as unknown as InputEvent);
+    } as unknown as Event);
 
-    expect(mockFileReader.readAsDataURL).not.toHaveBeenCalled();
+    expect(ctx.mmpService.addNodeImage).not.toHaveBeenCalled();
   });
 
-  it('should read image file as data URL', () => {
+  it('should hand a raster image file to addNodeImage with the resize', async () => {
     const mockFile = new File([''], 'test.jpg', { type: 'image/jpeg' });
-    const mockFileReader = {
-      readAsDataURL: jest.fn(),
-      result: '',
-      onload: null,
-    };
-    window.FileReader = jest.fn(
-      () => mockFileReader
-    ) as unknown as typeof FileReader;
 
-    ctx.component.initImageUpload({
+    await ctx.component.initImageUpload({
       target: { files: [mockFile] },
-    } as unknown as InputEvent);
+    } as unknown as Event);
 
-    expect(mockFileReader.readAsDataURL).toHaveBeenCalledWith(mockFile);
+    expect(ctx.mmpService.addNodeImage).toHaveBeenCalledWith(mockFile, true);
   });
 
   it('should read JSON file as text', () => {
@@ -293,7 +288,7 @@ describe('ToolbarComponent', () => {
     const mockFileReader = {
       readAsText: jest.fn(),
       result: '{}',
-      onload: null,
+      onload: null as FileReader['onload'],
     };
     window.FileReader = jest.fn(
       () => mockFileReader
@@ -301,7 +296,7 @@ describe('ToolbarComponent', () => {
 
     ctx.component.initJSONUpload({
       target: { files: [mockFile] },
-    } as unknown as InputEvent);
+    } as unknown as Event);
 
     expect(mockFileReader.readAsText).toHaveBeenCalledWith(mockFile);
   });
@@ -344,6 +339,163 @@ describe('ToolbarComponent', () => {
       const undoButton =
         ctx.fixture.nativeElement.querySelector('#undo-button');
       expect(undoButton.disabled).toBe(true);
+    });
+  });
+
+  describe('distribute nodes', () => {
+    it('should render a button for distributing the nodes evenly', () => {
+      const button = ctx.fixture.nativeElement.querySelector(
+        '#distribute-nodes-button'
+      );
+
+      expect(button).not.toBeNull();
+    });
+
+    it('should distribute the nodes when the button is clicked', () => {
+      const button = ctx.fixture.nativeElement.querySelector(
+        '#distribute-nodes-button'
+      );
+
+      button.click();
+
+      expect(ctx.mmpService.distributeNodes).toHaveBeenCalled();
+    });
+  });
+
+  describe('with nothing selected', () => {
+    const disabled = (selector: string): boolean | undefined =>
+      ctx.fixture.nativeElement.querySelector(selector)?.disabled;
+
+    beforeEach(() => {
+      ctx.mmpService.hasSelectedNode.mockReturnValue(false);
+      ctx.mmpService.selectNode.mockReturnValue(null);
+      refresh(ctx);
+    });
+
+    it('disables the buttons that act on the selected node', () => {
+      for (const selector of [
+        '#copy-node-button',
+        '#cut-node-button',
+        '#hide-child-nodes-button',
+        '#protect-branch-button',
+        '#node-image-button',
+        '#image-upload',
+        '#bold-button',
+        '#italic-button',
+        '#add-link-button',
+      ]) {
+        expect(disabled(selector)).toBe(true);
+      }
+    });
+
+    it('keeps paste, add tree and distribute enabled', () => {
+      for (const selector of [
+        '#paste-node-button',
+        '#add-tree-button',
+        '#distribute-nodes-button',
+      ]) {
+        expect(disabled(selector)).toBe(false);
+      }
+    });
+
+    it('enables the node buttons again once a node is selected', () => {
+      ctx.mmpService.hasSelectedNode.mockReturnValue(true);
+      refresh(ctx);
+
+      expect(disabled('#copy-node-button')).toBe(false);
+    });
+
+    it('changes no font style or weight', () => {
+      ctx.component.toogleNodeFontStyle();
+      ctx.component.toogleNodeFontWeight();
+
+      expect(ctx.mmpService.updateNode).not.toHaveBeenCalled();
+    });
+  });
+
+  describe('protect branch', () => {
+    const icon = (): string | undefined =>
+      ctx.fixture.nativeElement
+        .querySelector('#protect-branch-button mat-icon')
+        ?.textContent.trim();
+
+    it('offers to protect an unprotected node', () => {
+      expect(icon()).toBe('lock');
+    });
+
+    it('offers to release a node inside a protected branch', () => {
+      ctx.mmpService.protectingNode.mockReturnValue('parent-id');
+      refresh(ctx);
+
+      expect(icon()).toBe('lock_open');
+    });
+
+    it('toggles the protection when clicked', () => {
+      ctx.fixture.nativeElement.querySelector('#protect-branch-button').click();
+
+      expect(ctx.mmpService.toggleBranchProtection).toHaveBeenCalled();
+    });
+  });
+
+  describe('before the map exists', () => {
+    const disabled = (selector: string): boolean | undefined =>
+      ctx.fixture.nativeElement.querySelector(selector)?.disabled;
+
+    it('disables import and export', () => {
+      ctx.mmpService.mapCreated$.next(false);
+      ctx.fixture.detectChanges();
+
+      expect({
+        importMenu: disabled('#menu-import'),
+        exportMenu: disabled('#menu-export'),
+      }).toEqual({ importMenu: true, exportMenu: true });
+    });
+
+    it('enables import and export once the map exists', () => {
+      expect({
+        importMenu: disabled('#menu-import'),
+        exportMenu: disabled('#menu-export'),
+      }).toEqual({ importMenu: false, exportMenu: false });
+    });
+  });
+
+  it('disables the edit buttons while editDisabled is true', () => {
+    ctx.fixture.componentRef.setInput('editDisabled', true);
+    ctx.fixture.detectChanges();
+
+    for (const selector of [
+      '#add-tree-button',
+      '#paste-node-button',
+      '#distribute-nodes-button',
+      '#copy-node-button',
+    ]) {
+      expect(ctx.fixture.nativeElement.querySelector(selector)?.disabled).toBe(
+        true
+      );
+    }
+  });
+
+  describe('add tree', () => {
+    const query = (selector: string): HTMLButtonElement | null =>
+      ctx.fixture.nativeElement.querySelector(selector);
+
+    it('shows the add-tree button and no detached-node button', () => {
+      expect(query('#add-tree-button')).not.toBeNull();
+      expect(query('#add-detached-node-button')).toBeNull();
+    });
+
+    it('adds a tree when the add-tree button is clicked', () => {
+      query('#add-tree-button')?.click();
+
+      expect(ctx.mmpService.addTree).toHaveBeenCalled();
+      expect(ctx.mmpService.addNode).not.toHaveBeenCalled();
+    });
+
+    it('keeps the add-tree button enabled with nothing selected', () => {
+      ctx.mmpService.hasSelectedNode.mockReturnValue(false);
+      refresh(ctx);
+
+      expect(query('#add-tree-button')?.disabled).toBe(false);
     });
   });
 });

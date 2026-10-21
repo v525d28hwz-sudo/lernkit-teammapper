@@ -1,4 +1,10 @@
-## ADDED Requirements
+# yjs-sync Specification
+
+## Purpose
+
+Defines how clients and the server keep one Y.Doc per map in sync over WebSocket, and the structure that Y.Doc holds.
+
+## Requirements
 
 ### Requirement: Y.Doc per map on the server
 The server SHALL maintain one Y.Doc instance per active map. A Y.Doc is created or loaded when the first client connects to a map and SHALL remain in memory while at least one client is connected. The Y.Doc SHALL be evicted from memory after a grace period (default 30 seconds) following the last client disconnect.
@@ -31,7 +37,7 @@ The server SHALL expose a WebSocket endpoint at the `/yjs` path, mounted on the 
 - **THEN** the server SHALL close the WebSocket connection with an appropriate error code
 
 ### Requirement: Y.Doc structure mirrors node model
-Each Y.Doc SHALL contain a `Y.Map("nodes")` where keys are node IDs and values are `Y.Map` instances with the same fields as `ExportNodeProperties` (id, parent, name, isRoot, locked, detached, k, coordinates, colors, font, image, link). A separate `Y.Map("mapOptions")` SHALL hold map-level metadata.
+Each Y.Doc SHALL contain a `Y.Map("nodes")` where keys are node IDs and values are `Y.Map` instances with the same fields as `ExportNodeProperties` (id, parent, name, isRoot, locked, k, coordinates, colors, font, image, link). `isRoot` SHALL mark the main root. A node with no parent is a root, and a Y.Doc MAY hold several roots. Exactly one node SHALL carry the main-root mark. The detached property SHALL NOT be written. Each attribute group (`colors`, `font`, `image`, `link`) SHALL be a nested `Y.Map` with one key per attribute, and `coordinates` SHALL stay a plain object. Readers SHALL also accept an attribute group stored as a plain object. A separate `Y.Map("mapOptions")` SHALL hold map-level metadata.
 
 #### Scenario: Y.Doc hydrated from database
 - **WHEN** a Y.Doc is created from database rows
@@ -41,27 +47,88 @@ Each Y.Doc SHALL contain a `Y.Map("nodes")` where keys are node IDs and values a
 - **WHEN** a client adds a new entry to the `nodes` Y.Map
 - **THEN** the entry SHALL be a Y.Map containing all required `ExportNodeProperties` fields
 
+#### Scenario: Y.Doc holds several roots
+- **WHEN** a map with three trees is hydrated
+- **THEN** the `nodes` map SHALL hold three entries with no parent
+- **AND** one of them SHALL carry the main-root mark
+
+#### Scenario: Two clients change different attributes of one group
+- **WHEN** one client changes a node's background color and another client changes the same node's name color before either receives the other's update
+- **THEN** both clients SHALL hold both colors after they sync
+- **AND** the server SHALL persist both colors
+
+### Requirement: Full-map replacement detection reads the main-root mark only
+The frontend SHALL classify a remote or undo transaction as a full-map replacement when it adds or rewrites the top-level `nodes` entry of the node carrying the main-root mark, which an import, a redistribution and an undo of either produce. A transaction that adds a root without the main-root mark SHALL be applied as an ordinary node add.
+
+#### Scenario: Peer adds a tree
+- **WHEN** a remote client creates a root and the transaction reaches this client
+- **THEN** this client SHALL add the node without reloading the map
+- **AND** the undo history SHALL keep its entries
+
+#### Scenario: Peer pastes a tree
+- **WHEN** a remote client pastes a tree with no node selected and the transaction reaches this client
+- **THEN** this client SHALL add the pasted nodes without reloading the map
+- **AND** the undo history SHALL keep its entries
+
+#### Scenario: Peer imports a map
+- **WHEN** a remote client imports a map, replacing every node in one transaction
+- **THEN** this client SHALL reload the map from the Y.Doc
+- **AND** the undo history SHALL be cleared
+
+#### Scenario: Peer redistributes a map
+- **WHEN** a remote client redistributes a map, rewriting every node under its existing ID
+- **THEN** this client SHALL reload the map from the Y.Doc
+- **AND** the map SHALL hold exactly one node carrying the main-root mark
+
+#### Scenario: Local import does not clear the history of the importing client
+- **WHEN** the local client imports a map
+- **THEN** that client SHALL reload the map from the Y.Doc
+- **AND** the undo history SHALL keep its entries
+
+### Requirement: Batched adds are ordered across roots
+When a transaction adds several nodes, the receiving client SHALL order them so that every parent precedes its children, across all trees.
+
+#### Scenario: Remote client pastes a tree
+- **WHEN** a remote client pastes a root with two levels of descendants in one transaction
+- **THEN** the receiving client SHALL add the root before its children and each child before its own children
+- **AND** every added node SHALL find its parent already present
+
 ### Requirement: Authentication at WebSocket handshake
-The server SHALL verify the modification secret during the WebSocket handshake. The `mapId` and `secret` SHALL be passed as query parameters. Clients with a valid secret SHALL receive read-write access. Clients without a valid secret (or maps with no secret set) SHALL receive read-only access by default, or read-write access if the map has no modification secret.
+The server SHALL verify the modification secret during the WebSocket handshake. The client SHALL send the `mapId` in the path or as a query parameter. The client SHALL offer the secret as the subprotocol `teammapper.secret.<secret>` next to `teammapper.v2`. The server SHALL select `teammapper.v2` and SHALL NOT select the secret subprotocol, so the handshake response carries no secret. The server SHALL refuse the upgrade with HTTP 426 when the client does not offer `teammapper.v2`, because an older client cannot read the nested attribute groups. The server SHALL ignore a `secret` query parameter. Clients with a valid secret SHALL receive read-write access. Clients without a valid secret SHALL receive read-only access, unless the map has no modification secret, which grants read-write access.
 
-#### Scenario: Client connects with valid modification secret
-- **WHEN** a client connects with `?mapId=<uuid>&secret=<valid-secret>`
-- **THEN** the server SHALL allow the client to send Y.Doc updates (read-write access)
+#### Scenario: Client offers a valid secret subprotocol
+- **WHEN** a client connects offering `teammapper.v2, teammapper.secret.<valid-secret>`
+- **THEN** the server SHALL select the subprotocol `teammapper.v2`
+- **AND** the server SHALL allow the client to send Y.Doc updates (read-write access)
 
-#### Scenario: Client connects with invalid modification secret
-- **WHEN** a client connects with `?mapId=<uuid>&secret=<invalid-secret>`
+#### Scenario: Client offers an invalid secret subprotocol
+- **WHEN** a client connects offering `teammapper.v2, teammapper.secret.<invalid-secret>`
 - **THEN** the server SHALL allow the client to receive Y.Doc state but SHALL silently drop any write messages from the client
+
+#### Scenario: Client sends the secret as a query parameter
+- **WHEN** a client offers `teammapper.v2` without a secret subprotocol and sends `?secret=<valid-secret>`
+- **THEN** the server SHALL grant read-only access
+
+#### Scenario: Client from an older frontend connects
+- **WHEN** a client offers `teammapper.v1`, or no subprotocol
+- **THEN** the server SHALL refuse the upgrade with HTTP 426 and an `Upgrade: websocket` header
 
 #### Scenario: Client connects to a map with no modification secret
 - **WHEN** a client connects to a map that has no modification secret set
 - **THEN** the server SHALL grant read-write access regardless of the provided secret
 
 ### Requirement: Frontend WebSocket provider
-The frontend SHALL connect to the Yjs WebSocket endpoint using `y-websocket`'s `WebsocketProvider`. The provider SHALL be configured with reconnection support. The provider SHALL pass the map ID and modification secret as query parameters.
+The frontend SHALL connect to the Yjs WebSocket endpoint using `y-websocket`'s `WebsocketProvider`. The provider SHALL be configured with reconnection support. The provider SHALL pass the modification secret through its `protocols` option and SHALL NOT put it into the URL.
 
 #### Scenario: Frontend establishes Yjs connection
-- **WHEN** a user navigates to a map
-- **THEN** the frontend SHALL create a `WebsocketProvider` targeting `/yjs` with the map's UUID as the room name and the modification secret as a query parameter
+- **WHEN** a user navigates to a map with a modification secret
+- **THEN** the frontend SHALL create a `WebsocketProvider` targeting `/yjs` with the map's UUID as the room name
+- **AND** the provider SHALL offer the subprotocols `teammapper.v2` and `teammapper.secret.<secret>`
+- **AND** the WebSocket URL SHALL NOT contain the secret
+
+#### Scenario: Frontend connects to a map without a secret
+- **WHEN** the frontend holds no modification secret for the map
+- **THEN** the provider SHALL offer the subprotocol `teammapper.v2` alone
 
 #### Scenario: WebSocket connection lost
 - **WHEN** the WebSocket connection is interrupted
@@ -69,7 +136,8 @@ The frontend SHALL connect to the Yjs WebSocket endpoint using `y-websocket`'s `
 
 #### Scenario: WebSocket reconnects successfully
 - **WHEN** the `WebsocketProvider` reconnects after a disconnection
-- **THEN** the Yjs sync protocol SHALL automatically reconcile the local Y.Doc with the server Y.Doc without a full map reload
+- **THEN** the provider SHALL offer the same subprotocols again
+- **AND** the Yjs sync protocol SHALL automatically reconcile the local Y.Doc with the server Y.Doc without a full map reload
 
 ### Requirement: Connection status observable
 The frontend SHALL expose a reactive `ConnectionStatus` observable (`'connected' | 'disconnected' | null`) via `MapSyncService`. UI components SHALL subscribe to this observable to present connection state (e.g., showing a disconnect dialog). The service SHALL NOT directly control UI elements like toasts or dialogs.
@@ -114,3 +182,17 @@ Note: During the phased rollout, both Socket.io and Yjs code paths coexist behin
 #### Scenario: No Socket.io client on the frontend
 - **WHEN** the frontend application is built after the cleanup phase is complete
 - **THEN** the `socket.io-client` package SHALL NOT be included in the bundle
+
+### Requirement: The Y.Doc carries node images as references or data URLs
+The `image` field of a node entry in the `nodes` Y.Map SHALL hold an `image:<uuid>` reference, a data URL, or no image. A current frontend SHALL write a reference for every image it adds. A client joining a map whose nodes all reference their images SHALL receive no image bytes in the Yjs sync.
+
+#### Scenario: Map with references syncs without image bytes
+- **GIVEN** every node image of a map is a reference
+- **WHEN** a client connects to the map
+- **THEN** the Yjs sync SHALL carry the references
+- **AND** the Yjs sync SHALL carry no image bytes
+
+#### Scenario: Data URL written by an older client
+- **WHEN** an older cached frontend writes a data URL into a node's `image` field
+- **THEN** every connected client SHALL render the image
+- **AND** the `image` field SHALL keep the data URL
