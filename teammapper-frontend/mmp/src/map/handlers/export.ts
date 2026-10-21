@@ -95,7 +95,7 @@ export default class Export {
   /**
    * lernkit: Auflösungsfaktor für PNG/JPEG/PDF. Kleine Maps werden auf ca. 4000 px
    * (lange Seite) hochgerechnet, höchstens 4-fach; die Canvas-Fläche bleibt unter
-   * 16 Mio. Pixeln (Grenze von Safari auf iPad/iPhone).
+   * 16 Mio. Pixeln, auf iPhone/iPad unter 6 Mio. (Speichergrenze von Safari).
    */
   public static imageScale(width: number, height: number): number {
     const w = Math.max(1, width),
@@ -104,7 +104,11 @@ export default class Export {
       window.devicePixelRatio || 1,
       Math.min(4, 4000 / Math.max(w, h))
     );
-    scale = Math.min(scale, Math.sqrt(16e6 / (w * h)));
+    // iPhone/iPad: Canvas-Speicher ist knapp (v. a. im privaten Modus) -> kleinere Grenze
+    const ios =
+      /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    scale = Math.min(scale, Math.sqrt((ios ? 6e6 : 16e6) / (w * h)));
     return Math.max(scale, 0.1);
   }
 

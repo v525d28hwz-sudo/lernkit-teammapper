@@ -678,9 +678,11 @@ export class MmpService implements OnDestroy {
       0
     );
 
-    pdf.save(`${name}.${format}`);
+    // lernkit: als Datei herunterladen statt (auf iPhone/iPad) in neuem Tab öffnen
+    const blob = pdf.output('blob');
+    UtilsService.downloadFile(`${name}.${format}`, blob);
 
-    return { success: true, size: pdf.output().length };
+    return { success: true, size: blob.size };
   }
 
   /**

@@ -68,18 +68,45 @@ export class UtilsService {
 
   /**
    * Download a file with a fake link click.
+   * lernkit: über eine Blob-URL statt eines (großen) data:-Links — Safari auf
+   * iPhone/iPad lädt große data:-Links nicht herunter bzw. öffnet sie nur als Seite.
    */
-  public static downloadFile(name: string, content: string) {
+  public static downloadFile(name: string, content: string | Blob) {
+    const blob =
+      typeof content === 'string'
+        ? UtilsService.dataUriToBlob(content)
+        : content;
+    const url = URL.createObjectURL(blob);
     const fakeLink = document.createElement('a');
 
-    fakeLink.href = content;
+    fakeLink.href = url;
     fakeLink.download = name;
+    fakeLink.rel = 'noopener';
 
     document.body.appendChild(fakeLink);
 
     fakeLink.click();
 
     document.body.removeChild(fakeLink);
+    // iOS braucht die URL noch eine Weile nach dem Klick
+    setTimeout(() => URL.revokeObjectURL(url), 60000);
+  }
+
+  /**
+   * lernkit: data:-URI (base64 oder URL-kodiert) in einen Blob umwandeln.
+   */
+  public static dataUriToBlob(uri: string): Blob {
+    const komma = uri.indexOf(',');
+    const kopf = uri.slice(5, komma);
+    const daten = uri.slice(komma + 1);
+    const typ = kopf.split(';')[0] || 'application/octet-stream';
+    if (kopf.includes(';base64')) {
+      const binaer = atob(daten);
+      const bytes = new Uint8Array(binaer.length);
+      for (let i = 0; i < binaer.length; i++) bytes[i] = binaer.charCodeAt(i);
+      return new Blob([bytes], { type: typ });
+    }
+    return new Blob([decodeURIComponent(daten)], { type: typ });
   }
 
   /**
