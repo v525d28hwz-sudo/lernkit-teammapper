@@ -3,7 +3,8 @@
 # Abhängigkeiten bleiben dank Lockfile gleich.
 #
 # Ablauf: neu bauen -> Image mit frischer Postgres-Datenbank starten und prüfen
-# (Migrationen, Startseite, Einstellungen, Map anlegen inkl. lernkit-SVG-Icon)
+# (Migrationen, Startseite, Einstellungen, Map anlegen inkl. lernkit-SVG-Icon,
+# Link-Sperrliste geladen und wirksam)
 # -> NUR wenn alles grün ist, :latest nach GHCR pushen. Der Server zieht das
 # Image erst beim nächsten Coolify „Pull Latest Images & Restart“; dafür legt
 # der Workflow ein Issue als Erinnerung an. Schlägt eine Prüfung fehl, bleibt
@@ -93,6 +94,10 @@ jobs:
           [ -n "$id" ] || { echo "FEHLER: Map nicht angelegt: $antwort"; exit 1; }
           curl -fsS "http://localhost:3000/api/maps/$id" | grep -q 'data:image/svg+xml;base64,PHN2Zz4='
           echo "Map $id angelegt, lernkit-SVG-Icon erhalten"
+          curl -fsS 'http://localhost:3000/api/lernkit/link-pruefung?url=https://www.pornhub.com/' | grep -q '"gesperrt":true'
+          curl -fsS 'http://localhost:3000/api/lernkit/link-pruefung?url=https://lernkit.de/' | grep -q '"gesperrt":false'
+          echo "Link-Sperrliste aktiv"
+          docker logs maps 2>&1 | grep -o 'Sperrliste geladen: [0-9]* Domains'
           sleep 5
           [ "$(docker inspect -f '{{.State.Running}}' maps)" = true ] || { echo "FEHLER: Container läuft nicht"; exit 1; }
           echo "Alle Prüfungen grün."

@@ -30,6 +30,7 @@ import {
 } from './node-images';
 import { validate as uuidValidate } from 'uuid';
 import { ExportService } from '../export/export.service';
+import { API_URL } from '../../http/http.service';
 
 /**
  * `catch` binds `unknown`. mmp throws the conditions below as `Error` instances
@@ -753,7 +754,23 @@ export class MmpService implements OnDestroy {
   /**
    * Inserts a link in the selected node.
    */
-  public addNodeLink(href: string) {
+  public async addNodeLink(href: string) {
+    // lernkit: Links auf Domains der Sperrliste ablehnen (der Server entfernt
+    // sie zusätzlich beim Speichern). Ist die Prüfung nicht erreichbar, wird
+    // der Link gesetzt und serverseitig geprüft.
+    try {
+      const res = await fetch(
+        `${API_URL.ROOT}/lernkit/link-pruefung?url=${encodeURIComponent(href)}`
+      );
+      if (res.ok && (await res.json())?.gesperrt) {
+        this.toastrService.error(
+          await this.utilsService.translate('TOASTS.ERRORS.LINK_BLOCKED')
+        );
+        return;
+      }
+    } catch {
+      // Prüfung nicht erreichbar
+    }
     this.updateNode('linkHref', href);
   }
 

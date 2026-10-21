@@ -3,6 +3,7 @@ import { SettingsService } from '../../../../core/services/settings/settings.ser
 import { TranslateService, TranslatePipe } from '@ngx-translate/core';
 import { UserSettings } from '@teammapper/shared';
 import { MatSelect, MatOption } from '@angular/material/select';
+import { LERNKIT_MELDE_ADRESSE } from '../../../../lernkit/lernkit-kontakt';
 
 @Component({
   selector: 'teammapper-footer',
@@ -18,6 +19,7 @@ export class FooterComponent implements OnInit {
   public languages: string[] = SettingsService.LANGUAGES;
 
   public currentYear = new Date().getFullYear().toString();
+  public meldeAdresse = LERNKIT_MELDE_ADRESSE;
 
   public ngOnInit() {
     this.settings = this.settingsService.getCachedUserSettings();

@@ -50,6 +50,9 @@ services:
       POSTGRES_SSL_REJECT_UNAUTHORIZED: "false"
       POSTGRES_QUERY_TIMEOUT: "100000"
       POSTGRES_STATEMENT_TIMEOUT: "100000"
+      # Betreiber-Löschung gemeldeter Maps (/assets/lernkit-betreiber/index.html);
+      # mind. 24 Zeichen, sonst ist die Funktion aus. Wert nur in Coolify setzen.
+      LERNKIT_BETREIBER_TOKEN: ${LERNKIT_BETREIBER_TOKEN:-}
       # Retention: Löschung nach 365 Tagen INAKTIVITÄT (GREATEST(lastAccessed,
       # lastModified, node.lastUpdatedAt) + afterDays) — siehe MapsService.
       DELETE_AFTER_DAYS: "365"

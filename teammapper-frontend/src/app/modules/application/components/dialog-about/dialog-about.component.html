@@ -35,6 +35,20 @@
       >
     </div>
   </div>
+  <section class="about-modal-section lk-about-meta">
+    <h3>Nutzungsregeln &amp; Inhalt melden</h3>
+    <p>
+      Keine jugendgefährdenden, beleidigenden, rassistischen,
+      verfassungsfeindlichen oder sonst rechtswidrigen Inhalte und Links.
+      Verstöße werden ohne Rückfrage gelöscht. Links auf Seiten der
+      UT1-Sperrliste (Université Toulouse Capitole, CC BY-SA 4.0) werden nicht
+      gespeichert.
+    </p>
+    <p>
+      Problematischen Inhalt gefunden? Bitte mit Link zur Mindmap melden an
+      <a [href]="'mailto:' + meldeAdresse">{{ meldeAdresse }}</a>.
+    </p>
+  </section>
   <section class="about-modal-section shortcuts-section">
     <h3>{{ 'MODALS.INFO.SHORTCUTS_TITLE' | translate }}</h3>
     <teammapper-shortcut-list></teammapper-shortcut-list>

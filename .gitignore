@@ -66,3 +66,5 @@ ca/*.req
 .playwright-mcp
 .mcp.json
 .omc
+# lernkit: lokal erzeugte Sperrliste (entsteht im Docker-Build)
+teammapper-backend/lernkit-blocklist/

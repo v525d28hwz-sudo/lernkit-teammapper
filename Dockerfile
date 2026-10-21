@@ -39,6 +39,14 @@ RUN GENERATE_SOURCEMAP=false pnpm --filter teammapper-frontend run build:prod \
 RUN pnpm --filter teammapper-backend deploy --prod --legacy /home/node/deploy
 
 
+# lernkit: Link-Sperrliste (UT1, CC BY-SA 4.0) als kompakte Fingerabdruck-Datei.
+# Eigene Stufe: im normalen Build gecacht, beim zweiwöchentlichen Neubau
+# (--no-cache) frisch heruntergeladen.
+FROM base AS blocklist
+COPY --chown=node:node lernkit/blocklist/build-blocklist.mjs ./
+RUN node build-blocklist.mjs /home/node/lernkit-blocklist
+
+
 FROM base AS development
 
 
@@ -53,6 +61,7 @@ ENV APP_PROD_PATH=${APP_PATH}/teammapper
 WORKDIR $APP_PROD_PATH
 
 COPY --from=builder --chown=node:node /home/node/deploy/ ./
+COPY --from=blocklist --chown=node:node /home/node/lernkit-blocklist ./lernkit-blocklist
 COPY --chown=node:node teammapper-backend/config ./config
 COPY --chown=node:node --chmod=755 entrypoint.prod.sh ./
 

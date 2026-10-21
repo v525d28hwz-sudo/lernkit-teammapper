@@ -12,6 +12,7 @@ import { CdkScrollable } from '@angular/cdk/scrolling';
 import { FaIconComponent } from '@fortawesome/angular-fontawesome';
 import { MatButton } from '@angular/material/button';
 import { ShortcutListComponent } from '../shortcut-list/shortcut-list.component';
+import { LERNKIT_MELDE_ADRESSE } from '../../../../lernkit/lernkit-kontakt';
 
 @Component({
   selector: 'teammapper-dialog-about',
@@ -35,6 +36,7 @@ export class DialogAboutComponent {
   public faGithub = faGithub;
   public version = '';
   public applicationName = 'TeamMapper';
+  public meldeAdresse = LERNKIT_MELDE_ADRESSE;
 
   constructor() {
     const settings = this.settingsService.getCachedSystemSettings();

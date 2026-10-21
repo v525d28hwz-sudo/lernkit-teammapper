@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow">
+<title>Betreiber · lernkit Mindmap</title>
+<link rel="stylesheet" href="betreiber.css">
+</head>
+<body>
+<main>
+  <h1>Gemeldete Mindmap löschen</h1>
+  <p class="hinweis">Nur für den Betreiber. Löscht eine Mindmap sofort und endgültig, z.&nbsp;B. nach einer Meldung jugendgefährdender oder rechtswidriger Inhalte.</p>
+  <label for="link">Link zur Mindmap</label>
+  <input id="link" type="text" placeholder="https://maps.lernkit.de/map/…" autocomplete="off">
+  <label for="token">Betreiber-Schlüssel</label>
+  <input id="token" type="password" autocomplete="off">
+  <button id="pruefen" type="button">Weiter</button>
+  <div id="frage" hidden>
+    <p>Mindmap <code id="mapid"></code> endgültig löschen? Das lässt sich nicht rückgängig machen.</p>
+    <button id="ja" type="button" class="gefahr">Ja, endgültig löschen</button>
+    <button id="nein" type="button">Abbrechen</button>
+  </div>
+  <p id="meldung" role="status"></p>
+</main>
+<script src="betreiber.js"></script>
+</body>
+</html>

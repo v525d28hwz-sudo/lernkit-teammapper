@@ -4,6 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm'
 import { ThrottlerModule } from '@nestjs/throttler'
 import MapsController from './controllers/maps.controller'
 import ImagesController from './controllers/images.controller'
+import LernkitController from './controllers/lernkit.controller'
 import { MapDataModule } from './map-data.module'
 import { LlmUsageCounter } from './entities/llmUsageCounter.entity'
 import { YjsDocManagerService } from './services/yjs-doc-manager.service'
@@ -32,8 +33,8 @@ import configService from '../config.service'
     ]),
   ],
   controllers: configService.isAiEnabled()
-    ? [MapsController, ImagesController, MermaidController]
-    : [MapsController, ImagesController],
+    ? [MapsController, ImagesController, MermaidController, LernkitController]
+    : [MapsController, ImagesController, LernkitController],
   providers: [
     TasksService,
     AiService,

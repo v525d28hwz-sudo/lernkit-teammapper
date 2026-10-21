@@ -252,6 +252,7 @@
       "AI_MERMAID_ERROR": "Mermaid could not be generated",
       "IMAGE_STORAGE_FULL": "The image storage of this mind map is full. A removed image frees its space within 7 days of its upload.",
       "IMAGE_UPLOAD_ERROR": "The image could not be uploaded.",
+      "LINK_BLOCKED": "This link is blocked because the site is on a block list for harmful, illegal or dangerous content.",
       "DELETE_MAP_ERROR": "The mind map could not be deleted."
     },
     "DELETE_MAP_SUCCESS": "Mindmap successfully deleted!",

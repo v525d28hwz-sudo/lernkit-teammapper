@@ -5,6 +5,7 @@ import {
   isSafeLinkHref,
 } from '@teammapper/shared'
 import { MmpNode } from '../entities/mmpNode.entity'
+import { isBlockedLink } from '../../lernkit/blocklist'
 
 const HEX_COLOR_REGEX = /^#[0-9a-fA-F]{6}([0-9a-fA-F]{2})?$/
 const ALLOWED_FONT_STYLES = ['normal', 'italic']
@@ -22,9 +23,12 @@ const sanitizeImageSrc = (src: string | undefined | null): string => {
   return isImageReference(src) || isImageDataUrl(src) ? src : ''
 }
 
-/** Validate linkHref uses only http or https protocol. Returns empty string for invalid values. */
+/**
+ * Validate linkHref uses only http or https protocol. Returns empty string for invalid values.
+ * lernkit: Links auf Domains der Sperrliste werden ebenfalls entfernt.
+ */
 const sanitizeLinkHref = (href: string | undefined | null): string =>
-  isSafeLinkHref(href) ? href : ''
+  isSafeLinkHref(href) && !isBlockedLink(href) ? href : ''
 
 /** Validate a hex color value (#rrggbb or #rrggbbaa). Returns empty string for invalid values. */
 const sanitizeColor = (color: string | undefined | null): string => {

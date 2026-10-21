@@ -6,8 +6,11 @@ import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { Logger } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { join } from 'path'
+import { loadBlocklist } from './lernkit/blocklist'
 
 async function bootstrap() {
+  // lernkit: Link-Sperrliste beim Start laden (nicht erst beim ersten Link)
+  loadBlocklist()
   const logger = new Logger('Main Process')
 
   // Process-level handlers for uncaught errors - anything that happens outside of NestJS, such as type errors.
