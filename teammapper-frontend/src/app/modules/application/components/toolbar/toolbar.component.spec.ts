@@ -31,6 +31,7 @@ class MmpServiceStub {
   selectNode = jest.fn();
   updateNode = jest.fn();
   addNodeLink = jest.fn();
+  meldeUngueltigenLink = jest.fn();
   addNode = jest.fn();
   addTree = jest.fn();
   removeNodeLink = jest.fn();
@@ -241,6 +242,26 @@ describe('ToolbarComponent', () => {
     ctx.component.addLink();
 
     expect(ctx.mmpService.addNodeLink).not.toHaveBeenCalled();
+    expect(ctx.mmpService.meldeUngueltigenLink).toHaveBeenCalled();
+  });
+
+  it('should add https:// to a link without protocol', () => {
+    jest.spyOn(window, 'prompt').mockReturnValue(' www.example.com/seite ');
+
+    ctx.component.addLink();
+
+    expect(ctx.mmpService.addNodeLink).toHaveBeenCalledWith(
+      'https://www.example.com/seite'
+    );
+  });
+
+  it('should do nothing when the prompt is cancelled or empty', () => {
+    jest.spyOn(window, 'prompt').mockReturnValue('  ');
+
+    ctx.component.addLink();
+
+    expect(ctx.mmpService.addNodeLink).not.toHaveBeenCalled();
+    expect(ctx.mmpService.meldeUngueltigenLink).not.toHaveBeenCalled();
   });
 
   it('should reject javascript: protocol link', () => {

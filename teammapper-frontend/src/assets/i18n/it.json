@@ -225,6 +225,7 @@
       "MERMAID_SEVERAL_TREES": "Ogni albero è diventato un proprio blocco mindmap. Gli strumenti Mermaid al di fuori di TeamMapper mostrano un blocco alla volta."
     },
     "ERRORS": {
+      "LINK_INVALID": "This is not a valid web address. Please enter e.g. www.example.com or https://www.example.com.",
       "ROOT_NODE_COPIED": "Non è possibile copiare il nodo radice!",
       "ROOT_NODE_CUT": "Non è possibile tagliare il nodo radice!",
       "ROOT_NODE_DELETED": "Non è possibile eliminare il nodo radice!",

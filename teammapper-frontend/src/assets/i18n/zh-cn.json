@@ -225,6 +225,7 @@
       "MERMAID_SEVERAL_TREES": "每棵树都成为一个独立的 mindmap 块。TeamMapper 之外的 Mermaid 工具一次只能渲染一个块。"
     },
     "ERRORS": {
+      "LINK_INVALID": "This is not a valid web address. Please enter e.g. www.example.com or https://www.example.com.",
       "ROOT_NODE_COPIED": "无法复制根节点！",
       "ROOT_NODE_CUT": "不可能切断根节点！",
       "ROOT_NODE_DELETED": "无法删除根节点！",

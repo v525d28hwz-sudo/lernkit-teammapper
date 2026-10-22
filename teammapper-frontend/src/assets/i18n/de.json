@@ -254,6 +254,7 @@
       "IMAGE_STORAGE_FULL": "Der Bildspeicher dieser Mindmap ist voll. Ein entferntes Bild gibt seinen Platz innerhalb von 7 Tagen nach dem Hochladen frei.",
       "IMAGE_UPLOAD_ERROR": "Das Bild konnte nicht hochgeladen werden.",
       "LINK_BLOCKED": "Dieser Link ist gesperrt, weil die Seite auf einer Sperrliste für jugendgefährdende, rechtswidrige oder gefährliche Inhalte steht.",
+      "LINK_INVALID": "Das ist keine gültige Webadresse. Bitte z. B. www.beispiel.de oder https://www.beispiel.de eingeben.",
       "DELETE_MAP_ERROR": "Die Mindmap konnte nicht gelöscht werden."
     },
     "DELETE_MAP_SUCCESS": "Mindmap erfolgreich gelöscht!",

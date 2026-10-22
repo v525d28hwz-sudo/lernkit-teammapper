@@ -137,8 +137,17 @@ export class ToolbarComponent {
     const linkInput = prompt(
       this.translationService.instant('MODALS.LINK.URL')
     );
-    if (linkInput !== null && this.isValidLink(linkInput))
-      this.mmpService.addNodeLink(linkInput);
+    if (linkInput === null || linkInput.trim() === '') return;
+    // lernkit: „www.beispiel.de“ ohne https:// ergänzen statt still zu verwerfen
+    const link = this.ergaenzeProtokoll(linkInput.trim());
+    if (this.isValidLink(link)) this.mmpService.addNodeLink(link);
+    else this.mmpService.meldeUngueltigenLink();
+  }
+
+  private ergaenzeProtokoll(input: string): string {
+    const hatProtokoll = /^[a-z][a-z0-9+.-]*:/i.test(input);
+    const siehtAusWieDomain = /^[^\s/]+\.[a-z]{2,}([/?#:]|$)/i.test(input);
+    return !hatProtokoll && siehtAusWieDomain ? `https://${input}` : input;
   }
 
   public removeLink() {

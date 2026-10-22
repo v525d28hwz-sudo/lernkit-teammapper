@@ -775,6 +775,15 @@ export class MmpService implements OnDestroy {
   }
 
   /**
+   * lernkit: Hinweis bei einer Eingabe, die keine gültige Webadresse ist.
+   */
+  public async meldeUngueltigenLink() {
+    this.toastrService.error(
+      await this.utilsService.translate('TOASTS.ERRORS.LINK_INVALID')
+    );
+  }
+
+  /**
    * Removes a link in the selected node.
    */
   public removeNodeLink() {
