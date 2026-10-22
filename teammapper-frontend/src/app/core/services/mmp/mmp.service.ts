@@ -864,8 +864,16 @@ export class MmpService implements OnDestroy {
       0
     );
 
-    // lernkit: als Datei herunterladen statt (auf iPhone/iPad) in neuem Tab öffnen
-    const blob = pdf.output('blob');
+    // lernkit: als Datei herunterladen statt (auf iPhone/iPad) in neuem Tab öffnen.
+    // Safari auf iOS zeigt ein PDF trotz download-Attribut in der Vorschau an;
+    // als neutraler Dateityp landet es direkt im Ordner „Downloads“.
+    const pdfBlob = pdf.output('blob');
+    const ios =
+      /iPhone|iPad|iPod/.test(navigator.userAgent) ||
+      (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+    const blob = ios
+      ? new Blob([pdfBlob], { type: 'application/octet-stream' })
+      : pdfBlob;
     UtilsService.downloadFile(`${name}.${format}`, blob);
 
     return { success: true, size: blob.size };
