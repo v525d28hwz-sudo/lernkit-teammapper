@@ -55,7 +55,7 @@ test('imports Mermaid mindmap via modal', async ({ page }) => {
   await page.getByText('Create mind map').click();
   await expect(page.locator('.map')).toBeVisible();
 
-  await expect(page.getByText(IMPORTED_ROOT)).toBeVisible({ timeout: 5000 });
+  await expect(page.getByText(ROOT_NODE)).toBeVisible({ timeout: 5000 });
 
   // Open import menu
   await page.locator('#menu-import').click();
