@@ -1,7 +1,7 @@
 import { test, expect, Page } from '@playwright/test';
 import type { ExportNodeProperties } from '@teammapper/shared';
 import type { Readable } from 'stream';
-import { addChild, addTree, createMap } from './helpers';
+import { addChild, addTree, createMap, ROOT_NODE } from './helpers';
 
 async function readStream(stream: Readable): Promise<string> {
   const chunks: Buffer[] = [];
@@ -49,7 +49,7 @@ test('creates a tree and adds two levels of children to it', async ({
   expect(secondRoot?.isRoot).toBe(false);
   expect(byName('Tree child')?.parent).toBe(secondRoot?.id);
   expect(byName('Tree grandchild')?.parent).toBe(byName('Tree child')?.id);
-  expect(byName('Root node')?.isRoot).toBe(true);
+  expect(byName(ROOT_NODE)?.isRoot).toBe(true);
 });
 
 test('pastes a copied tree as a second tree with nothing selected', async ({
@@ -149,7 +149,7 @@ test('imports an old JSON export holding detached nodes as trees', async ({
 
 test('deletes a second tree and keeps the main tree', async ({ page }) => {
   await createMap(page);
-  await addChild(page, 'Root node', 'Main child');
+  await addChild(page, ROOT_NODE, 'Main child');
   await addTree(page, 'Doomed tree');
   await addChild(page, 'Doomed tree', 'Doomed child');
 
@@ -158,9 +158,9 @@ test('deletes a second tree and keeps the main tree', async ({ page }) => {
 
   await expect(page.getByText('Doomed tree', { exact: true })).toHaveCount(0);
   await expect(page.getByText('Doomed child', { exact: true })).toHaveCount(0);
-  await expect(page.getByText('Root node', { exact: true })).toBeVisible();
+  await expect(page.getByText(ROOT_NODE, { exact: true })).toBeVisible();
   await expect(page.getByText('Main child', { exact: true })).toBeVisible();
 
   const names = (await exportNodes(page)).map(node => node.name).sort();
-  expect(names).toEqual(['Main child', 'Root node']);
+  expect(names).toEqual(['Main child', ROOT_NODE]);
 });

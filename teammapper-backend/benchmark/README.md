@@ -22,12 +22,12 @@ pnpm run benchmark:ai
 
 Defined in `fixtures.ts`. Each fixture has a topic category:
 
-| Category        | Description                                      |
-|-----------------|--------------------------------------------------|
-| `informational` | Factual topics testing accuracy and depth         |
-| `technical`     | Domain-specific jargon testing clean node labels  |
-| `creative`      | Open-ended topics testing node diversity           |
-| `edge-case`     | Minimal or extreme inputs testing graceful handling|
+| Category        | Description                                         |
+| --------------- | --------------------------------------------------- |
+| `informational` | Factual topics testing accuracy and depth           |
+| `technical`     | Domain-specific jargon testing clean node labels    |
+| `creative`      | Open-ended topics testing node diversity            |
+| `edge-case`     | Minimal or extreme inputs testing graceful handling |
 
 Fixtures cover both English (`en`) and German (`de`) prompts.
 
@@ -35,46 +35,46 @@ Fixtures cover both English (`en`) and German (`de`) prompts.
 
 Reports are written to `benchmark/reports/<timestamp>.json`. The top-level structure is a `GradingReport`:
 
-| Field            | Type                       | Description                                                        |
-|------------------|----------------------------|--------------------------------------------------------------------|
-| `timestamp`      | `string`                   | ISO 8601 timestamp of the benchmark run.                           |
-| `provider`       | `string`                   | LLM provider used (e.g. `"openai-compatible"`).                    |
-| `model`          | `string`                   | Model identifier (e.g. `"mistral-large-latest"`).                  |
-| `systemPrompt`   | `string`                   | The full system prompt sent to the AI for mind map generation.     |
-| `results`        | `BenchmarkResult[]`        | Per-fixture results (see below).                                   |
-| `averages`       | `Record<string, number>`   | Average score per grading dimension across all fixtures.           |
-| `overallAverage` | `number`                   | Grand average of all dimension scores across all fixtures.         |
+| Field            | Type                     | Description                                                    |
+| ---------------- | ------------------------ | -------------------------------------------------------------- |
+| `timestamp`      | `string`                 | ISO 8601 timestamp of the benchmark run.                       |
+| `provider`       | `string`                 | LLM provider used (e.g. `"openai-compatible"`).                |
+| `model`          | `string`                 | Model identifier (e.g. `"mistral-large-latest"`).              |
+| `systemPrompt`   | `string`                 | The full system prompt sent to the AI for mind map generation. |
+| `results`        | `BenchmarkResult[]`      | Per-fixture results (see below).                               |
+| `averages`       | `Record<string, number>` | Average score per grading dimension across all fixtures.       |
+| `overallAverage` | `number`                 | Grand average of all dimension scores across all fixtures.     |
 
 ### `BenchmarkResult`
 
 Each entry in the `results` array:
 
-| Field        | Type                 | Description                                                    |
-|--------------|----------------------|----------------------------------------------------------------|
-| `fixtureId`  | `string`             | Unique fixture identifier (e.g. `"en-info-photosynthesis"`).   |
-| `fixture`    | `BenchmarkFixture`   | Full fixture definition (id, description, language, topic).    |
-| `rawOutput`  | `string`             | The raw Mermaid syntax returned by the AI.                     |
-| `durationMs` | `number`             | Time taken for generation in milliseconds.                     |
+| Field        | Type                 | Description                                                        |
+| ------------ | -------------------- | ------------------------------------------------------------------ |
+| `fixtureId`  | `string`             | Unique fixture identifier (e.g. `"en-info-photosynthesis"`).       |
+| `fixture`    | `BenchmarkFixture`   | Full fixture definition (id, description, language, topic).        |
+| `rawOutput`  | `string`             | The raw Mermaid syntax returned by the AI.                         |
+| `durationMs` | `number`             | Time taken for generation in milliseconds.                         |
 | `error`      | `string \| null`     | Error message if generation failed or timed out, otherwise `null`. |
-| `dimensions` | `GradingDimension[]` | Array of scored grading dimensions (typically 2).              |
+| `dimensions` | `GradingDimension[]` | Array of scored grading dimensions (typically 2).                  |
 
 ### `GradingDimension`
 
 Each entry in the `dimensions` array:
 
-| Field        | Type     | Description                                           |
-|--------------|----------|-------------------------------------------------------|
+| Field        | Type     | Description                                                  |
+| ------------ | -------- | ------------------------------------------------------------ |
 | `name`       | `string` | Dimension name (`"Semantic Quality"` or `"Mermaid Syntax"`). |
-| `score`      | `number` | Score from 0 to 10.                                   |
-| `strengths`  | `string` | One-sentence summary of what the output did well.     |
-| `weaknesses` | `string` | One-sentence summary of issues found.                 |
+| `score`      | `number` | Score from 0 to 10.                                          |
+| `strengths`  | `string` | One-sentence summary of what the output did well.            |
+| `weaknesses` | `string` | One-sentence summary of issues found.                        |
 
 ### `BenchmarkFixture`
 
-| Field               | Type     | Description                                              |
-|---------------------|----------|----------------------------------------------------------|
-| `id`                | `string` | Unique identifier (e.g. `"de-tech-softwarearchitektur"`). |
-| `description`       | `string` | Human-readable description of what the fixture tests.    |
-| `mindmapDescription`| `string` | The prompt sent to the AI for mind map generation.       |
-| `language`          | `string` | Language code (`"en"` or `"de"`).                        |
-| `topic`             | `string` | Fixture category: `informational`, `technical`, `creative`, or `edge-case`. |
+| Field                | Type     | Description                                                                 |
+| -------------------- | -------- | --------------------------------------------------------------------------- |
+| `id`                 | `string` | Unique identifier (e.g. `"de-tech-softwarearchitektur"`).                   |
+| `description`        | `string` | Human-readable description of what the fixture tests.                       |
+| `mindmapDescription` | `string` | The prompt sent to the AI for mind map generation.                          |
+| `language`           | `string` | Language code (`"en"` or `"de"`).                                           |
+| `topic`              | `string` | Fixture category: `informational`, `technical`, `creative`, or `edge-case`. |

@@ -1,3 +1,4 @@
+import { ROOT_NODE } from './helpers';
 import { test, expect } from '@playwright/test';
 
 /*
@@ -8,7 +9,7 @@ test('creates a map and changes the location', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
   await expect(page.locator('.map')).toBeVisible();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 });
 
 test('adds a new node to the map that is saved and retrieved when reloaded', async ({
@@ -16,7 +17,7 @@ test('adds a new node to the map that is saved and retrieved when reloaded', asy
 }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 
   await page.locator('#floating-add-node').click();
   await page.keyboard.type('New Node');
@@ -33,7 +34,7 @@ test('shows the selection ring on the root after a reload', async ({
 }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 
   await page.reload();
   // The first sync redraws the map, then enables the add-tree button.
@@ -41,7 +42,7 @@ test('shows the selection ring on the root after a reload', async ({
 
   const rootBackground = page
     .locator('g.node')
-    .filter({ has: page.getByText('Root node', { exact: true }) })
+    .filter({ has: page.getByText(ROOT_NODE, { exact: true }) })
     .locator('path')
     .first();
   await expect

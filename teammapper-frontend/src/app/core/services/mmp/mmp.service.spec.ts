@@ -737,7 +737,7 @@ describe('MmpService', () => {
         });
 
         const downloadedJson = (): string => {
-          const uri: string = downloadFileSpy.mock.calls[0][1];
+          const uri = downloadFileSpy.mock.calls[0][1] as string;
           return decodeURIComponent(uri.replace(/^data:[^,]*,/, ''));
         };
 

@@ -1,3 +1,4 @@
+import { ROOT_NODE } from './helpers';
 import { test, expect } from '@playwright/test';
 
 test('uses zoom controls and center map', async ({ page }) => {
@@ -17,5 +18,5 @@ test('uses zoom controls and center map', async ({ page }) => {
 
   // Map should still be visible after all operations
   await expect(page.locator('.map')).toBeVisible();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 });

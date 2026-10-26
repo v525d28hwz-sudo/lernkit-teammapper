@@ -1,5 +1,5 @@
 import { test, expect, Page } from '@playwright/test';
-import { createMap } from './helpers';
+import { createMap, ROOT_NODE } from './helpers';
 
 test('navigates to settings page and back to map', async ({ page }) => {
   await page.goto('/');
@@ -65,7 +65,7 @@ test.describe('info dialog', () => {
   });
 
   test('map shortcuts rest while the dialog is open', async ({ page }) => {
-    await page.getByText('Root node').click();
+    await page.getByText(ROOT_NODE).click();
     const count = await nodes(page).count();
 
     await page.keyboard.press('?');

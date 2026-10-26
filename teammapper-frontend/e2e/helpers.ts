@@ -1,3 +1,6 @@
+// lernkit: Name des Wurzelknotens (teammapper-backend/config/settings.override.json); per Umgebungsvariable überschreibbar
+export const ROOT_NODE = process.env.E2E_ROOT_NODE_NAME || 'Zentrales Thema';
+
 import { expect, Page } from '@playwright/test';
 
 /**
@@ -7,7 +10,7 @@ import { expect, Page } from '@playwright/test';
 export async function createMap(page: Page) {
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
   await expect(page.locator('#add-tree-button')).toBeEnabled();
 }
 

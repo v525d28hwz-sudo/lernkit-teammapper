@@ -1,3 +1,4 @@
+import { ROOT_NODE } from './helpers';
 import { test, expect } from '@playwright/test';
 
 test('branch colors are inherited correctly from parent nodes', async ({
@@ -5,16 +6,16 @@ test('branch colors are inherited correctly from parent nodes', async ({
 }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 
   // Add first child to root
-  await page.getByText('Root node').click();
+  await page.getByText(ROOT_NODE).click();
   await page.locator('#floating-add-node').click();
   await page.keyboard.type('First Branch');
   await page.locator('.map').click();
 
   // Add second child to root
-  await page.getByText('Root node').click();
+  await page.getByText(ROOT_NODE).click();
   await page.locator('#floating-add-node').click();
   await page.keyboard.type('Second Branch');
   await page.locator('.map').click();

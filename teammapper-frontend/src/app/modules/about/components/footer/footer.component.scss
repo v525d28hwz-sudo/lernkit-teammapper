@@ -1,6 +1,6 @@
 // lernkit-Fußzeile (dunkel, analog Portal). MIT/TeamMapper-Attribution bleibt (Lizenz).
 footer.lk-fuss {
-  background-color: #0F172A;
+  background-color: #0f172a;
   padding: 20px 0;
 
   // Nutzungshinweis (Bildungskontext) oberhalb der Fußzeilen-Leiste
@@ -8,7 +8,9 @@ footer.lk-fuss {
     max-width: 1170px;
     margin: 0 auto 14px;
     padding: 0 24px;
-    font: 400 12px/1.55 'Inter', sans-serif;
+    font:
+      400 12px/1.55 'Inter',
+      sans-serif;
     color: rgba(255, 255, 255, 0.5);
 
     strong {
@@ -39,20 +41,26 @@ footer.lk-fuss {
   }
 
   .lk-fuss__logo {
-    font: 700 15px 'Inter', sans-serif;
+    font:
+      700 15px 'Inter',
+      sans-serif;
     color: #e3eefa;
     text-decoration: none;
   }
 
   .lk-fuss__sub {
-    font: 700 8px 'Inter', sans-serif;
+    font:
+      700 8px 'Inter',
+      sans-serif;
     letter-spacing: 2px;
     text-transform: uppercase;
     color: rgba(255, 255, 255, 0.45);
   }
 
   .lk-fuss__attrib {
-    font: 400 12px 'Inter', sans-serif;
+    font:
+      400 12px 'Inter',
+      sans-serif;
     color: rgba(255, 255, 255, 0.5);
 
     a {
@@ -71,7 +79,9 @@ footer.lk-fuss {
   .lk-fuss__links {
     display: flex;
     gap: 16px;
-    font: 400 12px 'Inter', sans-serif;
+    font:
+      400 12px 'Inter',
+      sans-serif;
 
     a {
       color: rgba(255, 255, 255, 0.5);

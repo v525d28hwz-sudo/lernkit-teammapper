@@ -1,5 +1,5 @@
 import { expect, Page, test } from '@playwright/test';
-import { createMap } from './helpers';
+import { createMap, ROOT_NODE } from './helpers';
 
 /**
  * A node is as wide as its name, measured in the font the app ships, so its
@@ -40,7 +40,7 @@ test('sizes a node from its name in the shipped font', async ({ page }) => {
   await fontsLoaded(page);
 
   const fontFamily = await page
-    .getByText('Root node', { exact: true })
+    .getByText(ROOT_NODE, { exact: true })
     .evaluate(name => getComputedStyle(name).fontFamily);
   expect(fontFamily).toContain('Fira Sans');
   await expect
@@ -49,7 +49,7 @@ test('sizes a node from its name in the shipped font', async ({ page }) => {
 
   await expect
     .poll(async () => {
-      const { background, name } = await widths(page, 'Root node');
+      const { background, name } = await widths(page, ROOT_NODE);
       return background - name;
     })
     .toBe(WIDTH_PADDING);
@@ -60,22 +60,22 @@ test('keeps node widths after a reload', async ({ page }) => {
   await fontsLoaded(page);
   await expect
     .poll(async () => {
-      const { background, name } = await widths(page, 'Root node');
+      const { background, name } = await widths(page, ROOT_NODE);
       return background - name;
     })
     .toBe(WIDTH_PADDING);
-  const before = await widths(page, 'Root node');
+  const before = await widths(page, ROOT_NODE);
 
   await page.reload();
   await expect(page.locator('#add-tree-button')).toBeEnabled();
   await fontsLoaded(page);
 
-  await expect.poll(() => widths(page, 'Root node')).toEqual(before);
+  await expect.poll(() => widths(page, ROOT_NODE)).toEqual(before);
 });
 
 test('grows a node while its name is edited', async ({ page }) => {
   await createMap(page);
-  await page.getByText('Root node', { exact: true }).click();
+  await page.getByText(ROOT_NODE, { exact: true }).click();
   await page.locator('#floating-add-node').click();
   await page.keyboard.type('A');
   const short = await widths(page, 'A');

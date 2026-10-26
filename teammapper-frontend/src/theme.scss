@@ -21,8 +21,7 @@ $app-theme: mat.m2-define-light-theme(
       accent: $app-accent,
       warn: $app-warn,
     ),
-    typography:
-      mat.m2-define-typography-config(
+    typography: mat.m2-define-typography-config(
         $font-family: '"Inter", "Fira Sans", sans-serif',
       ),
     density: 0,

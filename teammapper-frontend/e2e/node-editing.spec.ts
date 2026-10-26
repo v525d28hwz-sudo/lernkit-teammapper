@@ -1,9 +1,10 @@
+import { ROOT_NODE } from './helpers';
 import { test, expect } from '@playwright/test';
 
 test('adds and removes nodes using floating buttons', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 
   // Add node using floating button
   await page.locator('#floating-add-node').click();
@@ -57,10 +58,10 @@ test('adds a node and drags it - screenshot test', async ({ page }) => {
   });
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
 
   // Add a new node to the root
-  await page.getByText('Root node').click();
+  await page.getByText(ROOT_NODE).click();
   await page.locator('#floating-add-node').click();
   await page.keyboard.type('Draggable Node');
   await page.locator('.map').click();

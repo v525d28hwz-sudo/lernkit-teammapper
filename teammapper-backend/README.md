@@ -6,7 +6,8 @@ Backend for TeamMapper, build with [Nest](https://github.com/nestjs/nest)
 
 ## Installation
 
--  Install dependencies
+- Install dependencies
+
 ```bash
 $ npm install
 ```
@@ -55,41 +56,41 @@ Copy `.env.default` to `.env` and configure the variables below.
 
 ### Required
 
-| Variable | Description |
-|---|---|
-| `POSTGRES_HOST` | PostgreSQL host |
-| `POSTGRES_PORT` | PostgreSQL port |
-| `POSTGRES_USER` | PostgreSQL user |
-| `POSTGRES_PASSWORD` | PostgreSQL password |
+| Variable            | Description              |
+| ------------------- | ------------------------ |
+| `POSTGRES_HOST`     | PostgreSQL host          |
+| `POSTGRES_PORT`     | PostgreSQL port          |
+| `POSTGRES_USER`     | PostgreSQL user          |
+| `POSTGRES_PASSWORD` | PostgreSQL password      |
 | `POSTGRES_DATABASE` | PostgreSQL database name |
 
 ### Application
 
-| Variable | Description | Default |
-|---|---|---|
-| `PORT` | Server port | `3000` |
-| `MODE` | `DEV` disables SSL | `DEV` |
-| `DELETE_AFTER_DAYS` | Days before unused maps are deleted | `30` |
+| Variable            | Description                         | Default |
+| ------------------- | ----------------------------------- | ------- |
+| `PORT`              | Server port                         | `3000`  |
+| `MODE`              | `DEV` disables SSL                  | `DEV`   |
+| `DELETE_AFTER_DAYS` | Days before unused maps are deleted | `30`    |
 
 ### PostgreSQL (optional)
 
-| Variable | Description | Default |
-|---|---|---|
-| `POSTGRES_SSL` | Enable SSL for database connections | `true` |
-| `POSTGRES_SSL_REJECT_UNAUTHORIZED` | Reject unauthorized SSL certificates | `true` |
-| `POSTGRES_QUERY_TIMEOUT` | Query timeout in ms | `100000` |
-| `POSTGRES_STATEMENT_TIMEOUT` | Statement timeout in ms | `100000` |
+| Variable                           | Description                          | Default  |
+| ---------------------------------- | ------------------------------------ | -------- |
+| `POSTGRES_SSL`                     | Enable SSL for database connections  | `true`   |
+| `POSTGRES_SSL_REJECT_UNAUTHORIZED` | Reject unauthorized SSL certificates | `true`   |
+| `POSTGRES_QUERY_TIMEOUT`           | Query timeout in ms                  | `100000` |
+| `POSTGRES_STATEMENT_TIMEOUT`       | Statement timeout in ms              | `100000` |
 
 ### Yjs Real-time Collaboration
 
-| Variable | Description | Default |
-|---|---|---|
-| `FEATURE_YJS_RATE_LIMITING` | Enable WebSocket connection rate limiting | `false` |
-| `WS_TRUST_PROXY` | Trust the `X-Forwarded-For` header for client IP resolution behind a reverse proxy: `false`, `true`, or the number of proxies in front of the backend | `false` |
-| `WS_GLOBAL_MAX_CONNECTIONS` | Maximum total WebSocket connections | `500` |
-| `WS_PER_IP_MAX_CONNECTIONS` | Maximum WebSocket connections per IP | `50` |
-| `WS_PER_IP_RATE_LIMIT` | Maximum connection attempts per IP within the rate window | `10` |
-| `WS_PER_IP_RATE_WINDOW_MS` | Sliding window duration for rate limiting in ms | `10000` |
+| Variable                    | Description                                                                                                                                           | Default |
+| --------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `FEATURE_YJS_RATE_LIMITING` | Enable WebSocket connection rate limiting                                                                                                             | `false` |
+| `WS_TRUST_PROXY`            | Trust the `X-Forwarded-For` header for client IP resolution behind a reverse proxy: `false`, `true`, or the number of proxies in front of the backend | `false` |
+| `WS_GLOBAL_MAX_CONNECTIONS` | Maximum total WebSocket connections                                                                                                                   | `500`   |
+| `WS_PER_IP_MAX_CONNECTIONS` | Maximum WebSocket connections per IP                                                                                                                  | `50`    |
+| `WS_PER_IP_RATE_LIMIT`      | Maximum connection attempts per IP within the rate window                                                                                             | `10`    |
+| `WS_PER_IP_RATE_WINDOW_MS`  | Sliding window duration for rate limiting in ms                                                                                                       | `10000` |
 
 `WS_TRUST_PROXY` also sets Express `trust proxy`, so the image upload rate limit reads the same client IP. Its values:
 
@@ -99,28 +100,28 @@ Copy `.env.default` to `.env` and configure the variables below.
 
 ### Node images
 
-| Variable | Description | Default |
-|---|---|---|
-| `MAX_IMAGE_BYTES_PER_MAP` | Total bytes of the images one map may hold; the server answers 413 to an upload above it | `2000000` |
-| `UPLOAD_IMAGE_MAX_SIZE_BYTES` | Largest single image upload in bytes; the server answers 413 to a larger file | `150000` |
-| `UPLOAD_IMAGE_RATE_LIMIT` | Maximum image uploads per client IP within the rate window | `30` |
-| `UPLOAD_IMAGE_RATE_WINDOW_MS` | Window of the image upload rate limit in ms | `60000` |
+| Variable                      | Description                                                                              | Default   |
+| ----------------------------- | ---------------------------------------------------------------------------------------- | --------- |
+| `MAX_IMAGE_BYTES_PER_MAP`     | Total bytes of the images one map may hold; the server answers 413 to an upload above it | `2000000` |
+| `UPLOAD_IMAGE_MAX_SIZE_BYTES` | Largest single image upload in bytes; the server answers 413 to a larger file            | `150000`  |
+| `UPLOAD_IMAGE_RATE_LIMIT`     | Maximum image uploads per client IP within the rate window                               | `30`      |
+| `UPLOAD_IMAGE_RATE_WINDOW_MS` | Window of the image upload rate limit in ms                                              | `60000`   |
 
 Map duplication allows 5 requests per minute per backend process and one active duplication across instances. Configure the shared rate with `DUPLICATE_MAP_RATE_LIMIT` and `DUPLICATE_MAP_RATE_WINDOW_MS`; `DUPLICATE_MAP_MAX_IMAGE_BYTES` sets its total image storage budget (default 1 GB).
 
 ### AI / LLM Integration
 
-| Variable | Description | Default |
-|---|---|---|
-| `AI_LLM_URL` | LLM service URL | - |
-| `AI_LLM_TOKEN` | LLM API token | - |
-| `AI_LLM_PROVIDER` | LLM provider (`openai` or `openai-compatible`) | `openai` |
-| `AI_LLM_MODEL` | LLM model name | - |
-| `AI_LLM_TPM` | Tokens per minute limit (per-process, soft) | - |
-| `AI_LLM_TPD` | Tokens per day limit (DB-backed, hard ceiling across restarts/instances) | - |
-| `AI_LLM_RPM` | Requests per minute limit (per-process) | - |
-| `AI_LLM_MAX_OUTPUT_TOKENS` | Per-call cap on generated tokens, reasoning included | `4096` |
-| `AI_LLM_TIMEOUT_MS` | Per-call abort timeout in ms | `60000` |
+| Variable                   | Description                                                              | Default  |
+| -------------------------- | ------------------------------------------------------------------------ | -------- |
+| `AI_LLM_URL`               | LLM service URL                                                          | -        |
+| `AI_LLM_TOKEN`             | LLM API token                                                            | -        |
+| `AI_LLM_PROVIDER`          | LLM provider (`openai` or `openai-compatible`)                           | `openai` |
+| `AI_LLM_MODEL`             | LLM model name                                                           | -        |
+| `AI_LLM_TPM`               | Tokens per minute limit (per-process, soft)                              | -        |
+| `AI_LLM_TPD`               | Tokens per day limit (DB-backed, hard ceiling across restarts/instances) | -        |
+| `AI_LLM_RPM`               | Requests per minute limit (per-process)                                  | -        |
+| `AI_LLM_MAX_OUTPUT_TOKENS` | Per-call cap on generated tokens, reasoning included                     | `4096`   |
+| `AI_LLM_TIMEOUT_MS`        | Per-call abort timeout in ms                                             | `60000`  |
 
 > **Migration note:** The previous `stackit` provider value for `AI_LLM_PROVIDER` has been replaced by `openai-compatible`. If you were using `AI_LLM_PROVIDER=stackit`, change it to `AI_LLM_PROVIDER=openai-compatible`.
 
@@ -134,19 +135,19 @@ Map duplication allows 5 requests per minute per backend process and one active 
 
 ### Authentication
 
-| Variable | Description | Default |
-|---|---|---|
-| `JWT_SECRET` | Secret for signing JWT tokens | - |
+| Variable     | Description                   | Default |
+| ------------ | ----------------------------- | ------- |
+| `JWT_SECRET` | Secret for signing JWT tokens | -       |
 
 ### Testing
 
-| Variable | Description | Default |
-|---|---|---|
-| `POSTGRES_TEST_HOST` | Test database host | - |
-| `POSTGRES_TEST_PORT` | Test database port | `5432` |
-| `POSTGRES_TEST_USER` | Test database user | - |
-| `POSTGRES_TEST_PASSWORD` | Test database password | - |
-| `POSTGRES_TEST_DATABASE` | Test database name | - |
+| Variable                 | Description            | Default |
+| ------------------------ | ---------------------- | ------- |
+| `POSTGRES_TEST_HOST`     | Test database host     | -       |
+| `POSTGRES_TEST_PORT`     | Test database port     | `5432`  |
+| `POSTGRES_TEST_USER`     | Test database user     | -       |
+| `POSTGRES_TEST_PASSWORD` | Test database password | -       |
+| `POSTGRES_TEST_DATABASE` | Test database name     | -       |
 
 ## Static File Serving & SPA Routing
 
@@ -170,6 +171,7 @@ The `ServeStaticModule` uses a `renderPath` regex to restrict the SPA fallback t
 **When adding new frontend routes:** If a new top-level route is added to the Angular router (in `root.routes.ts`), the `renderPath` regex in `app.module.ts` must be updated to include it.
 
 ## Typeorm
+
 For a list of commands check https://github.com/typeorm/typeorm/blob/master/docs/using-cli.md
 
 Some useful commands include:

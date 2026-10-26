@@ -1,5 +1,5 @@
 import { test, expect } from '@playwright/test';
-import { addChild, createMap } from './helpers';
+import { addChild, createMap, ROOT_NODE } from './helpers';
 
 // The toolbar refuses to hide the child nodes of a root, so the test hides the
 // child nodes of a node below the main root.
@@ -8,7 +8,7 @@ test('hiding child nodes stays local to the client', async ({
   browser,
 }) => {
   await createMap(page);
-  await addChild(page, 'Root node', 'Branch');
+  await addChild(page, ROOT_NODE, 'Branch');
   await addChild(page, 'Branch', 'First child');
 
   await page.getByText('Branch', { exact: true }).click();

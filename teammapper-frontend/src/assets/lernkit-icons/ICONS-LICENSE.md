@@ -1,6 +1,7 @@
 # Icon-Lizenzen (maps.lernkit.de)
 
 ## Ordner `symbole/`
+
 Die Icons stammen aus **Tabler Icons** (https://tabler.io/icons) und stehen unter der
 **MIT-Lizenz**. Sie wurden lediglich auf die lernkit-Farbe `#2A2623` umgefärbt.
 Ausnahme: `musiknote.svg` ist eine eigene Zeichnung (© lernkit).
@@ -29,7 +30,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 ```
 
-## Ordner `motive/`  (ZSL / Baden-Württemberg)
+## Ordner `motive/` (ZSL / Baden-Württemberg)
+
 Diese Motive stammen aus einem ZSL-/Baden-Württemberg-Design-Set. **Ihr Lizenzstatus
 ist ungeklärt**; sie sind **nicht** unter einer freien Lizenz freigegeben. Sie sind im
 Icon-Dialog **passwortgeschützt** und nicht durchsuchbar, solange kein Passwort eingegeben

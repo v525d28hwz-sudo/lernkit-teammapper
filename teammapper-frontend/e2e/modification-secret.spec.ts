@@ -1,3 +1,4 @@
+import { ROOT_NODE } from './helpers';
 import { test, expect, Page } from '@playwright/test';
 import path from 'path';
 
@@ -18,7 +19,7 @@ test('keeps the modification secret out of URLs and syncs edits from a second cl
   const ownerUrls = recordUrls(page);
   await page.goto('/');
   await page.getByText('Create mind map').click();
-  await expect(page.getByText('Root node')).toBeVisible();
+  await expect(page.getByText(ROOT_NODE)).toBeVisible();
   const secret = new URL(page.url()).hash.slice(1);
   expect(secret).not.toBe('');
 
@@ -29,7 +30,7 @@ test('keeps the modification secret out of URLs and syncs edits from a second cl
     const editor = await editorContext.newPage();
     const editorUrls = recordUrls(editor);
     await editor.goto(page.url());
-    await expect(editor.getByText('Root node')).toBeVisible();
+    await expect(editor.getByText(ROOT_NODE)).toBeVisible();
 
     // A write through the WebSocket reaches the owner only from a writable connection.
     await editor.locator("button[title='Adds a node']").click();

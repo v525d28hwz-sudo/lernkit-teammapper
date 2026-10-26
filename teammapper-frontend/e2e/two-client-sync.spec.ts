@@ -1,6 +1,6 @@
 import { test, expect, Locator, Page } from '@playwright/test';
 import path from 'path';
-import { addChild, createMap } from './helpers';
+import { addChild, createMap, ROOT_NODE } from './helpers';
 
 const IMPORT_FIXTURE = path.join(__dirname, 'fake-data', 'test-map.json');
 
@@ -30,7 +30,7 @@ async function openSecondClient(
 ): Promise<Page> {
   const secondClient = await newPage();
   await secondClient.goto(page.url());
-  await expect(secondClient.getByText('Root node')).toBeVisible();
+  await expect(secondClient.getByText(ROOT_NODE)).toBeVisible();
   await expect(secondClient.locator('#add-tree-button')).toBeEnabled();
   return secondClient;
 }
@@ -62,7 +62,7 @@ async function dragNode(page: Page, name: string, dx: number, dy: number) {
  */
 async function offsetFromRoot(page: Page, name: string) {
   const node = await nodeOf(page, name).boundingBox();
-  const root = await nodeOf(page, 'Root node').boundingBox();
+  const root = await nodeOf(page, ROOT_NODE).boundingBox();
   if (!node || !root) throw new Error(`No bounding box for ${name} or root`);
   return {
     x: node.x + node.width / 2 - (root.x + root.width / 2),
@@ -97,7 +97,7 @@ test('two clients on one map see each other edit, move, color, undo, remove and 
     const clientB = await openSecondClient(clientA, () => contextB.newPage());
 
     // 1. A adds a child node and names it.
-    await addChild(clientA, 'Root node', 'Child from A');
+    await addChild(clientA, ROOT_NODE, 'Child from A');
     await expect(nodeOf(clientB, 'Child from A')).toBeVisible();
 
     // 2. B renames the node.
@@ -156,7 +156,7 @@ test('two clients on one map see each other edit, move, color, undo, remove and 
       clientB.getByText('Mindmap successfully imported!')
     ).toBeVisible();
     await expect(clientB.getByText('test', { exact: true })).toBeVisible();
-    await expect(clientB.getByText('Root node')).toBeVisible();
+    await expect(clientB.getByText(ROOT_NODE)).toBeVisible();
     await expect(nodeOf(clientB, 'Renamed by B')).toHaveCount(0);
   } finally {
     await contextB.close();
