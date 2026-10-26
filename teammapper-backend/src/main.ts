@@ -6,6 +6,7 @@ import { GlobalExceptionFilter } from './filters/global-exception.filter'
 import { Logger } from '@nestjs/common'
 import { NestExpressApplication } from '@nestjs/platform-express'
 import { join } from 'path'
+import type { NextFunction, Request, Response } from 'express'
 import { loadBlocklist } from './lernkit/blocklist'
 
 async function bootstrap() {
@@ -44,7 +45,7 @@ async function bootstrap() {
   // (frame-ancestors, base-uri, form-action). TLS terminiert der Coolify-Proxy, HSTS gilt
   // für den Client. X-Powered-By verrät sonst das Framework.
   app.disable('x-powered-by')
-  app.use((_req, res, next) => {
+  app.use((_req: Request, res: Response, next: NextFunction) => {
     res.setHeader(
       'Content-Security-Policy',
       "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
