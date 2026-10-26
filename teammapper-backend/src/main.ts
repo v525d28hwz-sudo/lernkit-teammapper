@@ -39,6 +39,22 @@ async function bootstrap() {
   // off, Express keeps its default and reads the socket address.
   const trustProxy = configService.getTrustProxy()
   if (trustProxy !== false) app.set('trust proxy', trustProxy)
+  // lernkit: Sicherheits-Header für alle Antworten (Seite, Assets, API). Die CSP entspricht
+  // der <meta>-CSP der index.html, ergänzt um Direktiven, die nur als Header wirken
+  // (frame-ancestors, base-uri, form-action). TLS terminiert der Coolify-Proxy, HSTS gilt
+  // für den Client. X-Powered-By verrät sonst das Framework.
+  app.disable('x-powered-by')
+  app.use((_req, res, next) => {
+    res.setHeader(
+      'Content-Security-Policy',
+      "default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; connect-src 'self' ws: wss:; worker-src 'self' blob:; frame-ancestors 'none'; base-uri 'self'; form-action 'self'; object-src 'none'"
+    )
+    res.setHeader('Strict-Transport-Security', 'max-age=31536000; includeSubDomains')
+    res.setHeader('X-Content-Type-Options', 'nosniff')
+    res.setHeader('Referrer-Policy', 'no-referrer')
+    res.setHeader('Permissions-Policy', 'camera=(), microphone=(), geolocation=()')
+    next()
+  })
 
   app.use(
     '/arasaac/api',
