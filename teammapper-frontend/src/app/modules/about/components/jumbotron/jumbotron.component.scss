@@ -188,3 +188,29 @@ section.jumbotron {
     }
   }
 }
+
+// Smartphone (nur Telefone; iPad/Desktop unberührt):
+// Hochformat ≤ 760 px breit, Querformat ≤ 500 px hoch
+@media (max-width: 760px) and (orientation: portrait) {
+  section.jumbotron {
+    padding: 22px 0 18px;
+
+    .m-2 { margin: 0.75rem 1rem; }
+    .lk-hero-col > h1 { font-size: 28px; margin-bottom: 10px; }
+    .lk-hero-intro { font-size: 14.5px; margin-bottom: 14px; }
+    > div { padding: 8px 0; }
+  }
+}
+
+@media (orientation: landscape) and (max-height: 500px) {
+  section.jumbotron {
+    padding: 8px 0 8px;
+
+    .m-2 { margin: 0.25rem 1rem; }
+    .lk-kicker { margin-bottom: 2px; }
+    .lk-hero-col > h1 { font-size: 20px; margin: 0 0 8px; }
+    .lk-hero-intro,
+    .lk-hinweis { display: none; }
+    > div { padding: 0; }
+  }
+}

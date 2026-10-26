@@ -67,3 +67,12 @@ header.lk-topbar {
     gap: 14px;
   }
 }
+
+// Smartphone-Querformat: flache Kopfzeile
+@media (orientation: landscape) and (max-height: 500px) {
+  header.lk-topbar {
+    min-height: 44px;
+    padding-top: 4px;
+    padding-bottom: 4px;
+  }
+}
