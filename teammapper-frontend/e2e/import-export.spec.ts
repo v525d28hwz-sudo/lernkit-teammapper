@@ -14,6 +14,9 @@ test('opens import menu and checks options', async ({ page }) => {
   await expect(page.getByText('MERMAID')).toBeVisible();
 });
 
+// lernkit: die importierte Beispieldatei trägt den englischen Wurzelnamen
+const IMPORTED_ROOT = 'Root node';
+
 test('uploads JSON file for import', async ({ page }) => {
   await page.goto('/');
   await page.getByText('Create mind map').click();
@@ -35,11 +38,11 @@ test('uploads JSON file for import', async ({ page }) => {
 
   // Verify the nodes from the imported file are present
   // The imported map should replace the current map, showing the imported nodes
-  await expect(page.getByText(ROOT_NODE)).toBeVisible({ timeout: 5000 });
+  await expect(page.getByText(IMPORTED_ROOT)).toBeVisible({ timeout: 5000 });
   await expect(page.getByText('test')).toBeVisible({ timeout: 5000 });
 
   // Count all text elements that could be nodes (Root node + test)
-  const rootNodeCount = await page.getByText(ROOT_NODE).count();
+  const rootNodeCount = await page.getByText(IMPORTED_ROOT).count();
   const testNodeCount = await page.getByText('test').count();
 
   // Verify we have the expected nodes
@@ -52,7 +55,7 @@ test('imports Mermaid mindmap via modal', async ({ page }) => {
   await page.getByText('Create mind map').click();
   await expect(page.locator('.map')).toBeVisible();
 
-  await expect(page.getByText(ROOT_NODE)).toBeVisible({ timeout: 5000 });
+  await expect(page.getByText(IMPORTED_ROOT)).toBeVisible({ timeout: 5000 });
 
   // Open import menu
   await page.locator('#menu-import').click();
@@ -74,7 +77,7 @@ test('imports Mermaid mindmap via modal', async ({ page }) => {
       Sub B1
       Sub B2`;
 
-  await page.getByRole('textbox', { name: 'mindmap ...' }).fill(mermaidSyntax);
+  await page.locator('mat-dialog-container textarea').fill(mermaidSyntax);
 
   // Click the import button in the dialog
   await page
@@ -121,7 +124,7 @@ test('imports Mermaid mindmap with different branch colors', async ({
     Second Branch
     Third Branch`;
 
-  await page.getByRole('textbox', { name: 'mindmap ...' }).fill(mermaidSyntax);
+  await page.locator('mat-dialog-container textarea').fill(mermaidSyntax);
 
   // Click the import button in the dialog
   await page

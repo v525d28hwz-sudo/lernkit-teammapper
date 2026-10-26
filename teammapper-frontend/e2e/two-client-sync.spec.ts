@@ -156,7 +156,8 @@ test('two clients on one map see each other edit, move, color, undo, remove and 
       clientB.getByText('Mindmap successfully imported!')
     ).toBeVisible();
     await expect(clientB.getByText('test', { exact: true })).toBeVisible();
-    await expect(clientB.getByText(ROOT_NODE)).toBeVisible();
+    // lernkit: Wurzelname aus der importierten Datei
+    await expect(clientB.getByText('Root node')).toBeVisible();
     await expect(nodeOf(clientB, 'Renamed by B')).toHaveCount(0);
   } finally {
     await contextB.close();
