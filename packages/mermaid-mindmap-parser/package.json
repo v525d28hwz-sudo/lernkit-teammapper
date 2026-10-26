@@ -30,7 +30,7 @@
     "dist"
   ],
   "dependencies": {
-    "dompurify": "3.4.16"
+    "dompurify": "3.4.17"
   },
   "devDependencies": {
     "jison": "0.4.18",
